@@ -12,13 +12,19 @@ public class Block {
     public Block(){
         this.autoID();
     }
+    public Block(int amount_transactions){
+        this.autoID();
+        this.amount_transactions = amount_transactions;
+    }
     private int id;
     private long timeStamp; //data atual 
     private String hash = "nao calculado"; // Hash do atual
     private String previousHash = "First Block";
     private final ArrayList<I_Transaction> data = new ArrayList(); //Dado a ser adicionado ao bloco
+    private String hash_transactions;
+    
     private int nonce = 0; // quantidades hash gerados
-    private final int amount_transactions = 5; //Quantidade de transações suportadas neste bloco
+    private int amount_transactions = 5; //Quantidade de transações suportadas neste bloco
     private int difficulty = 5;
 
     @Override
@@ -88,29 +94,35 @@ public class Block {
             } // Gera varios hash's, ate que algum contenha a qtde desejadas de 0 no inicio
 
             
-            JOptionPane.showMessageDialog(null, "Block Mined!!!: " + this.hash);
+            JOptionPane.showMessageDialog(null, "Bloco mineirado!!!: " + this.toString() );
 //            JOptionPane.showMessageDialog(null, "Print in Mine " + Block.printBlock(this) );
     }
     
     private String calculateHash() {
-        String calculatedhash = 
-            StringUtil.applySha256( previousHash + Long.toString(timeStamp)
-                + Integer.toString(nonce)+ this.data);
+        this.hashTransactions();
+        
+        String value = this.id + this.previousHash + Long.toString(this.timeStamp) 
+                + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
+        
+        String calculatedhash = StringUtil.applySha256( value );
     
         return calculatedhash;
     }
     
     public boolean add_transation( Transaction transaction ){
         if( !this.isFull() ){
-            System.out.println("Não esta cheio");
+            
+            if( this.data.size() > 0)
+                transaction.setPrevious( this.getLastTransaction().getHash() );
+            
             this.data.add(transaction);
-            JOptionPane.showMessageDialog(null,"Bloco : "+this.getId() +"\n" + this.data.size() + " transacoes" );
+
+            JOptionPane.showMessageDialog(null,"Adicionando ao Bloco : "+this.getId() 
+                    +"\n Transações adicionadas: " + this.data.size() + " transacoes" );
             return true;    
         }else{
-            System.out.println("Não é possivel adicionar uma nova transacao a este bloco"
-                    + "\nEste bloco esta cheio, calculando hash");
-            if(this.calculate_hash()){
-                System.out.println("Hash: " + this.getHash());
+            if( this.calculate_hash() ){
+                JOptionPane.showMessageDialog(null, "Hash: " + this.getHash() +"\n"+this.showTransactions() );
             }
             
             return false;
@@ -118,7 +130,17 @@ public class Block {
         
     }
     
-    
+    private String hashTransactions(){
+        String hash = "";
+        
+            for(I_Transaction It :  this.data){
+                Transaction t = (Transaction) It;
+                   hash += t.getHash();
+            }
+            
+        this.hash_transactions = StringUtil.applySha256(hash);
+        return hash;
+    }
     
     
     
@@ -158,6 +180,15 @@ public class Block {
 
     public void setNonce(int nonce) {
         this.nonce = nonce;
+    }
+    
+    public Transaction getLastTransaction(){
+        if(this.data.size() > 0 ){
+            Transaction t = (Transaction) this.data.get(this.data.size()-1);
+            return t;
+        }
+        
+        return null;
     }
     
     

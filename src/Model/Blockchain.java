@@ -9,8 +9,9 @@ public class Blockchain {
     public Blockchain(){
         this.pool = new Pool(this);
         this.blockchain = new ArrayList();
-        this.tempBlock = new Block();
+        this.tempBlock = new Block(3);
     }
+    
     private final ArrayList<Block> blockchain;
     private final Pool pool;
     private Block tempBlock;
@@ -18,6 +19,7 @@ public class Blockchain {
             
     //Candidato Thread
     public void add(Transaction transaction){
+        transaction.hashTransaction();
         boolean add =  this.tempBlock.add_transation(transaction);
         if( !add ){
             this.pool.add(this.tempBlock);

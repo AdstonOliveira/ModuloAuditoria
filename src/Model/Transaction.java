@@ -1,7 +1,10 @@
 package Model;
 
 import Tools.RandID;
+import Tools.StringUtil;
 import java.io.File;
+import java.io.IOException;
+import javax.swing.JOptionPane;
 
 /**
  * @author adston
@@ -11,7 +14,9 @@ public class Transaction implements I_Transaction{
     private int id;
     private String sender;
     private String hash;
+    private String previous_hash = "Primeira Transacao do bloco";
     private File transacao;
+    private String hash_file;
 
     public Transaction(){
         
@@ -22,14 +27,26 @@ public class Transaction implements I_Transaction{
         this.hash = "bcd";
     }
     public Transaction(File file){
+        
         this.id = RandID.newID();
+        this.sender = "Em testes";
         this.transacao = file;
+        
+        try {
+            this.hash_file = StringUtil.applySHA(file);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, ex, sender, id);
+        }
+        
+        this.hashTransaction();
+        
+        JOptionPane.showMessageDialog(null, "Transaction: " + this.toString() );
     }
     
     @Override
     public String toString() {
-        return "Transaction{" + "id=" + id + ", sender=" + sender + ", hash=" + hash + ", transacao=" 
-                + transacao + "\n"+'}';
+        return "Transaction{" + "id=" + id + ", sender=" + sender + ", hash_file=" + this.hash_file + ", hash_T=" 
+                + this.hash +" previous TransactionHash: "+ this.previous_hash +"\n"+'}';
     }
     
     
@@ -63,4 +80,15 @@ public class Transaction implements I_Transaction{
         return this.hash;
     }
     
+    public void hashTransaction(){
+        String value = Integer.toString(this.id) + this.sender + this.previous_hash + this.hash_file;
+        
+        this.hash = StringUtil.applySha256(value);
+    }
+    public String getPrevious(){
+        return this.previous_hash;
+    }
+    public void setPrevious(String previous_hash){
+        this.previous_hash = previous_hash;
+    }
 }

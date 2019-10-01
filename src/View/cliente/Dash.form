@@ -141,7 +141,9 @@
               <SubComponents>
                 <Component class="javax.swing.JButton" name="btn_selectFile">
                   <Properties>
+                    <Property name="mnemonic" type="int" value="115"/>
                     <Property name="text" type="java.lang.String" value="Selecionar arquivo"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Sele&#xe7;&#xe3;o do arquivo a enviar"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_selectFileActionPerformed"/>
@@ -149,6 +151,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_send">
                   <Properties>
+                    <Property name="mnemonic" type="int" value="101"/>
                     <Property name="text" type="java.lang.String" value="Enviar"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
@@ -158,6 +161,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_cancel">
                   <Properties>
+                    <Property name="mnemonic" type="int" value="99"/>
                     <Property name="text" type="java.lang.String" value="Cancelar"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>

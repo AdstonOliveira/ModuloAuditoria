@@ -77,13 +77,16 @@ public class Dash extends javax.swing.JInternalFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Adicionar Nova Transação", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
+        btn_selectFile.setMnemonic('s');
         btn_selectFile.setText("Selecionar arquivo");
+        btn_selectFile.setToolTipText("Seleção do arquivo a enviar");
         btn_selectFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_selectFileActionPerformed(evt);
             }
         });
 
+        btn_send.setMnemonic('e');
         btn_send.setText("Enviar");
         btn_send.setEnabled(false);
         btn_send.addActionListener(new java.awt.event.ActionListener() {
@@ -92,6 +95,7 @@ public class Dash extends javax.swing.JInternalFrame {
             }
         });
 
+        btn_cancel.setMnemonic('c');
         btn_cancel.setText("Cancelar");
         btn_cancel.setEnabled(false);
         btn_cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -220,7 +224,8 @@ public class Dash extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_cancelActionPerformed
 
     private void btn_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sendActionPerformed
-        this.blockchain.add( new Transaction( this.controller.getSelectXML().getSelected() ) );
+        Transaction transaction = new Transaction( this.controller.getSelectXML().getSelected() );
+        this.blockchain.add( transaction );
         this.resetButtons();
     }//GEN-LAST:event_btn_sendActionPerformed
     public void activeButtons(){

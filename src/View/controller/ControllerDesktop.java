@@ -22,13 +22,14 @@ public class ControllerDesktop {
     }
     
     public boolean selectXML(JInternalFrame iFrame){
-        if(this.selectXML!=null)
+        if(this.selectXML != null)
             this.selectXML = null;
         
         this.selectXML = new SelectXML();
         
         return this.selectXML.selectFile(iFrame);
     }
+    
     public SelectXML getSelectXML(){
         return this.selectXML;
     }

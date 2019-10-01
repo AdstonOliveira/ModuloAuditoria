@@ -1,5 +1,6 @@
 package Tools;
 
+import Model.I_Transaction;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -44,11 +45,11 @@ public class StringUtil {
             return (df.format (dt));
         }
         
-    public static String applyMD5(File input) throws FileNotFoundException, IOException{		
+    public static String applySHA(File input) throws FileNotFoundException, IOException{		
 		
         MessageDigest digest = null;	        
             try {
-                digest = MessageDigest.getInstance("MD5");
+                digest = MessageDigest.getInstance("SHA-256");
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(StringUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -78,6 +79,25 @@ public class StringUtil {
 
         return output;
         }
-
+    
+//        public static String applySha256(I_Transaction input){		
+//		try {
+//			MessageDigest digest = MessageDigest.getInstance("SHA-256");	        
+//			//Applies sha256 to our input, 
+//			byte[] hash = digest.digest(input.getBytes("UTF-8"));	        
+//			StringBuffer hexString = new StringBuffer(); // This will contain hash as hexidecimal
+//                        
+//			for (int i = 0; i < hash.length; i++) {
+//				String hex = Integer.toHexString(0xff & hash[i]);
+//				if(hex.length() == 1) hexString.append('0');
+//				hexString.append(hex);
+//			}
+//                        
+//			return hexString.toString();
+//		}
+//		catch(Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//                }
         
-}
+        }

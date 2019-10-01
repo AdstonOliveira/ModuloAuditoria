@@ -13,7 +13,7 @@ public class Pool {
     private final ArrayList<Block> pool;
     
     public void addOnBlockchain(Block block){
-        if(!this.blockchain.addOnBlockchain(block)){
+        if( !this.blockchain.addOnBlockchain(block) ){
             System.out.println("Ocorreu um erro ao adicionar a Blockchain");
         }
     }
@@ -25,7 +25,7 @@ public class Pool {
         //Enviar para consenso 
         // Parte abaixo desenvolvida para testes
         this.getLast().calculate_hash();
-        this.blockchain.addOnBlockchain(this.getLast());
+        this.blockchain.addOnBlockchain( this.getLast() );
     }
     
     public String showBlock(){

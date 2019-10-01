@@ -213,7 +213,7 @@ public class Dash extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_selectFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selectFileActionPerformed
-        if(controller.selectXML(this)){
+        if( controller.selectXML(this) ){
             this.activeButtons();
         }
         

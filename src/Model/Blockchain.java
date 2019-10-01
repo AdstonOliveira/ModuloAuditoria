@@ -19,8 +19,11 @@ public class Blockchain {
             
     //Candidato Thread
     public void add(Transaction transaction){
-        transaction.hashTransaction();
-        boolean add =  this.tempBlock.add_transation(transaction);
+        if(transaction.getHash() == null)
+            transaction.hashTransaction();
+        
+        boolean add = this.tempBlock.add_transation(transaction);
+        
         if( !add ){
             this.pool.add(this.tempBlock);
             this.tempBlock = new Block();
@@ -31,16 +34,21 @@ public class Blockchain {
     
     public boolean addOnBlockchain(Block block){
         if(this.getSize() > 0){
-           block.setPreviousHash(this.getLast().getHash());
-           block.mineBlock(block.getDifficulty());
-           this.blockchain.add(block);
-           return true;
+           block.setPreviousHash( this.getLast().getHash() );
+           //implantar distribuição
+           if( block.mineBlock(block.getDifficulty()) ){
+                this.blockchain.add(block);
+                return true;
+           }
+           
         }else{
             block.setPreviousHash("Genesis Block");
-            block.mineBlock(block.getDifficulty());
-            this.blockchain.add(block);
-            return true;
+            if( block.mineBlock(block.getDifficulty()) ){
+                this.blockchain.add(block);
+                return true;
+            }
         }
+        return false;
     }
     
     public Block getLast(){

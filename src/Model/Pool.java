@@ -24,8 +24,9 @@ public class Pool {
         this.addBlock(tempBlock);
         //Enviar para consenso 
         // Parte abaixo desenvolvida para testes
-        this.getLast().calculate_hash();
-        this.blockchain.addOnBlockchain( this.getLast() );
+        if( this.getLast().calculate_hash() ){
+            this.blockchain.addOnBlockchain( this.getLast() );
+        }
     }
     
     public String showBlock(){

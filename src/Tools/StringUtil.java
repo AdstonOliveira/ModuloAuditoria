@@ -65,7 +65,6 @@ public class StringUtil {
                     byte[] hash = digest.digest();
                     BigInteger bigInt = new BigInteger(1, hash);
                     output = bigInt.toString(16);
-                System.out.println("MD5: " + output);
             }catch(IOException e){
                 
             }finally{

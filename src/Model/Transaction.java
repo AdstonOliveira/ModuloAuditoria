@@ -5,11 +5,10 @@ import Tools.StringUtil;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-
 /**
  * @author adston
  */
-public class Transaction implements I_Transaction{
+public final class Transaction implements I_Transaction{
     
     private int id;
     private String sender;
@@ -26,6 +25,8 @@ public class Transaction implements I_Transaction{
         this.sender = "abc";
         this.hash = "bcd";
     }
+    /** Inicia a transação com um arquivo gerando seu hash
+     */
     public Transaction(File file){
         
         this.id = RandID.newID();
@@ -80,15 +81,18 @@ public class Transaction implements I_Transaction{
         return this.hash;
     }
     
+    /** Cria um hash para a transacao atual */
     public void hashTransaction(){
         String value = Integer.toString(this.id) + this.sender + this.previous_hash + this.hash_file;
         
         this.hash = StringUtil.applySha256(value);
     }
+    
     public String getPrevious(){
         return this.previous_hash;
     }
     public void setPrevious(String previous_hash){
         this.previous_hash = previous_hash;
     }
+   
 }

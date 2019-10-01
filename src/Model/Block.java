@@ -1,10 +1,9 @@
 package Model;
-
+import Model.Thread.ThMinningBlock;
 import Tools.RandID;
 import Tools.StringUtil;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
 /**
  * @author adston
  */
@@ -12,6 +11,7 @@ public class Block {
     public Block(){
         this.autoID();
     }
+    /** inicializa um novo bloco com qtde de transações definida*/
     public Block(int amount_transactions){
         this.autoID();
         this.amount_transactions = amount_transactions;
@@ -32,7 +32,7 @@ public class Block {
         return "Block{" + "id=" + id + ", timeStamp=" + timeStamp + ", hash=" + hash + ", previousHash=" 
                 + previousHash + "\nTransações: " + this.showTransactions() + '}';
     }
-    
+    /** Exibe cada transação contida no bloco */
     public String showTransactions(){
         String content = "";
         for(I_Transaction t : data){
@@ -81,24 +81,33 @@ public class Block {
         return true;
     }
     
+    /** Processo de mineiração do atual bloco
+     * A dificuldade esta relacionada a qtde de 0's no inicio do hash
+     */
     
-    public void mineBlock( int difficulty ) {
+    public boolean mineBlock( int difficulty ) {
         /*Prova de trabalho tentando diferentes valores de variáveis ​​no bloco até que seu hash comece 
         com um certo número de 0s.*/
         //Cria um array com tamanho da dificuldade 
-        String target = new String( new char[difficulty] ).replace('\0', '0');
-        
-            while ( !hash.substring(0, difficulty).equals(target) ) { // Divide o hash da posicao 0, ate a qta 0
-                this.nonce++;
-                this.hash = calculateHash(); // o nonce serve para a quantidade de hash gerados...
-            } // Gera varios hash's, ate que algum contenha a qtde desejadas de 0 no inicio
+//        JOptionPane.showMessageDialog(null, "Aguarde. O Bloco esta sendo mineirado","Minnig Block",1);
+//        
+//        String target = new String( new char[difficulty] ).replace('\0', '0');
+//        
+//            while ( !hash.substring(0, difficulty).equals(target) ) { // Divide o hash da posicao 0, ate a qta 0
+//                this.nonce++;
+//                this.hash = calculateHash(); // o nonce serve para a quantidade de hash gerados...
+//            } // Gera varios hash's, ate que algum contenha a qtde desejadas de 0 no inicio
+//
+//            JOptionPane.showMessageDialog(null, "Bloco mineirado!!!: " + this.toString() );
+//            return true;
+        Thread t = new Thread(new ThMinningBlock(this));
+        t.start();
+        return true;
 
-            
-            JOptionPane.showMessageDialog(null, "Bloco mineirado!!!: " + this.toString() );
-//            JOptionPane.showMessageDialog(null, "Print in Mine " + Block.printBlock(this) );
     }
     
-    private String calculateHash() {
+    /** Cria o hash das transações para então criar seu proprio hash*/
+    public String calculateHash() {
         this.hashTransactions();
         
         String value = this.id + this.previousHash + Long.toString(this.timeStamp) 
@@ -109,27 +118,27 @@ public class Block {
         return calculatedhash;
     }
     
+    /** Adiciona cada transação ao atual bloco, adicionando o hash da transação 
+     * anterior a atual
+     */
     public boolean add_transation( Transaction transaction ){
         if( !this.isFull() ){
-            
             if( this.data.size() > 0)
                 transaction.setPrevious( this.getLastTransaction().getHash() );
             
             this.data.add(transaction);
 
             JOptionPane.showMessageDialog(null,"Adicionando ao Bloco : "+this.getId() 
-                    +"\n Transações adicionadas: " + this.data.size() + " transacoes" );
+                    +"\n Transações já adicionadas: " + this.data.size() );
             return true;    
         }else{
-            if( this.calculate_hash() ){
-                JOptionPane.showMessageDialog(null, "Hash: " + this.getHash() +"\n"+this.showTransactions() );
-            }
-            
-            return false;
+//             this.calculate_hash();
+
+        return false;
         }
         
     }
-    
+    /** Cria o hash das transações*/
     private String hashTransactions(){
         String hash = "";
         

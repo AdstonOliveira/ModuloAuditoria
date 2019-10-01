@@ -1,7 +1,8 @@
 
-import Model.Block;
 import Model.Blockchain;
 import Model.Transaction;
+import View.cliente.Dash;
+import View.controller.ControllerDesktop;
 
 
 public class Main {
@@ -20,15 +21,17 @@ public class Main {
 //        
 ////        b.calculate_hash();
 
-    Blockchain blockchain = new Blockchain();
-    for(int i = 0; i < 10; i++){
-        Transaction t = new Transaction("teste");
-        blockchain.add(t);
-    }
+//    Blockchain blockchain = new Blockchain();
+//    for(int i = 0; i < 10; i++){
+//        Transaction t = new Transaction("teste");
+//        blockchain.add(t);
+//    }
     
-        System.out.println(blockchain.toString());
-    
-    
+//        System.out.println(blockchain.toString());
+        ControllerDesktop cd = new ControllerDesktop();
+        cd.open();
+        Dash dash = new Dash();
+        cd.addIFrame(dash);
     
         
     }

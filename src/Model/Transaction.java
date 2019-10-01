@@ -1,6 +1,7 @@
 package Model;
 
 import Tools.RandID;
+import java.io.File;
 
 /**
  * @author adston
@@ -10,7 +11,7 @@ public class Transaction implements I_Transaction{
     private int id;
     private String sender;
     private String hash;
-    private String transacao;
+    private File transacao;
 
     public Transaction(){
         
@@ -19,7 +20,10 @@ public class Transaction implements I_Transaction{
         this.id = RandID.newID();
         this.sender = "abc";
         this.hash = "bcd";
-        this.transacao = "transacao Teste";
+    }
+    public Transaction(File file){
+        this.id = RandID.newID();
+        this.transacao = file;
     }
     
     @Override

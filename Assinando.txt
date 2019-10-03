@@ -1,0 +1,8 @@
+https://www.devmedia.com.br/como-criar-uma-assinatura-digital-em-java/31287
+
+run this: openssl pkcs12 -export -in www-example-com.crt -inkey www-example-com.key -out www-example-com.p12
+
+http://hasini-gunasinghe.blogspot.com/2012/08/digital-signature-by-example.html  => funciona
+
+certificado auto assinado +> funciona
+https://marceloprogramador.com/2015/07/28/guia-certificados-java/

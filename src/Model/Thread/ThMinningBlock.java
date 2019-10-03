@@ -1,6 +1,6 @@
 package Model.Thread;
 
-import Model.Block;
+import Model.ServerSide.Block;
 import javax.swing.JOptionPane;
 
 /**

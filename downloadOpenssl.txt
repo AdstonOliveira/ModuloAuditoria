@@ -1,0 +1,9 @@
+http://slproweb.com/products/Win32OpenSSL.html -> 03/10/2019
+
+senha gerada ifsp100%
+
+gerar certificado:
+https://www.devmedia.com.br/gerando-um-certificado-digital-proprio/31506
+
+How to use:
+https://java.docow.com/1396/como-usar-o-arquivo-key-e-crt-em-java-gerado-pelo-openssl.html

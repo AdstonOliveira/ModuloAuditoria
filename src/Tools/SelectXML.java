@@ -28,7 +28,6 @@ public class SelectXML {
                 return true;
             }
             
-            
         return false;
     }
     public File getSelected(){

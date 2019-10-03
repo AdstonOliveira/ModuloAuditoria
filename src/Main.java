@@ -1,16 +1,20 @@
 
-import View.cliente.Dash;
-import View.controller.ControllerDesktop;
+import Model.ClientSide.DAO;
+import Model.ClientSide.View.cliente.Dash;
+import Model.ClientSide.View.controller.ControllerClient;
+import Model.ClientSide.View.controller.ControllerLogin;
 
 
 public class Main {
     
     public static void main(String[] args) {
-
-        ControllerDesktop cd = new ControllerDesktop();
-        cd.open();
-        Dash dash = new Dash();
-        cd.addIFrame(dash);
+        ControllerLogin cl = new ControllerLogin();
+        cl.openLogin();
+        
+//        ControllerClient cd = new ControllerClient();
+//        cd.open();
+//        Dash dash = new Dash();
+//        cd.addIFrame(dash);
     
         
     }

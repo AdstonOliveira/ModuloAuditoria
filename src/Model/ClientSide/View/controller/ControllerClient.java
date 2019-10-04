@@ -1,6 +1,5 @@
 package Model.ClientSide.View.controller;
 
-import Model.ClientSide.View.cliente.Dash;
 import Tools.SelectXML;
 import Model.ClientSide.View.cliente.DesktopCliente;
 import javax.swing.JInternalFrame;

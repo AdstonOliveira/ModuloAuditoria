@@ -1,5 +1,6 @@
 package Tools;
 
+import Tools.Security.Key_Store;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,7 +19,6 @@ import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -41,7 +41,7 @@ public class Util {
                 hexString.append(hex);
             }
 
-            return signHash(hexString.toString());
+            return ( hexString.toString() );
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -117,41 +117,10 @@ public class Util {
 //		}
 //                }
     public static String signHash(String hash) throws KeyStoreException, FileNotFoundException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException, InvalidKeyException, SignatureException {
-        KeyStore ks = KeyStore.getInstance("JKS");
-        FileInputStream fis = new FileInputStream("C:\\par.jks");
-        char[] psswd = "ifsp100%".toCharArray();
-        String alias = "moduloauditoria";
-        //read the private key
-        ks.load(fis, psswd); // There are other ways to read the password. 
-        KeyStore.ProtectionParameter keyPass = new KeyStore.PasswordProtection(psswd);
-        KeyStore.PrivateKeyEntry privKeyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry(alias, keyPass);
-        PrivateKey privateKey = privKeyEntry.getPrivateKey();
-
-        //initialize the signature with signature algorithm and private key
-        Signature signature = Signature.getInstance("SHA256withRSA");
-        signature.initSign(privateKey);
-        //Read the string into a buffer
-        byte[] hashInBytes = hash.getBytes();
-
-        //update signature with data to be signed
-        signature.update(hashInBytes);
-
-        //sign the data
-        byte[] signedInfo = signature.sign();
-        
-        StringBuffer hexString = new StringBuffer(); // This will contain hash as hexidecimal
-
-            for (int i = 0; i < signedInfo.length; i++) {
-                String hex = Integer.toHexString(0xff & signedInfo[i]);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            
-            return hexString.toString();
-        
-
+       Key_Store ks = new Key_Store();
+        System.out.println(ks.signHash(hash));
+       
+        return "";
     }
 
     public static String formatDate(long date) {

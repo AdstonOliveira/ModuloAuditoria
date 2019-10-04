@@ -9,7 +9,9 @@ public class ServerBlockchain {
         this.blockchain = new Blockchain();
     }
     
-    
+    public static void main(String[] args) {
+        
+    }
     
     
     

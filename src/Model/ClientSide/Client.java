@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
-
 /**
  * @author adston
  */
@@ -48,6 +47,8 @@ public class Client {
     public String getName() {
         return name;
     }
-    
+    public boolean connectOnServer(){
+        return true;
+    }
     
 }

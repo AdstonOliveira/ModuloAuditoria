@@ -1,7 +1,3 @@
-
-import Model.ClientSide.DAO;
-import Model.ClientSide.View.cliente.Dash;
-import Model.ClientSide.View.controller.ControllerClient;
 import Model.ClientSide.View.controller.ControllerLogin;
 
 
@@ -15,9 +11,6 @@ public class Main {
 //        cd.open();
 //        Dash dash = new Dash();
 //        cd.addIFrame(dash);
-    
-        
     }
-    
     
 }

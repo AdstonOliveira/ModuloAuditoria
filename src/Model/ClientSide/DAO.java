@@ -129,12 +129,13 @@ public class DAO {
         Connection con = DAO.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        senha = Util.applySha256(senha.trim());
         
         try {
-            stmt = con.prepareStatement("SELECT * FROM adm.cliente where nome='"+nome+"' and senha='"+Util.applySha256(senha)+"'");
+            stmt = con.prepareStatement("SELECT * FROM adm.cliente where nome='"+nome+"' and senha='"+ (senha) + "'");
             rs = stmt.executeQuery();
-            System.out.println(nome + " " +senha);
             if( !rs.next() ){
+                JOptionPane.showMessageDialog(null,"Usuario ou senha inválidos", "Erro no login", 0);
                 return false;
             }
             return true;

@@ -2,7 +2,6 @@ package Model.ClientSide.View;
 
 import Model.ClientSide.View.controller.ControllerLogin;
 import javax.swing.JOptionPane;
-
 /**
  * @author adston
  */
@@ -98,10 +97,11 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPasswSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLogar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(btnLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(btnNovo, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnNovo, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnLogar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                        .addComponent(btnLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -138,10 +138,9 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogarActionPerformed
         // TODO add your handling code here:
-        if(this.controller.logar(this.txtNome.getText(), new String(this.jPasswSenha.getPassword()))){
+        if( this.controller.logar(this.txtNome.getText(), new String(this.jPasswSenha.getPassword())) ){
             JOptionPane.showMessageDialog(this,"Bem Vindo");
-        }else{
-            JOptionPane.showMessageDialog(this,"malvindo");
+            this.dispose();
         }
     }//GEN-LAST:event_btnLogarActionPerformed
 

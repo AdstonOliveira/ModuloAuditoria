@@ -1,5 +1,6 @@
 package Model.ClientSide.View.controller;
 
+import Model.ClientSide.View.cliente.Dash;
 import Tools.SelectXML;
 import Model.ClientSide.View.cliente.DesktopCliente;
 import javax.swing.JInternalFrame;
@@ -11,6 +12,9 @@ public class ControllerClient {
     private DesktopCliente desktop;
     private SelectXML selectXML;
     
+    public ControllerClient(){
+        
+    }
     public void open(){
         this.desktop = new DesktopCliente();
         this.desktop.setVisible(true);

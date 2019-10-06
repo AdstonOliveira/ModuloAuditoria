@@ -1,5 +1,5 @@
-package Model.ServerSide;
-import Model.ServerSide.Threads.ServerListen;
+package ServerSide.Model;
+import ServerSide.Threads.ServerListen;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,8 +15,13 @@ public class ServerBlockchain {
         this.blockchain = new Blockchain();
         this.initListen();
     }
+    public ServerBlockchain(int port){
+        this.port = port;
+        this.blockchain = new Blockchain();
+        this.initListen();
+    }
     
-    public void initListen(){
+    public final void initListen(){
         try {
             this.listen = new ServerListen(this.port, false);
         } catch (NoSuchAlgorithmException ex) {

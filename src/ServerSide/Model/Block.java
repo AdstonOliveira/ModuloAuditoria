@@ -1,7 +1,7 @@
-package Model.ServerSide;
-import Model.ClientSide.I_Transaction;
-import Model.ClientSide.Transaction;
-import Model.Thread.ThMinningBlock;
+package ServerSide.Model;
+import ClientSide.Model.I_Transaction;
+import ClientSide.Model.Transaction;
+import ClientSide.Model.Thread.ThMinningBlock;
 import Tools.RandID;
 import Tools.Util;
 import java.util.ArrayList;

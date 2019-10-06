@@ -1,8 +1,9 @@
-package Model.ClientSide.View.controller;
+package ClientSide.View.controller;
 
-import Model.ClientSide.DAO;
-import Model.ClientSide.View.Login;
-import Model.ClientSide.View.cliente.Dash;
+import ClientSide.Model.Client;
+import ClientSide.Model.DAO;
+import ClientSide.View.cliente.Login;
+import ClientSide.View.cliente.Dash;
 /**
  * @author adston
  */
@@ -17,7 +18,8 @@ public class ControllerLogin {
         
         public boolean logar(String nome, String senha){
             if( DAO.login(nome, senha) ){
-               ControllerClient controller = new ControllerClient();
+                Client client = new Client(nome);
+               ControllerClient controller = new ControllerClient(client);
                Dash dash = new Dash();
                controller.open();
                controller.addIFrame(dash);

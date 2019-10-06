@@ -1,7 +1,9 @@
-package Model.ClientSide.View.controller;
+package ClientSide.View.controller;
 
+import ClientSide.Model.Client;
+import ClientSide.View.cliente.Dash;
 import Tools.SelectXML;
-import Model.ClientSide.View.cliente.DesktopCliente;
+import ClientSide.View.cliente.DesktopCliente;
 import javax.swing.JInternalFrame;
 
 /**
@@ -10,16 +12,19 @@ import javax.swing.JInternalFrame;
 public class ControllerClient {
     private DesktopCliente desktop;
     private SelectXML selectXML;
+    private Client client;
     
-    public ControllerClient(){
-        
+    public ControllerClient(Client client){
+        this.client = client;
     }
+    
     public void open(){
         this.desktop = new DesktopCliente();
         this.desktop.setVisible(true);
     }
     
-    public void addIFrame(JInternalFrame iFrame){
+    public void addIFrame(Dash iFrame){
+        iFrame.setController(this);
         this.desktop.getDesktop().add(iFrame);
         iFrame.show();
     }
@@ -38,6 +43,10 @@ public class ControllerClient {
     }
     public void cancelOption(){
         this.selectXML.cancel();
+    }
+
+    public void showDetails() {
+        this.client.myDetails();
     }
     
     

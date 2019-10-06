@@ -1,4 +1,4 @@
-package Model.ServerSide;
+package ServerSide.Model;
 import java.util.ArrayList;
 /**
  * @author adston

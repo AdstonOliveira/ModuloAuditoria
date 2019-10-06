@@ -1,4 +1,4 @@
-package Model.ClientSide;
+package ClientSide.Model;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -21,6 +21,7 @@ public class Connected {
     private void getStream(){
         try {
             this.channelSendMessage = new PrintStream( this.client.getSocket().getOutputStream() );
+            System.out.println("PrintStream aberto");
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null,"Erro ao conectar: " + ex,"Fail",0);
         }

@@ -1,4 +1,4 @@
-package Model.ClientSide;
+package ClientSide.Model;
 
 import Tools.RandID;
 import Tools.Util;

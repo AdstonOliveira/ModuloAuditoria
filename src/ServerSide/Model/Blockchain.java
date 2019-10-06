@@ -1,12 +1,13 @@
-package Model.ServerSide;
+package ServerSide.Model;
 
-import Model.ClientSide.Transaction;
+import ClientSide.Model.Transaction;
 import java.util.ArrayList;
 /**
  *
  * @author adston
  */
 public class Blockchain {
+    
     public Blockchain(){
         this.pool = new Pool(this);
         this.blockchain = new ArrayList();

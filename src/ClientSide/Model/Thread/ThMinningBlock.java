@@ -1,5 +1,5 @@
-package Model.Thread;
-import Model.ServerSide.Block;
+package ClientSide.Model.Thread;
+import ServerSide.Model.Block;
 import javax.swing.JOptionPane;
 
 /**

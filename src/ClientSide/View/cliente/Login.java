@@ -1,6 +1,6 @@
-package Model.ClientSide.View;
+package ClientSide.View.cliente;
 
-import Model.ClientSide.View.controller.ControllerLogin;
+import ClientSide.View.controller.ControllerLogin;
 import javax.swing.JOptionPane;
 /**
  * @author adston
@@ -47,8 +47,8 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("Senha:");
 
-        btnLogar.setMnemonic('e');
-        btnLogar.setText("Enviar");
+        btnLogar.setMnemonic('c');
+        btnLogar.setText("Conectar");
         btnLogar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogarActionPerformed(evt);
@@ -138,7 +138,7 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogarActionPerformed
         // TODO add your handling code here:
-        if( this.controller.logar(this.txtNome.getText(), new String(this.jPasswSenha.getPassword())) ){
+        if( this.controller.logar(this.txtNome.getText(), new String( this.jPasswSenha.getPassword() ) ) ){
             JOptionPane.showMessageDialog(this,"Bem Vindo");
             this.dispose();
         }

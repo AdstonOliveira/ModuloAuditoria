@@ -1,4 +1,4 @@
-package Model.ClientSide.View.cliente;
+package ClientSide.View.cliente;
 
 import javax.swing.JDesktopPane;
 

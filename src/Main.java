@@ -1,4 +1,4 @@
-import Model.ClientSide.View.controller.ControllerLogin;
+import ClientSide.View.controller.ControllerLogin;
 
 
 public class Main {

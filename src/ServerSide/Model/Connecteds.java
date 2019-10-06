@@ -1,5 +1,7 @@
-package Model.ClientSide;
+package ServerSide.Model;
 
+import ClientSide.Model.Client;
+import ClientSide.Model.Connected;
 import java.util.ArrayList;
 
 /**

@@ -1,8 +1,8 @@
-package Model.ClientSide.View.cliente;
+package ClientSide.View.cliente;
 
-import Model.ServerSide.Blockchain;
-import Model.ClientSide.Transaction;
-import Model.ClientSide.View.controller.ControllerClient;
+import ServerSide.Model.Blockchain;
+import ClientSide.Model.Transaction;
+import ClientSide.View.controller.ControllerClient;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
  * @author adston
  */
 public class Dash extends javax.swing.JInternalFrame {
-    private ControllerClient controller = new ControllerClient();
+    private ControllerClient controller;
     private final Blockchain blockchain;
     /**
      * Creates new form Dash
@@ -18,8 +18,12 @@ public class Dash extends javax.swing.JInternalFrame {
     public Dash() {
         initComponents();
         this.blockchain = new Blockchain();
-        
     }
+    
+    public void setController(ControllerClient controller){
+        this.controller = controller;
+    }
+    
     public Dash(Blockchain blockchain){
         initComponents();
         this.blockchain = blockchain;
@@ -67,6 +71,10 @@ public class Dash extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setClosable(true);
         setIconifiable(true);
@@ -174,7 +182,7 @@ public class Dash extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -198,6 +206,23 @@ public class Dash extends javax.swing.JInternalFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jMenu1.setText("ShowMe");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
+
+        jMenuItem1.setText("Details");
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -231,6 +256,10 @@ public class Dash extends javax.swing.JInternalFrame {
         this.blockchain.add( transaction );
         this.resetButtons();
     }//GEN-LAST:event_btn_sendActionPerformed
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        this.controller.showDetails();
+    }//GEN-LAST:event_jMenu1MouseClicked
     public void activeButtons(){
         this.btn_cancel.setEnabled(true);
         this.btn_send.setEnabled(true);
@@ -245,6 +274,10 @@ public class Dash extends javax.swing.JInternalFrame {
     private javax.swing.JButton btn_cancel;
     private javax.swing.JButton btn_selectFile;
     private javax.swing.JButton btn_send;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

@@ -1,5 +1,4 @@
 package Model.Thread;
-
 import Model.ServerSide.Block;
 import javax.swing.JOptionPane;
 

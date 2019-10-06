@@ -1,8 +1,11 @@
 package Model.ClientSide;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 /**
  * @author adston
@@ -17,6 +20,15 @@ public class Client {
         this.socket = socket;
         this.IP = this.getMyIP();
     }
+    
+    public void ConnectTo(){
+        try {
+            this.socket = new Socket("localhost",1050);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     public String getMyIP(){
         try {

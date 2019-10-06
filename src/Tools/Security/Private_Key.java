@@ -25,9 +25,9 @@ public class Private_Key{
     
     private boolean getPrivateKey(Key_Store store){
         try {
-            store.ks.load( store.fis, store.pwd.toCharArray() ); // There are other ways to read the password. 
-            KeyStore.ProtectionParameter keyPass = new KeyStore.PasswordProtection(store.pwd.toCharArray());
-            KeyStore.PrivateKeyEntry privKeyEntry = (KeyStore.PrivateKeyEntry) store.ks.getEntry(store.ks_alias, keyPass);
+            store.getKs().load( store.getFis(), store.getPwd().toCharArray() ); // There are other ways to read the password. 
+            KeyStore.ProtectionParameter keyPass = new KeyStore.PasswordProtection(store.getPwd().toCharArray());
+            KeyStore.PrivateKeyEntry privKeyEntry = (KeyStore.PrivateKeyEntry) store.getKs().getEntry(store.getKs_alias(), keyPass);
             this.privateKey = privKeyEntry.getPrivateKey();
             
             return true;

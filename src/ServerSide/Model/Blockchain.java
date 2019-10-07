@@ -11,7 +11,7 @@ public class Blockchain {
     public Blockchain(){
         this.pool = new Pool(this);
         this.blockchain = new ArrayList();
-        this.tempBlock = new Block(3);
+        this.tempBlock = new Block(2);
     }
     
     private final ArrayList<Block> blockchain;
@@ -20,16 +20,14 @@ public class Blockchain {
             
             
     //Candidato Thread
-    public void add(Transaction transaction){
-        if(transaction.getHash() == null)
-            transaction.hashTransaction();
+    public void addTransaction(Transaction transaction){
         
         boolean add = this.tempBlock.add_transation(transaction);
         
         if( !add ){
             this.pool.add(this.tempBlock);
-            this.tempBlock = new Block();
-            this.add(transaction);
+            this.tempBlock = new Block(2);
+            this.addTransaction(transaction);
         }
     }
     
@@ -38,19 +36,18 @@ public class Blockchain {
         if(this.getSize() > 0){
            block.setPreviousHash( this.getLast().getHash() );
            //implantar distribuição
-           if( block.mineBlock(block.getDifficulty()) ){
+//           if( block.mineBlock(block.getDifficulty()) ){
                 this.blockchain.add(block);
                 return true;
-           }
+//           }
            
         }else{
             block.setPreviousHash("Genesis Block");
-            if( block.mineBlock(block.getDifficulty()) ){
+//            if( block.mineBlock(block.getDifficulty()) ){
                 this.blockchain.add(block);
                 return true;
-            }
+//            }
         }
-        return false;
     }
     
     public Block getLast(){

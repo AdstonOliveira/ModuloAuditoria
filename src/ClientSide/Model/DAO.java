@@ -130,7 +130,7 @@ public class DAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
-        senha = Util.applySha256( senha );
+        senha = Util.applySha512( senha );
            System.out.println(senha);
         try {
             stmt = con.prepareStatement("SELECT * FROM adm.cliente where nome='"+nome+"' and senha='"+ (senha) + "'");
@@ -158,7 +158,7 @@ public class DAO {
         try {
             stmt = con.prepareStatement("insert into adm.cliente(nome,senha) values (?,?)");
             stmt.setString(1, nome);
-            stmt.setString(2, Util.applySha256(senha));
+            stmt.setString(2, Util.applySha512(senha));
             
             stmt.executeUpdate();
             DAO.closeConnection(con, stmt);

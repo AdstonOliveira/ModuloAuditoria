@@ -1,22 +1,14 @@
 package Tools;
 
-import Tools.Security.Key_Store;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.Signature;
-import java.security.SignatureException;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,7 +19,7 @@ import java.util.logging.Logger;
 public class Util {
     
     //Applies Sha256 to string and returns the result. 
-    public static String applySha256(String input) {
+    public static String applySha512(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
             //Applies sha256 to our input, 
@@ -42,15 +34,16 @@ public class Util {
                 
                 hexString.append(hex);
             }
-            return ( hexString.toString() );
-        } catch (Exception e) {
+            
+            return hexString.toString();
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
 
     
 
-    public static String applySHA(File input) throws FileNotFoundException, IOException {
+    public static String applySHA512(File input) throws FileNotFoundException, IOException {
         MessageDigest digest = null;
 
         try {
@@ -58,7 +51,7 @@ public class Util {
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //Applies sha256 to our input, 
+        //Applies sha512 to our input, 
         InputStream is = new FileInputStream(input);
         byte[] buffer = new byte[8192];
         int read = 0;
@@ -71,20 +64,20 @@ public class Util {
             BigInteger bigInt = new BigInteger(1, hash);
             output = bigInt.toString(16);
         } catch (IOException e) {
-
+            System.out.println("Falha ao criar hash");
         } finally {
-            try {
-                System.out.println("Hash cerated: " + output);
-                is.close();
-            } catch (IOException e) {
-
-            }
+            
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    System.out.println("Falha ao fechar input stram");
+                }
         }
 
             return (output);
     }
 
-//        public static String applySha256(I_Transaction input){		
+//        public static String applySha512(I_Transaction input){		
 //		try {
 //			MessageDigest digest = MessageDigest.getInstance("SHA-256");	        
 //			//Applies sha256 to our input, 
@@ -104,12 +97,12 @@ public class Util {
 //		}
 //                }
 
-    public static String signHash(String hash) throws KeyStoreException, FileNotFoundException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException, InvalidKeyException, SignatureException {
-       Key_Store ks = new Key_Store();
-       System.out.println("Signned Hash: " + ks.signHash(hash));
-       
-        return "";
-    }
+//    public static String signHash(String hash) throws KeyStoreException, FileNotFoundException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException, InvalidKeyException, SignatureException {
+//       Key_Store ks = new Key_Store();
+//       System.out.println("Signned Hash: " + ks.signHash(hash));
+//       
+//        return "";
+//    }
 
     public static String formatDate(long date) {
         Date dt = new Date(date);

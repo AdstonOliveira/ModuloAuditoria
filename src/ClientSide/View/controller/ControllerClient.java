@@ -1,6 +1,7 @@
 package ClientSide.View.controller;
 
 import ClientSide.Model.Client;
+import ClientSide.Model.Transaction;
 import ClientSide.View.cliente.Dash;
 import Tools.SelectXML;
 import ClientSide.View.cliente.DesktopCliente;
@@ -13,14 +14,18 @@ public class ControllerClient {
     private DesktopCliente desktop;
     private SelectXML selectXML;
     private Client client;
+    private Dash dash;
     
     public ControllerClient(Client client){
         this.client = client;
+        this.open();
     }
     
     public void open(){
         this.desktop = new DesktopCliente();
         this.desktop.setVisible(true);
+        this.dash = new Dash();
+        this.addIFrame(dash);
     }
     
     public void addIFrame(Dash iFrame){
@@ -47,6 +52,11 @@ public class ControllerClient {
 
     public void showDetails() {
         this.client.myDetails();
+    }
+
+    public void addTransaction() {
+        Transaction transaction = new Transaction( this.client, this.selectXML.getSelected() );
+        this.client.getBlockchain().addTransaction(transaction);
     }
     
     

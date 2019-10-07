@@ -16,6 +16,7 @@ import javax.net.ssl.KeyManagerFactory;
  * @author adston
  */
 public class Key_Store {
+    
     private Private_Key privateKey;
     
     private String instance = "JKS";
@@ -29,6 +30,7 @@ public class Key_Store {
     public Key_Store() throws NoSuchAlgorithmException{
         this.setFis();
         this.kmf = this.getKMFactory("SunX509");
+        
     }
     
     public Key_Store(String instance, String ks_path, String ks_alias, String pwd, String kmf_factory) throws NoSuchAlgorithmException{
@@ -58,16 +60,14 @@ public class Key_Store {
             this.fis = new FileInputStream(this.ks_path);
             return true;
         } catch (FileNotFoundException ex) {
+            System.out.println("Erro ao abrir FIS. KEY_STORE linha 63");
             Logger.getLogger(Key_Store.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.privateKey = new Private_Key(this);
         return false;
     }
     
-    public String signHash(String toSign){
-       this.privateKey = new Private_Key(this);
-
-       return this.privateKey.signText(toSign);
-    }
     
     private KeyManagerFactory getKMFactory(String algorithm) throws NoSuchAlgorithmException{
         return KeyManagerFactory.getInstance(algorithm);
@@ -82,18 +82,10 @@ public class Key_Store {
                 this.initKS();
                 this.kmf.init( this.ks, this.pwd.toCharArray() );
                 return true;
-            } catch (KeyStoreException ex) {
+            } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException ex) {
                 Logger.getLogger(Key_Store.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(Key_Store.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
-            } catch (UnrecoverableKeyException ex) {
-                Logger.getLogger(Key_Store.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
-            } catch (IOException ex) {
-                Logger.getLogger(Key_Store.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (CertificateException ex) {
+            } catch (IOException | CertificateException ex) {
                 Logger.getLogger(Key_Store.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -101,6 +93,10 @@ public class Key_Store {
 
     }
 
+    
+    
+    
+    
     public Private_Key getPrivateKey() {
         return privateKey;
     }

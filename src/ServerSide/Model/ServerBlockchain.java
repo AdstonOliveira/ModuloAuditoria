@@ -25,6 +25,7 @@ public class ServerBlockchain {
         try {
             this.listen = new ServerListen(this.port, false);
         } catch (NoSuchAlgorithmException ex) {
+            System.out.println("Erro abrir server listen. linha 28");
             Logger.getLogger(ServerBlockchain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

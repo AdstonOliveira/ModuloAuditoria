@@ -252,8 +252,7 @@ public class Dash extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_cancelActionPerformed
 
     private void btn_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sendActionPerformed
-        Transaction transaction = new Transaction( this.controller.getSelectXML().getSelected() );
-        this.blockchain.add( transaction );
+        this.controller.addTransaction(); 
         this.resetButtons();
     }//GEN-LAST:event_btn_sendActionPerformed
 

@@ -18,15 +18,13 @@ public class Pool {
         }
     }
     
-    
-    
     public void add(Block tempBlock){
-        this.addBlock(tempBlock);
+        this.pool.add(tempBlock);
         //Enviar para consenso 
         // Parte abaixo desenvolvida para testes
-        if( this.getLast().calculate_hash() ){
-            this.blockchain.addOnBlockchain( this.getLast() );
-        }
+        tempBlock.calculate_hash();
+        
+        this.blockchain.addOnBlockchain( this.getLast() );
     }
     
     public String showBlock(){
@@ -51,7 +49,7 @@ public class Pool {
         if(this.getSize() > 0){
             return pool.get(this.getSize()-1);
         }else{
-            return new Block();
+            return null;
         }
     }
     

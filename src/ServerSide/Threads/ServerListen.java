@@ -34,6 +34,7 @@ public class ServerListen {
         this.ks = new Key_Store();
         this.PORT = PORT;
         this.auth_client = auth_client;
+        
         this.initMe();
     }
     
@@ -54,22 +55,20 @@ public class ServerListen {
         
         SSLServerSocket sss = null;
         try {
-            
             sss = (SSLServerSocket) ssf.createServerSocket(PORT);
-            
+        } catch (IOException ex) {
+            System.out.println("Erro linha 58. Criar serverSocket");
+            Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
+        }
             try {
                 sss.setReuseAddress(true);
             } catch (SocketException ex) {
+                System.out.println("Erro linha 66. Reuse address");
                 Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+        
             if (this.auth_client)
                 sss.setNeedClientAuth(this.auth_client);
-            
-        } catch (IOException ex) {
-            Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
           
         return sss;
     }
@@ -81,6 +80,7 @@ public class ServerListen {
             Thread t = new Thread(  new ThServerListen(server) );
             t.start();
         } catch (NoSuchAlgorithmException | KeyManagementException ex) {
+            System.out.println("Erro metodo init ServerListen");
             Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

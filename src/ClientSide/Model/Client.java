@@ -1,5 +1,6 @@
 package ClientSide.Model;
 
+import ServerSide.Model.Blockchain;
 import ServerSide.Model.ServerBlockchain;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -17,21 +18,27 @@ public class Client {
     private String name;
     private SSLSocket socket;
     private String myIp;
+    private ServerBlockchain mySideServer;
+    private Blockchain blockchain;
     
-    
+    /** Uso no servidor
+     * @param socket*/
     public Client(SSLSocket socket){
         this.socket = socket;
     }
-    
-    public Client( String name){
+    /*Uso no Cliente*/
+    public Client( String name ){
         this.name = name;
         this.myIp = this.getMyIP();
+        
         this.myServerSide();
         this.ConnectTo();
+        this.loadBlockchain();
+        
     }
     
     public final void myServerSide(){
-        new ServerBlockchain();
+        this.mySideServer = new ServerBlockchain();
     }
     
     public void ConnectTo(){
@@ -40,6 +47,10 @@ public class Client {
         System.out.println("Cliente Context: ");
         ssl.showMe();
         Connected connected = new Connected(this);
+    }
+    
+    public void loadBlockchain(){
+        this.blockchain = new Blockchain(); // carregar blockchain salva aqui
     }
     
     public void connectTo(String address, int port){
@@ -90,6 +101,30 @@ public class Client {
 
     public String getName() {
         return name;
+    }
+
+    public String getMyIp() {
+        return myIp;
+    }
+
+    public void setMyIp(String myIp) {
+        this.myIp = myIp;
+    }
+
+    public ServerBlockchain getMySideServer() {
+        return mySideServer;
+    }
+
+    public void setMySideServer(ServerBlockchain mySideServer) {
+        this.mySideServer = mySideServer;
+    }
+
+    public Blockchain getBlockchain() {
+        return blockchain;
+    }
+
+    public void setBlockchain(Blockchain blockchain) {
+        this.blockchain = blockchain;
     }
     
 }

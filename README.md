@@ -29,3 +29,7 @@ Lá você encontra uma pasta com o nome do seu banco de dados, por exemplo nesse
 
 Copie a pasta inteira para o diretório do seu projeto.
 E sobreescreva a pasta existente.
+##################################################################################################
+
+Comando criar jks:
+keytool -import -alias {{alias aqui}} -keystore {{ destino = C:\\NFE\\KEYSTORE\\nomedokeystore.jks }} -file {{certificado = C:\\certificado.cer }}

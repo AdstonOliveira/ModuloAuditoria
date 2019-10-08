@@ -22,11 +22,12 @@ public class SelectFile {
     public boolean selectXML(javax.swing.JInternalFrame display){
         this.jfc.setFileFilter( new FileNameExtensionFilter("Somente XML", "xml") );
         this.jfc.setAcceptAllFileFilterUsed(false);
-        
-            if ( this.jfc.showOpenDialog(display) == JFileChooser.APPROVE_OPTION ){
-                this.selected = jfc.getSelectedFile();
+        this.jfc.setMultiSelectionEnabled(false);
+
+        if ( this.jfc.showOpenDialog(display) == JFileChooser.APPROVE_OPTION ){
+            this.selected = jfc.getSelectedFile();
                 return true;
-            }
+        }
             
         return false;
     }

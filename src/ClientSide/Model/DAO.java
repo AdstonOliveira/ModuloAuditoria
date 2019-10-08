@@ -19,10 +19,11 @@ import org.apache.derby.impl.drda.NetworkServerControlImpl;
  */
 public class DAO {
 
-    private static final String DRIVER = "org.apache.derby.jdbc.ClientDriver";
-    private static final String URL = "jdbc:derby://localhost:1527/auditoria"; //porta padrão
+    private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
+//    private static final String URL = "jdbc:derby://localhost:1527/auditoria"; //porta padrão
     private static final String USER = "adm";
     private static final String PASS = "ifsp100%";
+    private static final String URL = "jdbc:derby:auditoria;create=true;user=adm;password=ifsp100%";
 
     public static Connection getConnection() {
         //Iniciar o banco sem precisar o fazer manualmente toda vez que executar e sem usar o netbeans

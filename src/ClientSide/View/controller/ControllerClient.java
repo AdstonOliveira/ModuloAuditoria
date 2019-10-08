@@ -3,7 +3,7 @@ package ClientSide.View.controller;
 import ClientSide.Model.Client;
 import ClientSide.Model.Transaction;
 import ClientSide.View.cliente.Dash;
-import Tools.SelectXML;
+import Tools.SelectFile;
 import ClientSide.View.cliente.DesktopCliente;
 import javax.swing.JInternalFrame;
 
@@ -12,7 +12,7 @@ import javax.swing.JInternalFrame;
  */
 public class ControllerClient {
     private DesktopCliente desktop;
-    private SelectXML selectXML;
+    private SelectFile selectXML;
     private Client client;
     private Dash dash;
     
@@ -38,12 +38,12 @@ public class ControllerClient {
         if(this.selectXML != null)
             this.selectXML = null;
         
-        this.selectXML = new SelectXML();
+        this.selectXML = new SelectFile();
         
-        return this.selectXML.selectFile(iFrame);
+        return this.selectXML.selectXML(iFrame);
     }
     
-    public SelectXML getSelectXML(){
+    public SelectFile getSelectXML(){
         return this.selectXML;
     }
     public void cancelOption(){

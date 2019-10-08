@@ -1,5 +1,6 @@
 package Tools.Security;
 
+import Tools.SelectFile;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,10 +28,14 @@ public class Key_Store {
     private String pwd ="ifsp100%";
     private KeyManagerFactory kmf; 
     
-    public Key_Store() throws NoSuchAlgorithmException{
+    public Key_Store(String titleKeyStore) throws NoSuchAlgorithmException{
+        
+        SelectFile sl = new SelectFile();
+        if(sl.selectKeyStore(titleKeyStore))
+            this.ks_path = sl.getSelected().getPath();
+        
         this.setFis();
         this.kmf = this.getKMFactory("SunX509");
-        
     }
     
     public Key_Store(String instance, String ks_path, String ks_alias, String pwd, String kmf_factory) throws NoSuchAlgorithmException{

@@ -11,15 +11,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 /**
  * @author adston
  */
-public class SelectXML {
-    public SelectXML(){
+public class SelectFile {
+    public SelectFile(){
        this.jfc = new JFileChooser();   
     }
     
     private File selected;
     private final JFileChooser jfc;
     
-    public boolean selectFile(javax.swing.JInternalFrame display){
+    public boolean selectXML(javax.swing.JInternalFrame display){
         this.jfc.setFileFilter( new FileNameExtensionFilter("Somente XML", "xml") );
         this.jfc.setAcceptAllFileFilterUsed(false);
         
@@ -30,6 +30,23 @@ public class SelectXML {
             
         return false;
     }
+    
+    public boolean selectKeyStore(String dialogTitle){
+        this.jfc.setFileFilter(new FileNameExtensionFilter("Arquivo KeyStore - jks", "jks"));
+        this.jfc.setAcceptAllFileFilterUsed(false);
+        this.jfc.setMultiSelectionEnabled(false);
+        
+        this.jfc.setDialogTitle(dialogTitle);
+        
+        if ( this.jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION ){
+                this.selected = jfc.getSelectedFile();
+                System.out.println(this.selected.getPath());
+                return true;
+            }
+            
+        return false;
+    }
+    
     public File getSelected(){
         if(this.selected !=null)
             return this.selected;

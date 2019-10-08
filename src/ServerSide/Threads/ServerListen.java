@@ -23,7 +23,7 @@ public class ServerListen {
     private SSL_Context ssl_context;
     
     public ServerListen() throws NoSuchAlgorithmException{
-        this.ks = new Key_Store();
+        this.ks = new Key_Store("Server KeyStore");
         this.PORT = 1050;
         this.auth_client = false;
         
@@ -31,7 +31,7 @@ public class ServerListen {
     }
 
     public ServerListen(int PORT, boolean auth_client) throws NoSuchAlgorithmException {
-        this.ks = new Key_Store();
+        this.ks = new Key_Store("Server KeyStore");
         this.PORT = PORT;
         this.auth_client = auth_client;
         
@@ -43,7 +43,7 @@ public class ServerListen {
     }
     
     public SSLServerSocket CreateServer() throws NoSuchAlgorithmException, KeyManagementException{
-        this.ks = new Key_Store();
+//        this.ks = new Key_Store();
         this.ks.initKMF();
         
         this.ssl_context = new SSL_Context();

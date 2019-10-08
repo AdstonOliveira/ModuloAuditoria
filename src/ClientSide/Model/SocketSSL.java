@@ -31,7 +31,7 @@ public class SocketSSL {
     
     public SSLSocket createSocket(){
         try {
-            this.ks = new Key_Store();
+            this.ks = new Key_Store("Cliente KeyStore");
             this.ks.initKMF();
             this.ssl_context = new SSL_Context();
             this.ssl_context.getSSLContext("SSLv3");

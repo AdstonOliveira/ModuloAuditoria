@@ -19,11 +19,12 @@ import org.apache.derby.impl.drda.NetworkServerControlImpl;
  */
 public class DAO {
 
-    private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-//    private static final String URL = "jdbc:derby://localhost:1527/auditoria"; //porta padrão
+//    private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver"; // prod
+    private static final String DRIVER = "org.apache.derby.jdbc.ClientDriver"; //modo dev
+    private static final String URL = "jdbc:derby://localhost:1527/auditoria"; //modo dev
     private static final String USER = "adm";
     private static final String PASS = "ifsp100%";
-    private static final String URL = "jdbc:derby:auditoria;create=true;user=adm;password=ifsp100%";
+//    private static final String URL = "jdbc:derby:auditoria;create=false;user="+USER+";password="+PASS; //prod
 
     public static Connection getConnection() {
         //Iniciar o banco sem precisar o fazer manualmente toda vez que executar e sem usar o netbeans
@@ -113,13 +114,7 @@ public class DAO {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
             DriverManager.getConnection("jdbc:derby:BancoGerenciador;restoreFrom=" + a);
             JOptionPane.showMessageDialog(null, "Backing Up Realizado com sucesso!");
-        } catch (InstantiationException ex) {
-            JOptionPane.showMessageDialog(null, "Erro no backing Up" + ex);
-        } catch (IllegalAccessException ex) {
-            JOptionPane.showMessageDialog(null, "Erro no backing Up" + ex);
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro no backing Up" + ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (InstantiationException | IllegalAccessException | SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Erro no backing Up" + ex);
         }
 

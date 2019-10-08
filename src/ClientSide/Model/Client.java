@@ -42,7 +42,10 @@ public class Client {
     }
     
     public void ConnectTo(){
-        SocketSSL ssl = new SocketSSL("localhost", 1050);
+        String endereco = JOptionPane.showInputDialog("Insira o endereco para se conectar");
+        int porta = Integer.parseInt(JOptionPane.showInputDialog("Insira a porta"));
+        
+        SocketSSL ssl = new SocketSSL(endereco, porta);
         this.socket = ssl.createSocket();
         System.out.println("Cliente Context: ");
         ssl.showMe();

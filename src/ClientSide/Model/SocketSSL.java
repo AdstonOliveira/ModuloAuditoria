@@ -2,6 +2,7 @@ package ClientSide.Model;
 
 import Tools.Security.Key_Store;
 import Tools.Security.SSL_Context;
+import Tools.SelectFile;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -25,6 +26,7 @@ public class SocketSSL {
         this.host = "localhost";
     }
     public SocketSSL(String host, int port){
+        
         this.port = port;
         this.host = host;
     }

@@ -20,8 +20,7 @@ public class ServerTeste {
          
         //2
         byte[] objectAsByte = new byte[socket.getReceiveBufferSize()];
-        BufferedInputStream bf = new BufferedInputStream(
-        socket.getInputStream());
+        BufferedInputStream bf = new BufferedInputStream( socket.getInputStream() );
         bf.read(objectAsByte);
          
         //3

@@ -11,15 +11,15 @@ public class Connecteds {
  
     private ArrayList<Connected> connecteds = new ArrayList();
     
-    
     public void add(Connected connected){
         if( connected.isValid() && !this.duplicated( connected.getName() ) )
             this.connecteds.add(connected);
         
     }
+    
     private boolean duplicated( String name ){
       if(this.connecteds.size() > 0)
-          return (this.connecteds.stream().anyMatch((conected) -> ( name.equalsIgnoreCase( conected.getName() ) ))) ;
+          return (this.connecteds.stream().anyMatch( (conected) -> ( name.equalsIgnoreCase( conected.getName() ) ))) ;
     
       return false;
     }

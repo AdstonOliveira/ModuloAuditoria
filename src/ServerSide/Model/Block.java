@@ -2,23 +2,21 @@ package ServerSide.Model;
 import ClientSide.Model.I_Transaction;
 import ClientSide.Model.Transaction;
 import ClientSide.Model.Thread.ThMinningBlock;
-import Tools.RandID;
 import Tools.Util;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 /**
  * @author adston
  */
 public class Block {
     public Block(){
-        this.autoID();
     }
     /** inicializa um novo bloco com qtde de transações definida*/
     public Block(int amount_transactions){
-        this.autoID();
         this.amount_transactions = amount_transactions;
     }
-    private int id;
+
     private long timeStamp; //data atual 
     private String hash = "nao calculado"; // Hash do atual
     private String previousHash = "First Block";
@@ -31,15 +29,16 @@ public class Block {
 
     @Override
     public String toString() {
-        return "Block{\n" + "id=" + id + ", timeStamp=" + timeStamp + ", hash=" + hash + ",\npreviousHash=" 
+        return "Block{\n" + "timeStamp= " + new Date(timeStamp) + "\nhash= " + hash + ",\npreviousHash= " 
                 + previousHash + "\nTransações: " + this.showTransactions() + '}';
     }
-    /** Exibe cada transação contida no bloco */
+    /** Exibe cada transação contida no bloco
+     * @return  */
     public String showTransactions(){
         String content = "";
         for(I_Transaction t : transactions){
             Transaction transaction = (Transaction) t;
-            content += transaction.toString();
+            content += "\n"+transaction.toString();
         }
         return content;
     }
@@ -51,22 +50,21 @@ public class Block {
     }
     
     /** Processo de mineiração do atual bloco
-     * A dificuldade esta relacionada a qtde de 0's no inicio do hash
-     */
-    
+    * A dificuldade esta relacionada a qtde de 0's no inicio do hash
+    * Cria o hash das transações para então criar seu proprio hash
+    */
     public boolean mineBlock( ) {
         this.hashTransactions();
         Thread t = new Thread( new ThMinningBlock(this) );
-//        t.start();
-        t.run();
+        t.start();
+//        t.run();
         return true;
     }
     
-    /** Cria o hash das transações para então criar seu proprio hash*/
     public String calculateHash() {
+        this.timeStamp = System.currentTimeMillis();
         
-        
-        String value = this.id + this.previousHash + Long.toString(this.timeStamp) 
+        String value = this.previousHash + Long.toString(this.timeStamp) 
                 + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
         
         String calculatedhash = Util.applySha512( value );
@@ -86,41 +84,25 @@ public class Block {
             
             this.transactions.add(transaction);
 
-            JOptionPane.showMessageDialog(null,"Adicionando ao Bloco : "+this.getId() 
-                    +"\n Transaçoes registradas: " + this.transactions.size() );
+            JOptionPane.showMessageDialog(null,"Adicionando ao Bloco\n"+
+                    "Total Transaçoes Registradas: " + this.transactions.size() );
             return true;    
-        }else{
+        }
 //             this.calculate_hash();
             return false;
-        }
-        
     }
     /** Cria o hash das transações*/
     private String hashTransactions(){
-        String hash = "";
+        String thash = "";
             for(I_Transaction It :  this.transactions){
                 Transaction t = (Transaction) It;
                     System.out.println("Transaction Hash: " + t.getHash());
-                   hash += t.getHash();
+                   thash += t.getHash();
             }
             
-        this.hash_transactions = Util.applySha512(hash);
+        this.hash_transactions = Util.applySha512(thash);
         System.out.println("hash for all Transactions\n" + this.hash_transactions);
         return hash;
-    }
-    
-    
-    
-    public int getId() {
-        return id;
-    }
-    
-    private void autoID(){
-        this.id = RandID.newID();
-        
-    }
-    public void setId(int id) {
-        this.id = id;
     }
     
     public boolean isFull(){
@@ -163,10 +145,6 @@ public class Block {
         return transactions;
     }
 
-//    public void setDados(ArrayList<I_Transaction> dados) {
-//        this.data = dados;
-//    }
-
     public int getNonce() {
         return nonce;
     }
@@ -182,9 +160,5 @@ public class Block {
         }
         return null;
     }
-    
-    
-    
-    
     
 }

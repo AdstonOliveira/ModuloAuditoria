@@ -1,5 +1,6 @@
 package ServerSide.Threads;
 
+import ServerSide.Model.ServerBlockchain;
 import Tools.Security.Key_Store;
 import Tools.Security.SSL_Context;
 import java.io.IOException;
@@ -10,7 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocket;
-
 /**
  * @author adston
  * Classe que inicializa a escuta do lado servidor
@@ -21,17 +21,20 @@ public class ServerListen {
     private final int PORT;
     private final boolean auth_client;
     private SSL_Context ssl_context;
+    private ServerBlockchain server;
     
-    public ServerListen() throws NoSuchAlgorithmException{
+    public ServerListen(ServerBlockchain server) throws NoSuchAlgorithmException{
         this.ks = new Key_Store("Server KeyStore");
+        this.server = server;
         this.PORT = 1050;
         this.auth_client = false;
         
         this.initMe();
     }
 
-    public ServerListen(int PORT, boolean auth_client) throws NoSuchAlgorithmException {
+    public ServerListen(ServerBlockchain server, int PORT, boolean auth_client) throws NoSuchAlgorithmException {
         this.ks = new Key_Store("Server KeyStore");
+        this.server = server;
         this.PORT = PORT;
         this.auth_client = auth_client;
         
@@ -54,30 +57,32 @@ public class ServerListen {
         this.ssl_context.showPropSSLContext(this.ssl_context.getSsl_context());
         
         SSLServerSocket sss = null;
+        
         try {
             sss = (SSLServerSocket) ssf.createServerSocket(PORT);
         } catch (IOException ex) {
             System.out.println("Erro linha 58. Criar serverSocket");
             Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if(sss !=null){
             try {
                 sss.setReuseAddress(true);
             } catch (SocketException ex) {
                 System.out.println("Erro linha 66. Reuse address");
                 Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
             if (this.auth_client)
                 sss.setNeedClientAuth(this.auth_client);
+        }
           
         return sss;
     }
     
     public final void initMe(){
-        SSLServerSocket server;
+        SSLServerSocket socketServer;
         try {
-            server = this.CreateServer();
-            Thread t = new Thread(  new ThServerListen(server) );
+            socketServer = this.CreateServer();
+            Thread t = new Thread(  new ThServerListen(socketServer) );
             t.start();
         } catch (NoSuchAlgorithmException | KeyManagementException ex) {
             System.out.println("Erro metodo init ServerListen");

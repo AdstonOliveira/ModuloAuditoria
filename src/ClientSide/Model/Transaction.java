@@ -1,5 +1,6 @@
 package ClientSide.Model;
 
+import DAO.DAOTransaction;
 import Tools.RandID;
 import Tools.Util;
 import java.io.File;
@@ -10,12 +11,15 @@ import javax.swing.JOptionPane;
  * @author adston
  */
 public final class Transaction implements I_Transaction, Serializable{
+    private static final long serialVersionUID = 1L;
     
     private transient Client client;
     private long timestamp;
+    
     private int id;
     private String transaction_hash;
     private String previous_transaction_hash = "FirstInBlock";
+    
     private File transaction_file;
     private String hash_transaction_file;
 
@@ -40,12 +44,27 @@ public final class Transaction implements I_Transaction, Serializable{
         
         
     }
+    /* Cria um hash_transaction para a transacao atual */
+    public void hashTransaction(){
+        this.timestamp = System.currentTimeMillis();
+        
+        String value = Integer.toString(this.id) + this.client.getName() + this.timestamp + this.previous_transaction_hash 
+                + this.hash_transaction_file;
+        
+        this.transaction_hash = Util.applySha512(value);
+        DAOTransaction.saveTransaction(this);
+        
+        System.out.println("Transaction Hash: " + this.transaction_hash);
+    }
     
     @Override
     public String toString() {
-        return "Transaction{\n" + "id=" + id + ", sender=" + this.client.getName() + ",\nHash_file=" 
-                + this.hash_transaction_file + ",\nhash_T=" 
-                + this.transaction_hash +" previous TransactionHash: "+ this.previous_transaction_hash +"\n"+'}';
+        return "Transaction{\n" + "id= " + id + ", sender= " + this.client.getName()
+                +" Data registro: " + Util.formatDate(timestamp)
+                + ",\nHash_file= " + this.hash_transaction_file 
+                + ",\nhash_T= " + this.transaction_hash 
+                +"\nprevious TransactionHash: "+ this.previous_transaction_hash 
+                +"\n"+'}';
     }
     
     
@@ -79,21 +98,59 @@ public final class Transaction implements I_Transaction, Serializable{
         return this.transaction_hash;
     }
     
-    /* Cria um hash_transaction para a transacao atual */
-    public void hashTransaction(){
-        
-        String value = Integer.toString(this.id) + this.client.getName() + this.previous_transaction_hash 
-                + this.hash_transaction_file;
-        
-        this.transaction_hash = Util.applySha512(value);
-        System.out.println("Transaction Hash: " + this.transaction_hash);
-    }
-    
     public String getPrevious(){
         return this.previous_transaction_hash;
     }
     public void setPrevious(String previous_hash){
         this.previous_transaction_hash = previous_hash;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getTransaction_hash() {
+        return transaction_hash;
+    }
+
+    public void setTransaction_hash(String transaction_hash) {
+        this.transaction_hash = transaction_hash;
+    }
+
+    public String getPrevious_transaction_hash() {
+        return previous_transaction_hash;
+    }
+
+    public void setPrevious_transaction_hash(String previous_transaction_hash) {
+        this.previous_transaction_hash = previous_transaction_hash;
+    }
+
+    public File getTransaction_file() {
+        return transaction_file;
+    }
+
+    public void setTransaction_file(File transaction_file) {
+        this.transaction_file = transaction_file;
+    }
+
+    public String getHash_transaction_file() {
+        return hash_transaction_file;
+    }
+
+    public void setHash_transaction_file(String hash_transaction_file) {
+        this.hash_transaction_file = hash_transaction_file;
     }
    
 }

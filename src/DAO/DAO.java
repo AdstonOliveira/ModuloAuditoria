@@ -1,5 +1,4 @@
-package ClientSide.Model;
-
+package DAO;
 
 import Tools.Util;
 import java.io.PrintWriter;
@@ -13,11 +12,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.apache.derby.impl.drda.NetworkServerControlImpl;
-
 /**
  * @author adston
  */
 public class DAO {
+    protected static Connection conn;
 
 //    private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver"; // prod
     private static final String DRIVER = "org.apache.derby.jdbc.ClientDriver"; //modo dev
@@ -127,7 +126,6 @@ public class DAO {
         ResultSet rs = null;
         
         senha = Util.applySha512( senha );
-           System.out.println(senha);
         try {
             stmt = con.prepareStatement("SELECT * FROM adm.cliente where nome='"+nome+"' and senha='"+ (senha) + "'");
             rs = stmt.executeQuery();
@@ -149,8 +147,6 @@ public class DAO {
         Connection con = DAO.getConnection();
         PreparedStatement stmt = null;
         
-        nome = nome;
-
         try {
             stmt = con.prepareStatement("insert into adm.cliente(nome,senha) values (?,?)");
             stmt.setString(1, nome);

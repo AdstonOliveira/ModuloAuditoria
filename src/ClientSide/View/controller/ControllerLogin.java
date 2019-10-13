@@ -1,7 +1,7 @@
 package ClientSide.View.controller;
 
 import ClientSide.Model.Client;
-import ClientSide.Model.DAO;
+import DAO.DAO;
 import ClientSide.View.cliente.Login;
 /**
  * @author adston

@@ -40,10 +40,32 @@ public class Client {
     public final void myServerSide(){
         this.mySideServer = new ServerBlockchain();
     }
-    
+    public boolean checkPort(String porta){
+        if(porta ==null || porta.length() < 1)
+            return false;
+        
+        char[] p = porta.toCharArray();
+        
+            for(char c : p){
+                if(!Character.isDigit(c)){
+                    return false;
+                }
+            }
+        return true;
+    }
     public void ConnectTo(){
         String endereco = JOptionPane.showInputDialog("Insira o endereco para se conectar");
-        int porta = Integer.parseInt(JOptionPane.showInputDialog("Insira a porta"));
+        if(endereco == null || endereco.equalsIgnoreCase(""))
+            endereco = "localhost";
+        
+        String portaT = JOptionPane.showInputDialog("Insira a porta");
+        int porta = 1050;
+        
+        if(checkPort(portaT))
+            porta = Integer.valueOf(portaT);
+        
+        
+        
         
         SocketSSL ssl = new SocketSSL(endereco, porta);
         this.socket = ssl.createSocket();

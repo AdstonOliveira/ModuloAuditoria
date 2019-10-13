@@ -164,40 +164,37 @@ public class SeletorTeste extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
         enviarArquivoServidor();
     }//GEN-LAST:event_jButton2ActionPerformed
 private void enviarArquivoServidor(){
-   if (validaArquivo()){
+    
+   if ( validaArquivo() ){
     try {
         Socket socket = new Socket(jTextFieldDestino.getText().trim(),
           Integer.parseInt(jTextFieldPorta.getText().trim()));
  
-        BufferedOutputStream bf = new BufferedOutputStream
-        (socket.getOutputStream());
+        BufferedOutputStream bf = new BufferedOutputStream( socket.getOutputStream() );
  
         byte[] bytea = serializarArquivo();
         bf.write(bytea);
         bf.flush();
         bf.close();
         socket.close();
+        
     } catch (UnknownHostException e) {
-        e.printStackTrace();
     } catch (IOException e) {
-        e.printStackTrace();
     }
    }
 }
  
 private byte[] serializarArquivo(){
+    
    try {
       ByteArrayOutputStream bao = new ByteArrayOutputStream();
-      ObjectOutputStream ous;
-      ous = new ObjectOutputStream(bao);
+      ObjectOutputStream ous = new ObjectOutputStream(bao);
       ous.writeObject(arquivo);
       return bao.toByteArray();
    } catch (IOException e) {
-      e.printStackTrace();
    }
  
    return null;

@@ -11,7 +11,7 @@ public class Blockchain {
     public Blockchain(){
         this.pool = new Pool(this);
         this.blockchain = new ArrayList();
-        this.tempBlock = new Block(2);
+        this.tempBlock = new Block(1);
     }
     
     private final ArrayList<Block> blockchain;
@@ -21,14 +21,14 @@ public class Blockchain {
             
     //Candidato Thread
     public void addTransaction(Transaction transaction){
-        
         boolean add = this.tempBlock.add_transation(transaction);
         
         if( !add ){
             this.pool.add(this.tempBlock);
-            this.tempBlock = new Block(2);
+            this.tempBlock = new Block(1);
             this.addTransaction(transaction);
         }
+
     }
     
     

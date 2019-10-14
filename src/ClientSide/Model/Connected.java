@@ -53,6 +53,10 @@ public class Connected {
     public void setChannelSendMessage(PrintStream channelSendMessage) {
         this.channelSendMessage = channelSendMessage;
     }
+
+    public Client getClient() {
+        return client;
+    }
     
     
     

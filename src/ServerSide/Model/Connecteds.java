@@ -29,8 +29,10 @@ public class Connecteds {
     
     private boolean duplicated( String name ){
       if(this.connecteds.size() > 0)
-          return (this.connecteds.stream().anyMatch( (conected) -> ( name.equalsIgnoreCase( conected.getSocket().getInetAddress().getHostAddress() ) ))) ;
-    
+          for(Connected c : connecteds){
+              System.out.println(c.getClient().getIP());
+          }
+          
       return false;
     }
     

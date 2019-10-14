@@ -20,7 +20,10 @@ public class Connecteds {
         Connected connected = new Connected(client);
         this.add(connected);
     }
-    public void.getIPS(){
+    
+    public void getIPS(){
+        for(Connected c : connecteds)
+            System.out.println( c.getSocket().getInetAddress().getHostAddress() );
         
     }
     

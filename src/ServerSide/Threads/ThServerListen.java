@@ -31,6 +31,8 @@ public class ThServerListen implements Runnable{
                     this.sl.getServer().getConnecteds().addNew(client);
 
                     System.out.println("Conectou: IP:" + socket.getInetAddress());
+                    System.out.println("Enderecos conectados: \n");
+                    this.sl.getServer().getConnecteds().getIPS();
                 } catch (IOException ex) {
                     Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
                 }

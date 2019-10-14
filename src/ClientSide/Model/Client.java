@@ -116,7 +116,7 @@ public class Client {
     }
 
     public String getIP() {
-        return this.getMyIP();
+        return this.socket.getInetAddress().getHostAddress();
     }
 
     public void setIP(String IP) {

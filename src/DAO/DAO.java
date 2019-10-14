@@ -18,17 +18,18 @@ import org.apache.derby.impl.drda.NetworkServerControlImpl;
 public class DAO {
     protected static Connection conn;
 
-//    private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver"; // prod
-    private static final String DRIVER = "org.apache.derby.jdbc.ClientDriver"; //modo dev
-    private static final String URL = "jdbc:derby://localhost:1527/auditoria"; //modo dev
+    private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver"; // prod
+//    private static final String DRIVER = "org.apache.derby.jdbc.ClientDriver"; //modo dev
+//    private static final String URL = "jdbc:derby://localhost:1527/auditoria"; //modo dev
     private static final String USER = "adm";
     private static final String PASS = "ifsp100%";
-//    private static final String URL = "jdbc:derby:auditoria;create=false;user="+USER+";password="+PASS; //prod
+    private static final String URL = "jdbc:derby:auditoria;create=false;user="+USER+";password="+PASS; //prod
 
     public static Connection getConnection() {
         //Iniciar o banco sem precisar o fazer manualmente toda vez que executar e sem usar o netbeans
         try {
-            System.setProperty("derby.system.home", ".\\db\\javadb\\auditoria");
+//            System.setProperty("derby.system.home", ".\\db\\javadb\\auditoria");Arquivo que se encontra no src
+            System.setProperty("derby.system.home", "C:\\db\\javadb\\auditoria");
         // Crie uma pasta onde você quiser que fique o seu banco e set aqui
            //pode ser qualquer diretorio incluindo a pasta onde estara o executavel(.jar)
            //nesse Caso: C:\\MyDB\\.netbeans-derby

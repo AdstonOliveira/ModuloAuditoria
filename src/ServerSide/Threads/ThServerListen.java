@@ -30,7 +30,7 @@ public class ThServerListen implements Runnable{
                     Client client = new Client(socket);
                     this.sl.getServer().getConnecteds().addNew(client);
 
-                    System.out.println("Conectou");
+                    System.out.println("Conectou: IP:" + socket.getInetAddress());
                 } catch (IOException ex) {
                     Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
                 }

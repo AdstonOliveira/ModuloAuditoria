@@ -18,9 +18,11 @@ public class Connecteds {
     }
     public void addNew(Client client){
         Connected connected = new Connected(client);
-        this.connecteds.add(connected);
+        this.add(connected);
     }
-    
+    public void.getIPS(){
+        
+    }
     
     private boolean duplicated( String name ){
       if(this.connecteds.size() > 0)

@@ -6,6 +6,7 @@ import ClientSide.View.cliente.Dash;
 import Tools.SelectFile;
 import ClientSide.View.cliente.DesktopCliente;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
 /**
  * @author adston
@@ -18,7 +19,11 @@ public class ControllerClient {
     
     public ControllerClient(ClientSocket client){
         this.client = client;
-        this.open();
+        if(this.client.connectTo())
+            this.open();
+        else{
+            JOptionPane.showMessageDialog(null,"Não foi possivel conectar a um servidor de blockchain","Falha ao conectar",0);
+        }
     }
     
     public void open(){

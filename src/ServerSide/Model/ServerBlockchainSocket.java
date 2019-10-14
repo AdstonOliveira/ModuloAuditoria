@@ -24,11 +24,15 @@ public class ServerBlockchainSocket {
     public ServerBlockchainSocket(){
         this.blockchain = new Blockchain();
         this.connecteds = new Connecteds();
+        
+        this.startMe();
     }
     
     public void startMe(){
         try {
             this.server = new ServerSocket(port);
+            this.server.setReuseAddress(true);
+            
             this.listen = new SimpleServerListen(this);
             Thread t = new Thread(this.listen);
             t.start();

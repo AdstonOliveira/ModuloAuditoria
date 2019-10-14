@@ -29,7 +29,7 @@ public class ClientSocket {
     private void chanceConnection(){
         /*Bloco para alteracao de destino*/
         int defOpt = JOptionPane.showConfirmDialog(null, "Manter padrao? (localhost - 1050)","Config Padrao",0);
-            if(defOpt == 0){
+            if(defOpt == 1){
                 String ip = JOptionPane.showInputDialog(null,"Insira o endereco destino: ","Maquina destino");
                 if( ip != null && !ip.equalsIgnoreCase("") )
                     this.serverIP = ip;
@@ -40,9 +40,9 @@ public class ClientSocket {
                     this.PORT = Integer.valueOf(port);
             }
     }
+    
     public void startServer(){
         this.sbs = new ServerBlockchainSocket();
-        this.sbs.startMe();
     }           
     
     public boolean connectTo(){

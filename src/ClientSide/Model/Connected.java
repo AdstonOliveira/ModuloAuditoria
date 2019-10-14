@@ -16,6 +16,7 @@ public class Connected {
         this.client = client;
         this.getStream();
     }
+    
     public String getIP(){
         return this.client.getIP();
     }

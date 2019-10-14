@@ -63,9 +63,6 @@ public class Client {
         if(checkPort(portaT))
             porta = Integer.valueOf(portaT);
         
-        
-        
-        
         SocketSSL ssl = new SocketSSL(endereco, porta);
         this.socket = ssl.createSocket();
         System.out.println("Cliente Context: ");
@@ -96,11 +93,6 @@ public class Client {
         
         return "fail";
     }
-
-    
-    
-    
-    
     
     
     public void myDetails(){

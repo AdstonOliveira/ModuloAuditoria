@@ -29,7 +29,7 @@ public class Connecteds {
     
     private boolean duplicated( String name ){
       if(this.connecteds.size() > 0)
-          return (this.connecteds.stream().anyMatch( (conected) -> ( name.equalsIgnoreCase( conected.getName() ) ))) ;
+          return (this.connecteds.stream().anyMatch( (conected) -> ( name.equalsIgnoreCase( conected.getSocket().getInetAddress().getHostAddress() ) ))) ;
     
       return false;
     }

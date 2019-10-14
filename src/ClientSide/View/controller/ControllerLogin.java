@@ -1,6 +1,7 @@
 package ClientSide.View.controller;
 
 import ClientSide.Model.Client;
+import ClientSide.Model.ClientSocket;
 import DAO.DAO;
 import ClientSide.View.cliente.Login;
 /**
@@ -17,7 +18,7 @@ public class ControllerLogin {
         
         public boolean logar(String nome, String senha){
             if( DAO.login(nome, senha) ){
-               Client client = new Client(nome);
+               ClientSocket client = new ClientSocket(nome);
                ControllerClient controller = new ControllerClient(client);
                this.login.dispose();
                return true;

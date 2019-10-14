@@ -25,16 +25,19 @@ public class ThServerListen implements Runnable{
                 try {
                     SSLSocket socket;
                     socket = (SSLSocket) this.server.accept();
-                    Client client = new Client(socket);
-                    this.sl.getServer().getConnecteds().addNew(client);
                     System.out.println("Conectou: IP:" + socket.getInetAddress());
-                    /*enviar para espera*/
-                    Thread t = new Thread(new ThServerRead(socket));
-                    t.start();
                     
+                    Client client = new Client(socket);
+//                    this.sl.getServer().getConnecteds().addNew(client);
+                    
+                    /*enviar para espera*/
+                    System.out.println("Ta esperando msg");
+                    Thread t = new ThServerRead(socket);
+                    t.start();
                     System.out.println("Enderecos conectados: \n");
                     this.sl.getServer().getConnecteds().getIPS();
                 } catch (IOException ex) {
+                    System.out.println("fail");
                     Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 

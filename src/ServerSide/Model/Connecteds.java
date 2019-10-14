@@ -1,6 +1,7 @@
 package ServerSide.Model;
 
 import ClientSide.Model.Client;
+import ClientSide.Model.ClientSocket;
 import ClientSide.Model.Connected;
 import java.util.ArrayList;
 
@@ -12,11 +13,11 @@ public class Connecteds {
     private ArrayList<Connected> connecteds = new ArrayList();
     
     public void add(Connected connected){
-        if( connected.isValid() && !this.duplicated( connected.getName() ) )
+        if( connected.isValid() /*&& !this.duplicated( connected.getName() ) */)
             this.connecteds.add(connected);
     }
     
-    public void addNew(Client client){
+    public void addNew(ClientSocket client){
         Connected connected = new Connected(client);
         this.add(connected);
     }
@@ -26,7 +27,7 @@ public class Connecteds {
             System.out.println( c.getSocket().getInetAddress().getHostAddress() );
         
     }
-    
+    /*
     private boolean duplicated( String name ){
       if(this.connecteds.size() > 0)
           for(Connected c : connecteds){

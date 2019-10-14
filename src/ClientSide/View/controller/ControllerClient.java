@@ -1,6 +1,6 @@
 package ClientSide.View.controller;
 
-import ClientSide.Model.Client;
+import ClientSide.Model.ClientSocket;
 import ClientSide.Model.Transaction;
 import ClientSide.View.cliente.Dash;
 import Tools.SelectFile;
@@ -13,10 +13,10 @@ import javax.swing.JInternalFrame;
 public class ControllerClient {
     private DesktopCliente desktop;
     private SelectFile selectXML;
-    private Client client;
+    private ClientSocket client;
     private Dash dash;
     
-    public ControllerClient(Client client){
+    public ControllerClient(ClientSocket client){
         this.client = client;
         this.open();
     }
@@ -51,7 +51,7 @@ public class ControllerClient {
     }
 
     public void showDetails() {
-        this.client.myDetails();
+//        this.client.myDetails();
     }
 
     
@@ -60,7 +60,8 @@ public class ControllerClient {
         Transaction transaction = new Transaction( this.client, this.selectXML.getSelected() );
         transaction.serializeMe();
         transaction.writeFileFromArray();
-        this.client.sendTransaction(transaction);
+        
+//        this.client.sendTransaction(transaction);
 //        this.client.getBlockchain().addTransaction(transaction);
     }
     

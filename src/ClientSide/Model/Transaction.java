@@ -20,7 +20,7 @@ public final class Transaction implements I_Transaction, Serializable{
     private static final long serialVersionUID = 1L;
     private transient SerializeTransaction st;
     
-    private transient Client client;
+    private transient ClientSocket client;
     private long timestamp;
     
     private int id;
@@ -34,7 +34,7 @@ public final class Transaction implements I_Transaction, Serializable{
      * @param client Informar cliente criador
      * @param file Informar Arquivo a enviar */
     
-    public Transaction(Client client, File file){
+    public Transaction(ClientSocket client, File file){
         
         this.client = client;
 //        this.id = RandID.newID(); // Precisa verificar os numeros no banco
@@ -163,11 +163,11 @@ public final class Transaction implements I_Transaction, Serializable{
         this.previous_transaction_hash = previous_hash;
     }
 
-    public Client getClient() {
+    public ClientSocket getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(ClientSocket client) {
         this.client = client;
     }
 

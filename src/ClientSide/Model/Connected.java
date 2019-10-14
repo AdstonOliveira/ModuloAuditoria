@@ -9,17 +9,17 @@ import javax.swing.JOptionPane;
  */
 public class Connected {
 
-    private final Client client;
+    private final ClientSocket client;
     private PrintStream channelSendMessage;
     
-    public Connected(Client client){
+    public Connected(ClientSocket client){
         this.client = client;
         this.getStream();
     }
     
-    public String getIP(){
-        return this.client.getIP();
-    }
+//    public String getIP(){
+//        return this.client.getIP();
+//    }
     
     private void getStream(){
         try {
@@ -54,7 +54,7 @@ public class Connected {
         this.channelSendMessage = channelSendMessage;
     }
 
-    public Client getClient() {
+    public ClientSocket getClient() {
         return client;
     }
     

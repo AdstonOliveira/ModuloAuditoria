@@ -10,7 +10,7 @@ import javax.net.ssl.SSLSocket;
  * @author adston
  * Efetua a leitura dos dados enviados
  */
-public class ThServerRead implements Runnable{
+public class ThServerRead extends Thread{
     private SSLSocket socket;
     private ObjectInputStream is;
     
@@ -20,6 +20,7 @@ public class ThServerRead implements Runnable{
     }
 
     public final void initMe(){
+        System.out.println("Iniciou leitura");
         try {
             this.is = new ObjectInputStream(this.socket.getInputStream());
         } catch (IOException ex) {
@@ -27,7 +28,6 @@ public class ThServerRead implements Runnable{
         }
         
     }
-    
     
     @Override
     public void run() {

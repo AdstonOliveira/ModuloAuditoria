@@ -69,7 +69,7 @@ public class Client {
         this.socket = ssl.createSocket();
         System.out.println("Cliente Context: ");
         ssl.showMe();
-        Connected connected = new Connected(this);
+//        Connected connected = new Connected(this);
     }
     
     public void loadBlockchain(){
@@ -79,7 +79,7 @@ public class Client {
     public void connectTo(String address, int port){
         try {
             this.socket = (SSLSocket) new Socket(address, port);
-            Connected connected = new Connected(this);
+//            Connected connected = new Connected(this);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }

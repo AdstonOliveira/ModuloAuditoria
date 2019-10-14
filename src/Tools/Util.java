@@ -110,4 +110,18 @@ public class Util {
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
         return (df.format(dt));
     }
+    
+    public static boolean checkPort(String porta){
+        if(porta == null || porta.length() < 1)
+            return false;
+        
+        char[] p = porta.toCharArray();
+        
+            for(char c : p){
+                if(!Character.isDigit(c)){
+                    return false;
+                }
+            }
+        return true;
+    }
 }

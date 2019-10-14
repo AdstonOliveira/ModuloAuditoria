@@ -54,9 +54,14 @@ public class ControllerClient {
         this.client.myDetails();
     }
 
+    
+    
     public void addTransaction() {
         Transaction transaction = new Transaction( this.client, this.selectXML.getSelected() );
-        this.client.getBlockchain().addTransaction(transaction);
+        transaction.serializeMe();
+        transaction.writeFileFromArray();
+        this.client.sendTransaction(transaction);
+//        this.client.getBlockchain().addTransaction(transaction);
     }
     
     

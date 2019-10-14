@@ -3,6 +3,7 @@ package ClientSide.Model;
 import ServerSide.Model.Blockchain;
 import ServerSide.Model.ServerBlockchain;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -39,8 +40,9 @@ public class Client {
     public final void myServerSide(){
         this.mySideServer = new ServerBlockchain();
     }
+    
     public boolean checkPort(String porta){
-        if(porta ==null || porta.length() < 1)
+        if(porta == null || porta.length() < 1)
             return false;
         
         char[] p = porta.toCharArray();
@@ -92,6 +94,19 @@ public class Client {
         }
         
         return "fail";
+    }
+    
+    public void sendTransaction(Transaction t){
+        ObjectOutputStream os;
+        try {
+            os = new ObjectOutputStream( this.socket.getOutputStream() );
+            os.writeUTF("toValid");
+            os.writeObject(t);
+            os.flush();
+            os.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     

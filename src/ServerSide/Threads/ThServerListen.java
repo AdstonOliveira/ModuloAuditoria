@@ -1,13 +1,11 @@
 package ServerSide.Threads;
 
 import ClientSide.Model.Client;
-import ServerSide.Model.Connecteds;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
-
 /**
  * @author adston
  */
@@ -26,11 +24,14 @@ public class ThServerListen implements Runnable{
             while(true){
                 try {
                     SSLSocket socket;
-                    socket = (SSLSocket) server.accept();
+                    socket = (SSLSocket) this.server.accept();
                     Client client = new Client(socket);
                     this.sl.getServer().getConnecteds().addNew(client);
-
                     System.out.println("Conectou: IP:" + socket.getInetAddress());
+                    /*enviar para espera*/
+                    Thread t = new Thread(new ThServerRead(socket));
+                    t.start();
+                    
                     System.out.println("Enderecos conectados: \n");
                     this.sl.getServer().getConnecteds().getIPS();
                 } catch (IOException ex) {

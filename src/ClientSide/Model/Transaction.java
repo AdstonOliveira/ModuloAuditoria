@@ -1,17 +1,24 @@
 package ClientSide.Model;
 
+import ClientSide.Model.Serialize.SerializeTransaction;
 import DAO.DAOTransaction;
-import Tools.RandID;
 import Tools.Util;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 /**
  * @author adston
  */
 public final class Transaction implements I_Transaction, Serializable{
     private static final long serialVersionUID = 1L;
+    private transient SerializeTransaction st;
     
     private transient Client client;
     private long timestamp;
@@ -20,9 +27,9 @@ public final class Transaction implements I_Transaction, Serializable{
     private String transaction_hash;
     private String previous_transaction_hash = "FirstInBlock";
     
-    private File transaction_file;
+    private transient File transaction_file;
     private String hash_transaction_file;
-
+    private byte[] file_content;
     /** Inicia a transação com um arquivo gerando seu hash_transaction
      * @param client Informar cliente criador
      * @param file Informar Arquivo a enviar */
@@ -30,9 +37,9 @@ public final class Transaction implements I_Transaction, Serializable{
     public Transaction(Client client, File file){
         
         this.client = client;
-        this.id = RandID.newID(); // Precisa verificar os numeros no banco
+//        this.id = RandID.newID(); // Precisa verificar os numeros no banco
         this.transaction_file = file;
-        
+        this.FileToArray();
         try { // Cria o hash_transaction do arquivo
             this.hash_transaction_file = Util.applySHA512(this.transaction_file);
             this.hashTransaction();
@@ -41,9 +48,8 @@ public final class Transaction implements I_Transaction, Serializable{
         }finally{
             System.out.println(this.toString());
         }
-        
-        
     }
+    
     /* Cria um hash_transaction para a transacao atual */
     public void hashTransaction(){
         this.timestamp = System.currentTimeMillis();
@@ -57,14 +63,66 @@ public final class Transaction implements I_Transaction, Serializable{
         System.out.println("Transaction Hash: " + this.transaction_hash);
     }
     
+    public void FileToArray(){
+        int len = (int) this.transaction_file.length();
+            this.file_content = new byte[len];
+            
+            try {
+                FileInputStream inFile = new FileInputStream(this.transaction_file);
+                inFile.read(this.file_content,0 , len);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+    }
+    
+    public void writeFileFromArray(){
+        String path = "c://tmp_";
+        File directory = new File(path);
+        
+        if(!directory.isDirectory())
+            directory.mkdir();
+        
+        File sourceFile = new File(path + "//"+this.hash_transaction_file);
+        
+        FileOutputStream file = null;
+        try {
+            file = new FileOutputStream(sourceFile);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         BufferedOutputStream output; 
+        output = new BufferedOutputStream(file);
+        try {
+            output.flush();
+            output.write(this.file_content, 0, this.file_content.length); 
+            output.flush();
+            output.close();
+            System.out.println("Created");
+        } catch (IOException ex) {
+            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @Override
     public String toString() {
-        return "Transaction{\n" + "id= " + id + ", sender= " + this.client.getName()
+        return "Transaction{\n" + "file_size= " + this.file_content.length + ", sender= " + this.client.getName()
                 +" Data registro: " + Util.formatDate(timestamp)
                 + ",\nHash_file= " + this.hash_transaction_file 
                 + ",\nhash_T= " + this.transaction_hash 
                 +"\nprevious TransactionHash: "+ this.previous_transaction_hash 
                 +"\n"+'}';
+    }
+    
+    public boolean serializeMe(){
+        this.st = new SerializeTransaction();
+        if( this.st.serializeTransaction(this) ){
+            System.out.println(st.getSerialized().getAbsoluteFile());
+            return true;
+        }
+        return false;
     }
     
     
@@ -152,5 +210,9 @@ public final class Transaction implements I_Transaction, Serializable{
     public void setHash_transaction_file(String hash_transaction_file) {
         this.hash_transaction_file = hash_transaction_file;
     }
+    
+    
+    
+    
    
 }

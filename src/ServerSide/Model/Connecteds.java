@@ -14,8 +14,8 @@ public class Connecteds {
     public void add(Connected connected){
         if( connected.isValid() && !this.duplicated( connected.getName() ) )
             this.connecteds.add(connected);
-        
     }
+    
     public void addNew(Client client){
         Connected connected = new Connected(client);
         this.add(connected);

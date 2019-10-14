@@ -1,5 +1,6 @@
 package ServerSide.Threads;
 
+import ClientSide.Model.Client;
 import ServerSide.Model.Connecteds;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -12,9 +13,11 @@ import javax.net.ssl.SSLSocket;
  */
 public class ThServerListen implements Runnable{
     private SSLServerSocket server;
-        
-        public ThServerListen(SSLServerSocket server){
+    private ServerListen sl;
+    
+        public ThServerListen(ServerListen sl, SSLServerSocket server){
             this.server = server;
+            this.sl = sl;
         }
         
         @Override
@@ -22,10 +25,11 @@ public class ThServerListen implements Runnable{
             System.out.println("Aguardando conexoes \n");
             while(true){
                 try {
-                    SSLSocket client;
-                    client = (SSLSocket) server.accept();
-                    
-//                    Client c = new Client();
+                    SSLSocket socket;
+                    socket = (SSLSocket) server.accept();
+                    Client client = new Client(socket);
+                    this.sl.getServer().getConnecteds().addNew(client);
+
                     System.out.println("Conectou");
                 } catch (IOException ex) {
                     Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);

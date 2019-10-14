@@ -34,7 +34,6 @@ public class Client {
         this.myServerSide();
         this.ConnectTo();
         this.loadBlockchain();
-        
     }
     
     public final void myServerSide(){

@@ -65,7 +65,7 @@ public class Key_Store {
             this.fis = new FileInputStream(this.ks_path);
             return true;
         } catch (FileNotFoundException ex) {
-            System.out.println("Erro ao abrir FIS. KEY_STORE linha 63");
+            System.out.println("Erro ao abrir FIS. KEY_STORE linha 65");
             Logger.getLogger(Key_Store.class.getName()).log(Level.SEVERE, null, ex);
         }
         

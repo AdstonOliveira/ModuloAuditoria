@@ -16,6 +16,11 @@ public class Connecteds {
             this.connecteds.add(connected);
         
     }
+    public void addNew(Client client){
+        Connected connected = new Connected(client);
+        this.connecteds.add(connected);
+    }
+    
     
     private boolean duplicated( String name ){
       if(this.connecteds.size() > 0)

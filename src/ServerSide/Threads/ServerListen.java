@@ -82,12 +82,38 @@ public class ServerListen {
         SSLServerSocket socketServer;
         try {
             socketServer = this.CreateServer();
-            Thread t = new Thread(  new ThServerListen(socketServer) );
+            Thread t = new Thread(  new ThServerListen(this,socketServer) );
             t.start();
         } catch (NoSuchAlgorithmException | KeyManagementException ex) {
             System.out.println("Erro metodo init ServerListen");
             Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public Key_Store getKs() {
+        return ks;
+    }
+
+    public void setKs(Key_Store ks) {
+        this.ks = ks;
+    }
+
+    public SSL_Context getSsl_context() {
+        return ssl_context;
+    }
+
+    public void setSsl_context(SSL_Context ssl_context) {
+        this.ssl_context = ssl_context;
+    }
+
+    public ServerBlockchain getServer() {
+        return server;
+    }
+
+    public void setServer(ServerBlockchain server) {
+        this.server = server;
+    }
+    
+    
     
 }

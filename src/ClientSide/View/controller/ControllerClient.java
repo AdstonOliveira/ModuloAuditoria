@@ -66,7 +66,7 @@ public class ControllerClient {
         transaction.serializeMe();
         transaction.writeFileFromArray();
         
-//        this.client.sendTransaction(transaction);
+        this.client.sendTransaction(transaction);
 //        this.client.getBlockchain().addTransaction(transaction);
     }
     

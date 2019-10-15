@@ -32,8 +32,9 @@ public class ThServerListen implements Runnable{
                     
                     /*enviar para espera*/
                     System.out.println("Ta esperando msg");
-                    Thread t = new ThServerRead(socket);
-                    t.start();
+//                    Thread t = new ThServerRead(socket);;
+                    
+//                    t.start();
                     System.out.println("Enderecos conectados: \n");
                     this.sl.getServer().getConnecteds().getIPS();
                 } catch (IOException ex) {

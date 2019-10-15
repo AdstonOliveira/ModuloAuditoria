@@ -100,9 +100,9 @@ public class Client {
         ObjectOutputStream os;
         try {
             os = new ObjectOutputStream( this.socket.getOutputStream() );
-            os.writeUTF("toValid");
             os.writeObject(t);
             os.flush();
+            os.reset();
             os.close();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

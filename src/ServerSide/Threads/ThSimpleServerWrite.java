@@ -9,9 +9,9 @@ package ServerSide.Threads;
  *
  * @author adston
  */
-public class ThSimpleServerListen implements Runnable{
+public class ThSimpleServerWrite implements Runnable{
     
-    public ThSimpleServerListen(){
+    public ThSimpleServerWrite(){
         
     }
 

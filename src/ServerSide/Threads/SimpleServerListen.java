@@ -23,7 +23,10 @@ public class SimpleServerListen implements Runnable{
                 Socket socket = this.server.getServer().accept();
                 System.out.println("Conectou ...");
                 ClientSocket c = new ClientSocket(socket);
+                System.out.println("In server: " + c);
                 this.server.getConnecteds().addNew(c);
+                
+                new Thread( new ThServerRead(c) ).start();
                 
             } catch (IOException ex) {
                 Logger.getLogger(SimpleServerListen.class.getName()).log(Level.SEVERE, null, ex);

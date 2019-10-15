@@ -124,6 +124,22 @@ public final class Transaction implements I_Transaction, Serializable{
         }
         return false;
     }
+
+    public SerializeTransaction getSt() {
+        return st;
+    }
+
+    public void setSt(SerializeTransaction st) {
+        this.st = st;
+    }
+
+    public byte[] getFile_content() {
+        return file_content;
+    }
+
+    public void setFile_content(byte[] file_content) {
+        this.file_content = file_content;
+    }
     
     
     @Override

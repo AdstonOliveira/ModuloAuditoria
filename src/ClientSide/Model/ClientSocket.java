@@ -3,7 +3,9 @@ package ClientSide.Model;
 import ServerSide.Model.Blockchain;
 import ServerSide.Model.ServerBlockchainSocket;
 import Tools.Util;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +60,17 @@ public class ClientSocket {
     }
     
     public void sendTransaction(Transaction t){
-        System.out.println("Implementar envio");
+        ObjectOutputStream os;
+        try {
+            os = new ObjectOutputStream( this.socket.getOutputStream() );
+            if(t.serializeMe()){
+                os.writeObject(t);
+            os.flush();
+            os.close();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     

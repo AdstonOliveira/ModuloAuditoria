@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  * @author adston
  */
 public class Client {
-    
+    /*
     private String name;
     private SSLSocket socket;
     private String myIp;
@@ -23,11 +23,11 @@ public class Client {
     private Blockchain blockchain;
     
     /** Uso no servidor
-     * @param socket*/
+     * @param socket
     public Client(SSLSocket socket){
         this.socket = socket;
     }
-    /*Uso no Cliente*/
+    /*Uso no Cliente
     public Client( String name ){
         this.name = name;
         this.myIp = this.getMyIP();
@@ -157,5 +157,5 @@ public class Client {
     public void setBlockchain(Blockchain blockchain) {
         this.blockchain = blockchain;
     }
-    
+    */
 }

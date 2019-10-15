@@ -5,19 +5,26 @@
  */
 package ServerSide.Threads;
 
+import ServerSide.Model.ServerBlockchainSocket;
+import java.io.ObjectOutputStream;
+
 /**
  *
  * @author adston
  */
-public class ThSimpleServerWrite implements Runnable{
+public class ThSenderServer implements Runnable{
+    private ServerBlockchainSocket sbs;
     
-    public ThSimpleServerWrite(){
+    public ThSenderServer(ServerBlockchainSocket sbs){
+        this.sbs = sbs;
+    }
+    
+    @Override
+    public void run() {
         
     }
 
-    @Override
-    public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
+    
     
 }

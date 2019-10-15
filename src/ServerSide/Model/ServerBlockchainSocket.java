@@ -22,10 +22,10 @@ public class ServerBlockchainSocket {
     }
     
     public ServerBlockchainSocket(){
-        this.blockchain = new Blockchain();
         this.connecteds = new Connecteds();
         
         this.startMe();
+        this.blockchain = new Blockchain(this);
     }
     
     public void startMe(){
@@ -36,6 +36,7 @@ public class ServerBlockchainSocket {
             this.listen = new SimpleServerListen(this);
             Thread t = new Thread(this.listen);
             t.start();
+            
         } catch (IOException ex) {
             Logger.getLogger(ServerBlockchainSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -80,7 +81,11 @@ public class ServerBlockchainSocket {
         this.connecteds = connecteds;
     }
 
+    public Blockchain getBlockchain() {
+        return blockchain;
+    }
 
+    
 
 
 

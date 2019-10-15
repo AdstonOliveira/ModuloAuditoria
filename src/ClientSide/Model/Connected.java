@@ -1,8 +1,12 @@
 package ClientSide.Model;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 /**
  * @author adston
@@ -11,24 +15,27 @@ public class Connected {
 
     private final ClientSocket client;
     private PrintStream channelSendMessage;
+    private ObjectOutputStream sendObjet;
+    private ObjectInputStream receiveObjet;
+    
     
     public Connected(ClientSocket client){
         this.client = client;
-        this.getStream();
+        this.initMe();
     }
     
 //    public String getIP(){
 //        return this.client.getIP();
 //    }
-    
-    private void getStream(){
+    private void initMe(){
         try {
-            this.channelSendMessage = new PrintStream( this.client.getSocket().getOutputStream() );
-            System.out.println("PrintStream aberto");
+            this.sendObjet = new ObjectOutputStream(this.getClient().getSocket().getOutputStream());
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"Erro ao conectar: " + ex,"Fail",0);
+            Logger.getLogger(Connected.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
     
     public boolean isValid(){
         return this.client != null;

@@ -1,9 +1,9 @@
 package ClientSide.Model;
 
+import ClientSide.Model.Thread.ThListenClient;
 import ServerSide.Model.Blockchain;
 import ServerSide.Model.ServerBlockchainSocket;
 import Tools.Util;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -52,7 +52,14 @@ public class ClientSocket {
         
         try {
             this.socket = new Socket(this.serverIP, this.PORT);
+            
+            if( this.socket.isConnected() ){
+                System.out.println("Conectei ao servidor");
+                Thread listen = new Thread(new ThListenClient(this));
+                listen.start();
             return true;
+            }
+            return false;
         } catch (IOException ex) {
             Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -63,11 +70,8 @@ public class ClientSocket {
         ObjectOutputStream os;
         try {
             os = new ObjectOutputStream( this.socket.getOutputStream() );
-            if(t.serializeMe()){
-                os.writeObject(t);
+            os.writeObject(t);
             os.flush();
-            os.close();
-            }
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }

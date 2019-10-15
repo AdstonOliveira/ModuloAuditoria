@@ -8,18 +8,18 @@ import java.util.ArrayList;
  */
 public class Blockchain {
     
-    public Blockchain(){
+    public Blockchain(ServerBlockchainSocket sbs){
         this.pool = new Pool(this);
         this.blockchain = new ArrayList();
         this.tempBlock = new Block(1);
+        this.sbs = sbs;
     }
     
     private final ArrayList<Block> blockchain;
     private final Pool pool;
     private Block tempBlock;
+    private final ServerBlockchainSocket sbs;
             
-            
-    //Candidato Thread
     public void addTransaction(Transaction transaction){
         boolean add = this.tempBlock.add_transation(transaction);
         
@@ -74,6 +74,26 @@ public class Blockchain {
             content += b.toString() + "\n";
         }
         return content;
+    }
+
+    public Block getTempBlock() {
+        return tempBlock;
+    }
+
+    public void setTempBlock(Block tempBlock) {
+        this.tempBlock = tempBlock;
+    }
+
+    public ArrayList<Block> getBlockchain() {
+        return blockchain;
+    }
+
+    public Pool getPool() {
+        return pool;
+    }
+
+    public ServerBlockchainSocket getSbs() {
+        return sbs;
     }
     
     

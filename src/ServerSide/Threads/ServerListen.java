@@ -83,8 +83,8 @@ public class ServerListen {
         SSLServerSocket socketServer;
         try {
             socketServer = this.CreateServer();
-            Thread t = new Thread(  new ThServerListen(this, socketServer) );
-            t.start();
+//            Thread t = new Thread(  new ThServerListen(this, socketServer) );
+//            t.start();
         } catch (NoSuchAlgorithmException | KeyManagementException ex) {
             System.out.println("Erro metodo init ServerListen");
             Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);

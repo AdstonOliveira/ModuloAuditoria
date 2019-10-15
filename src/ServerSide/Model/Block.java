@@ -3,13 +3,14 @@ import ClientSide.Model.I_Transaction;
 import ClientSide.Model.Transaction;
 import ClientSide.Model.Thread.ThMinningBlock;
 import Tools.Util;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
 /**
  * @author adston
  */
-public class Block {
+public class Block implements Serializable{
     public Block(){
     }
     /** inicializa um novo bloco com qtde de transações definida*/
@@ -79,17 +80,18 @@ public class Block {
     
     public boolean add_transation( Transaction transaction ){
         if( !this.isFull() ){
+            
             if( this.transactions.size() > 0 )
                 transaction.setPrevious( this.getLastTransaction().getHash() );
             
             this.transactions.add(transaction);
 
-            JOptionPane.showMessageDialog(null,"Adicionando ao Bloco\n"+
+            JOptionPane.showMessageDialog(null,"Adicionado ao Bloco\n"+
                     "Total Transaçoes Registradas: " + this.transactions.size() );
             return true;    
         }
-//             this.calculate_hash();
-            return false;
+        
+        return false;
     }
     /** Cria o hash das transações*/
     private String hashTransactions(){
@@ -159,6 +161,16 @@ public class Block {
             return t;
         }
         return null;
+    }
+    
+    public boolean validBlock(){
+        String value = this.previousHash + Long.toString(this.timeStamp) 
+                + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
+        
+        String calculatedhash = Util.applySha512( value );
+        
+         return this.hash.equalsIgnoreCase(calculatedhash);
+        
     }
     
 }

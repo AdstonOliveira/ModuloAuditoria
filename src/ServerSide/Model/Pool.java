@@ -22,6 +22,8 @@ public class Pool {
         this.pool.add(tempBlock);
         //Enviar para consenso 
         // Parte abaixo desenvolvida para testes
+        System.out.println("Enviando para consenso ...");
+        this.blockchain.getSbs().getConnecteds().sendToValidation(tempBlock);
         tempBlock.calculate_hash();
         
         this.blockchain.addOnBlockchain( this.getLast() );

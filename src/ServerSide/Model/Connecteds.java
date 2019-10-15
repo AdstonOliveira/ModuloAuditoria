@@ -1,9 +1,12 @@
 package ServerSide.Model;
 
-import ClientSide.Model.Client;
 import ClientSide.Model.ClientSocket;
 import ClientSide.Model.Connected;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author adston
@@ -13,7 +16,7 @@ public class Connecteds {
     private ArrayList<Connected> connecteds = new ArrayList();
     
     public void add(Connected connected){
-        if( connected.isValid() /*&& !this.duplicated( connected.getName() ) */)
+        if( connected.isValid() )
             this.connecteds.add(connected);
     }
     
@@ -41,11 +44,26 @@ public class Connecteds {
      * @param cliente => Socket para comparacao
      * @param msg => Mensagem a ser enviada*/
     
-    public void sendAll( Client cliente, String msg ){
-       if( this.connecteds.size() > 0 )
-          for( Connected c : this.connecteds )
-              if(c.getSocket() != cliente.getSocket())
-              c.sendMessage(msg);
-   }
+    public void sendToValidation(Block toValid){
+        System.out.println("Entrou para envio");
+        
+        if(this.connecteds.size() > 0)
+            for(Connected c : this.connecteds){
+                System.out.println("Enviando para validacao ...");
+                ObjectOutputStream os;
+        
+                try {
+                    os = new ObjectOutputStream( c.getSocket().getOutputStream() );
+                    os.writeObject(toValid);
+                    os.flush();
+                } catch (IOException ex) {
+                    Logger.getLogger(Connecteds.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+            System.err.println("Nenhum socket conectado");
+        }
+        
+    }
+    
     
 }

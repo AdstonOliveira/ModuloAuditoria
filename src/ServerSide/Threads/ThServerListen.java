@@ -10,17 +10,17 @@ import javax.net.ssl.SSLSocket;
  * @author adston
  */
 public class ThServerListen implements Runnable{
-    private SSLServerSocket server;
+    /*private SSLServerSocket server;
     private ServerListen sl;
     
         public ThServerListen(ServerListen sl, SSLServerSocket server){
             this.server = server;
             this.sl = sl;
         }
-        
+        */
         @Override
-        public void run() {
-            System.out.println("Aguardando conexoes \n");
+        public void run() {}
+          /*  System.out.println("Aguardando conexoes \n");
             while(true){
                 try {
                     SSLSocket socket;
@@ -30,7 +30,7 @@ public class ThServerListen implements Runnable{
                     Client client = new Client(socket);
 //                    this.sl.getServer().getConnecteds().addNew(client);
                     
-                    /*enviar para espera*/
+                    /*enviar para espera
                     System.out.println("Ta esperando msg");
 //                    Thread t = new ThServerRead(socket);;
                     
@@ -46,5 +46,5 @@ public class ThServerListen implements Runnable{
 
         }
         
-    
+    */
 }

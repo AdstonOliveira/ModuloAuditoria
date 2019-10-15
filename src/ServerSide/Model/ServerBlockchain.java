@@ -7,7 +7,7 @@ import java.util.logging.Logger;
  * @author adston
  */
 public class ServerBlockchain {
-    private final Blockchain blockchain;
+/*    private final Blockchain blockchain;
     private ServerListen listen;
     private int port = 1050;
     private Connecteds connecteds;
@@ -64,6 +64,6 @@ public class ServerBlockchain {
     }
     
     
-    
+    */
     
 }

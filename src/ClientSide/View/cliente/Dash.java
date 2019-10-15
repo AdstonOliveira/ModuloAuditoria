@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Dash extends javax.swing.JInternalFrame {
     private ControllerClient controller;
-    private final Blockchain blockchain;
+//    private final Blockchain blockchain;
     /**
      * Creates new form Dash
      */
@@ -31,7 +31,7 @@ public class Dash extends javax.swing.JInternalFrame {
     public Dash(){
         initComponents();
 
-        this.blockchain = new Blockchain();
+//        this.blockchain = new Blockchain();
         try {
             this.populaTableUrna();
             this.populaTableVotos();
@@ -59,7 +59,7 @@ public class Dash extends javax.swing.JInternalFrame {
     
     public Dash(Blockchain blockchain){
         initComponents();
-        this.blockchain = blockchain;
+//        this.blockchain = blockchain;
     }
 
     public JButton getBtn_cancel() {

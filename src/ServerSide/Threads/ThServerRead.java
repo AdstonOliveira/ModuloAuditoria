@@ -1,6 +1,8 @@
 package ServerSide.Threads;
 import ClientSide.Model.ClientSocket;
 import ClientSide.Model.Transaction;
+import ServerSide.Model.Block;
+import ServerSide.Model.ServerBlockchainSocket;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.logging.Level;
@@ -13,41 +15,45 @@ import java.util.logging.Logger;
 public class ThServerRead extends Thread{
     private ClientSocket socket;
     private ObjectInputStream is;
+    private ServerBlockchainSocket serverBlockchain;
     
-    public ThServerRead(ClientSocket socket){
+    public ThServerRead(ClientSocket socket, ServerBlockchainSocket blockchain){
         this.socket = socket;
+        this.serverBlockchain = blockchain;
     }
 
     public final void initMe(){
-        System.out.println("Iniciou leitura");
+        System.out.println("Aguardando leitura ...");
     }
     
     @Override
     public void run() {
         this.initMe();
-        
-        System.out.println("Aguardando mensagens ...");
-        System.out.println("Socket Th: "+socket);
-        
+        while(true){
             try {
                 this.is = new ObjectInputStream( this.socket.getSocket().getInputStream() );
-                System.out.println("Tentei ler");
-        }   catch (IOException ex) {
+            } catch (IOException ex) {
                 Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
             }
-        try {
-            
-            Object tmp = this.is.readObject();
-            if(tmp instanceof Transaction){
-                System.out.println("Essa fita mesmo ...");
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
-        
+            Object tmp;
+            try {
+                tmp = this.is.readObject();
+
+                if(tmp instanceof Transaction){
+                    Transaction t = (Transaction) tmp;
+
+                    this.serverBlockchain.getBlockchain().addTransaction(t);
+                    System.out.println("Transacao recebida");
+                }
+                
+                if(tmp instanceof Block){
+                    System.out.println("Bloco recebido");
+                }
+
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }    
     }
-    
 }

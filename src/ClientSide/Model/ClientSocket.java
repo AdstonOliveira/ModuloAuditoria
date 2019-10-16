@@ -90,12 +90,29 @@ public class ClientSocket {
         this.os.writeObject(block);
         os.flush();
     }
+    
     /* teste
     public static void main(String[] args) {
         ClientSocket c = new ClientSocket();
         c.connectTo();
     }
 */
+
+    public ObjectOutputStream getOs() {
+        return os;
+    }
+
+    public void setOs(ObjectOutputStream os) {
+        this.os = os;
+    }
+
+    public ObjectInputStream getIs() {
+        return is;
+    }
+
+    public void setIs(ObjectInputStream is) {
+        this.is = is;
+    }
     
     
     

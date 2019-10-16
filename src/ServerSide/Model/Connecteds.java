@@ -35,17 +35,25 @@ public class Connecteds {
         
     }
     
-    Thread checkconnects = new Thread( ()->{
-        while(true)
-            if(this.connecteds.size() > 0){
-                for(Connected c : this.connecteds){
-                    if( !c.getSocket().isConnected() ){
-                        this.connecteds.remove(c);
-                        System.out.println("Removendo desconectado ");
+    Thread checkconnects = new Thread( new Runnable() {
+        @Override
+        public void run() {
+            while (true) {
+                if (Connecteds.this.connecteds.size() > 0) {
+                    for (Connected c : Connecteds.this.connecteds) {
+                        if (!c.getClient().getSocket().isConnected()) {
+                            try {
+                                c.getClient().getSocket().close();
+                            } catch (IOException ex) {
+                                Logger.getLogger(Connecteds.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            Connecteds.this.connecteds.remove(c);
+                            System.out.println("Removendo desconectado ");
+                        }
                     }
                 }
             }
-    
+        }    
     });
     public int size(){
         return this.connecteds.size();
@@ -66,9 +74,8 @@ public class Connecteds {
      * @param msg => Mensagem a ser enviada*/
     
     public void sendToValidation(Block toValid){
-        System.out.println("Entrou para envio");
         
-        if( this.connecteds.size() > 0 )
+        if( this.connecteds.size() > 0 ){
             for(Connected c : this.connecteds){
                 System.out.println("Enviando para validacao ...");
                 ObjectOutputStream os;
@@ -80,7 +87,8 @@ public class Connecteds {
                 } catch (IOException ex) {
                     Logger.getLogger(Connecteds.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }else{
+            }
+        }else{
             System.err.println("Nenhum socket conectado");
         }
         

@@ -1,4 +1,5 @@
 package ServerSide.Model;
+import ClientSide.Model.Transaction;
 import java.util.ArrayList;
 /**
  * @author adston
@@ -10,7 +11,7 @@ public class Pool {
     }
     
     private final Blockchain blockchain;
-    private final ArrayList<Block> pool;
+    private ArrayList<Block> pool;
     private AvaliationList al = new AvaliationList(this);
     
     public void addOnBlockchain(Block block){
@@ -19,10 +20,24 @@ public class Pool {
         }
     }
     
+    public void addTransaction(Transaction t){
+        if( this.pool.size() == 0 ){
+            this.createNewBlock();
+        }
+        
+        boolean add = this.getLast().add_transation(t);
+        
+        this.blockchain.getSbs().getConnecteds().sendToValidation(this.getLast());
+        
+        this.getLast().mineBlock();
+        this.al.add( this.getLast() );
+
+    }
+    
+    
     public void add(Block tempBlock){
         this.pool.add(tempBlock);
         
-        System.out.println("Enviando para consenso ...");
         this.blockchain.getSbs().getConnecteds().sendToValidation(tempBlock);
     }
     
@@ -37,13 +52,24 @@ public class Pool {
     public void addToAvalition(Block b){
         this.al.add(b);
         if(this.al.getToAvaliation().size() >= this.blockchain.getSbs().getConnecteds().size()/2){
-            if(this.al.compareAll()){
+            if( this.al.compareAll() ){
                 this.blockchain.addOnBlockchain(b);
-                System.out.println("Adicionei a blockchain");
+                System.out.println("Adicionei o bloco a blockchain");
             }
         }
     }
-    
+    public Block createNewBlock(){
+        
+        Block block = new Block();
+        block.setTimeStamp( System.currentTimeMillis() );
+        
+        if( this.pool.size() > 0 )
+            block.setPreviousHash( this.getLast().getHash() );
+        
+        this.pool.add(block);
+        
+        return block;
+    }
     
     public AvaliationList getAl() {
         return al;

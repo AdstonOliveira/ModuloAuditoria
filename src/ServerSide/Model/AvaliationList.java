@@ -19,6 +19,7 @@ public class AvaliationList {
     }
     
     public boolean compareAll(){
+        
         boolean equal = false;
         for(int i = 0; i < this.toAvaliation.size(); i++){
             for(int j = i; j < this.toAvaliation.size()-1; j++){
@@ -29,6 +30,8 @@ public class AvaliationList {
                 }
             }
         }
+        if(equal == true)
+            this.toAvaliation.clear();
         
         return equal;
     }

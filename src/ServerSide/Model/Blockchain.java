@@ -23,16 +23,20 @@ public class Blockchain {
     public void minning(Block minning){
         this.pool.addToAvalition(minning);
     }
+    
+    
+    
+    
     public void addTransaction( Transaction transaction ){
-        
-        boolean add = this.tempBlock.add_transation(transaction);
+        this.pool.addTransaction(transaction);
+        /*boolean add = this.tempBlock.add_transation(transaction);
         
         if( !add ){
             this.pool.add(this.tempBlock);
             
             this.tempBlock = this.createNewBlock();
             this.addTransaction(transaction);
-        }
+        }*/
 
     }
     public Block createNewBlock(){
@@ -52,16 +56,11 @@ public class Blockchain {
            //implantar distribuição
 //           if( block.mineBlock(block.getDifficulty()) ){
                 this.blockchain.add(block);
+                System.out.println(block.toString());
                 return true;
 //           }
-           
-        }else{
-            block.setPreviousHash("Genesis Block");
-//            if( block.mineBlock(block.getDifficulty()) ){
-                this.blockchain.add(block);
-                return true;
-//            }
         }
+        return false;
     }
     
     public Block getLast(){

@@ -5,6 +5,9 @@ import ClientSide.Model.Thread.ThMinningBlock;
 import Tools.Util;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  * @author adston
  */
@@ -25,11 +28,11 @@ public class Block implements Serializable{
     private int nonce = 0; // quantidades hash gerados
     private int amount_transactions = 1; //Quantidade de transações suportadas neste bloco
     private int difficulty = 5;
-/*
+
     @Override
     public String toString() {
         return "Block{\n" + "timeStamp= " + new Date(timeStamp) + "\nhash= " + hash + ",\npreviousHash= " 
-                + previousHash + "\nTransações: " + this.showTransactions() + '}';
+                + previousHash + "\nHashTransações: " + this.hash_transactions + '}';
     }
     /** Exibe cada transação contida no bloco
      * @return  */
@@ -56,6 +59,11 @@ public class Block implements Serializable{
         this.hashTransactions();
         Thread t = new Thread( new ThMinningBlock(this) );
         t.start();
+        try {
+            t.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return true;
     }
     
@@ -97,7 +105,6 @@ public class Block implements Serializable{
             }
             
         this.hash_transactions = Util.applySha512(thash);
-        System.out.println("hash for all Transactions\n" + this.hash_transactions);
         return hash;
     }
     

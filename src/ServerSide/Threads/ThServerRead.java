@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * @author adston
@@ -32,8 +33,6 @@ public class ThServerRead extends Thread{
                 Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
             }
         while( true ){
-            
-
             Object tmp;
             try {
                 tmp = this.is.readObject();
@@ -47,8 +46,9 @@ public class ThServerRead extends Thread{
 
                     if(tmp instanceof Block){
                         Block b = (Block) tmp;
-                        if(!b.getHash().equalsIgnoreCase("nao calculado")){
+                        if( !b.getHash().equalsIgnoreCase("nao calculado") ){
                             this.serverBlockchain.getBlockchain().minning(b);
+                            JOptionPane.showMessageDialog(null, b.toString());
                         }
                     }
 

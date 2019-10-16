@@ -27,7 +27,7 @@ public class Block implements Serializable{
     private int nonce = 0; // quantidades hash gerados
     private int amount_transactions = 1; //Quantidade de transações suportadas neste bloco
     private int difficulty = 5;
-
+/*
     @Override
     public String toString() {
         return "Block{\n" + "timeStamp= " + new Date(timeStamp) + "\nhash= " + hash + ",\npreviousHash= " 
@@ -58,7 +58,6 @@ public class Block implements Serializable{
         this.hashTransactions();
         Thread t = new Thread( new ThMinningBlock(this) );
         t.start();
-//        t.run();
         return true;
     }
     

@@ -11,6 +11,7 @@ public class DesktopCliente extends javax.swing.JFrame {
      */
     public DesktopCliente() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
     public JDesktopPane getDesktop(){
         return this.jDesktopPane1;

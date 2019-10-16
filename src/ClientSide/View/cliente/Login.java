@@ -9,6 +9,7 @@ public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
     private ControllerLogin controller;
 
@@ -142,6 +143,7 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"Bem Vindo");
             this.dispose();
         }
+        
     }//GEN-LAST:event_btnLogarActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed

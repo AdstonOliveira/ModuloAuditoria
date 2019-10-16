@@ -5,6 +5,7 @@ import ServerSide.Model.Blockchain;
 import ServerSide.Model.ServerBlockchainSocket;
 import Tools.Util;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -24,19 +25,22 @@ public class ClientSocket {
     private int PORT = 1050;
     private String serverIP = "localhost";
     
+    private ObjectInputStream is;
+    
+    
     public ClientSocket(){}
     public ClientSocket(Socket socket){ this.socket = socket; }
-    public ClientSocket(String name){ this.name = name; this.startServer();}
+    public ClientSocket(String name){ this.name = name; }
     
     private void chanceConnection(){
         /*Bloco para alteracao de destino*/
         int defOpt = JOptionPane.showConfirmDialog(null, "Manter padrao? (localhost - 1050)","Config Padrao",0);
             if(defOpt == 1){
-                String ip = JOptionPane.showInputDialog(null,"Insira o endereco destino: ","Maquina destino");
+                String ip = JOptionPane.showInputDialog(null,"Insira o endereco destino: ","10.0.0.1");
                 if( ip != null && !ip.equalsIgnoreCase("") )
                     this.serverIP = ip;
                 
-                String port = JOptionPane.showInputDialog(null,"Insira a porta destino: ","IP destino");
+                String port = JOptionPane.showInputDialog(null,"Insira a porta destino: ","1050");
                 
                 if(Util.checkPort(port))
                     this.PORT = Integer.valueOf(port);
@@ -49,16 +53,17 @@ public class ClientSocket {
     
     public boolean connectTo(){
         this.chanceConnection();
-        
+        this.startServer();
+
         try {
             this.socket = new Socket(this.serverIP, this.PORT);
             
             if( this.socket.isConnected() ){
-                System.out.println("Conectei ao servidor");
-                Thread listen = new Thread(new ThListenClient(this));
+                Thread listen = new Thread( new ThListenClient(this) );
                 listen.start();
             return true;
             }
+
             return false;
         } catch (IOException ex) {
             Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,12 +83,12 @@ public class ClientSocket {
     }
     
     
-    
+    /* teste
     public static void main(String[] args) {
         ClientSocket c = new ClientSocket();
         c.connectTo();
     }
-
+*/
     
     
     

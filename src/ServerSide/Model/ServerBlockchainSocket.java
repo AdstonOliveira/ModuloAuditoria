@@ -40,10 +40,17 @@ public class ServerBlockchainSocket {
         } catch (IOException ex) {
             Logger.getLogger(ServerBlockchainSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Thread t = new Thread(this.listen);
+//        Thread t = new Thread(this.listen);
     }
     
-    
+    public void closeMe(){
+        Thread.interrupted();
+        try {
+            this.server.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ServerBlockchainSocket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     
     

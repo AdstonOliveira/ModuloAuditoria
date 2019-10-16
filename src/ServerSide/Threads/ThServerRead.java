@@ -22,14 +22,12 @@ public class ThServerRead extends Thread{
         this.serverBlockchain = blockchain;
     }
 
-    public final void initMe(){
-        System.out.println("Aguardando leitura ...");
-    }
-    
     @Override
     public void run() {
-        this.initMe();
-        while(true){
+        System.out.println("Iniciando leitura ...");
+        
+        while( true ){
+            
             try {
                 this.is = new ObjectInputStream( this.socket.getSocket().getInputStream() );
             } catch (IOException ex) {
@@ -40,20 +38,21 @@ public class ThServerRead extends Thread{
             try {
                 tmp = this.is.readObject();
 
-                if(tmp instanceof Transaction){
-                    Transaction t = (Transaction) tmp;
+                    if(tmp instanceof Transaction){
+                        Transaction t = (Transaction) tmp;
+                        
+                        this.serverBlockchain.getBlockchain().addTransaction(t);
+                        System.out.println("Transacao recebida");
+                    }
 
-                    this.serverBlockchain.getBlockchain().addTransaction(t);
-                    System.out.println("Transacao recebida");
-                }
-                
-                if(tmp instanceof Block){
-                    System.out.println("Bloco recebido");
-                }
+                    if(tmp instanceof Block){
+                        System.out.println("Bloco recebido");
+                    }
 
             } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
             }
         }    
     }
+    
 }

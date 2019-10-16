@@ -20,17 +20,26 @@ public class ThListenClient implements Runnable{
     
     @Override
     public void run() {
+
         try {
             this.is = new ObjectInputStream( this.cs.getSocket().getInputStream() );
         } catch (IOException ex) {
             Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-            Object tmp;
+        
+        Object tmp;
             try {
                 tmp = this.is.readObject();
                 
                 if(tmp instanceof Block){
+                    Block b = (Block) tmp;
+                    
+                    if(b.getHash().equalsIgnoreCase("nao calculado")){
+                        ThMinningBlock mb = new ThMinningBlock(b);
+                        Thread t = new Thread(mb);
+                        t.start();
+                    }
+                    
                     System.out.println("Recebi um bloco do servidor");
                 }
                 

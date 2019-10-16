@@ -1,7 +1,6 @@
 package ClientSide.Model;
 
 import ClientSide.Model.Serialize.SerializeTransaction;
-import DAO.DAOTransaction;
 import Tools.Util;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -33,13 +32,13 @@ public final class Transaction implements I_Transaction, Serializable{
     /** Inicia a transação com um arquivo gerando seu hash_transaction
      * @param client Informar cliente criador
      * @param file Informar Arquivo a enviar */
-    
     public Transaction(ClientSocket client, File file){
         
         this.client = client;
 //        this.id = RandID.newID(); // Precisa verificar os numeros no banco
         this.transaction_file = file;
         this.FileToArray();
+        
         try { // Cria o hash_transaction do arquivo
             this.hash_transaction_file = Util.applySHA512(this.transaction_file);
             this.hashTransaction();
@@ -54,11 +53,10 @@ public final class Transaction implements I_Transaction, Serializable{
     public void hashTransaction(){
         this.timestamp = System.currentTimeMillis();
         
-        String value = Integer.toString(this.id) + this.client.getName() + this.timestamp + this.previous_transaction_hash 
+        String value = this.client.getName() + this.timestamp + this.previous_transaction_hash 
                 + this.hash_transaction_file;
         
         this.transaction_hash = Util.applySha512(value);
-        DAOTransaction.saveTransaction(this);
         
         System.out.println("Transaction Hash: " + this.transaction_hash);
     }
@@ -77,7 +75,7 @@ public final class Transaction implements I_Transaction, Serializable{
             }
         
     }
-    
+    //Cria um arquivo com o conteudo do array
     public void writeFileFromArray(){
         String path = "c://tmp_";
         File directory = new File(path);
@@ -108,7 +106,7 @@ public final class Transaction implements I_Transaction, Serializable{
     
     @Override
     public String toString() {
-        return "Transaction{\n" + "file_size= " + this.file_content.length + ", sender= " + this.client.getName()
+        return "Transaction{\n" + "file_size=(kb) " + this.file_content.length + ", sender= " + this.client.getName()
                 +" Data registro: " + Util.formatDate(timestamp)
                 + ",\nHash_file= " + this.hash_transaction_file 
                 + ",\nhash_T= " + this.transaction_hash 

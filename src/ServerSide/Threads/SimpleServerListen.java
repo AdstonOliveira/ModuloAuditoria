@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  * @author adston
  */
 public class SimpleServerListen implements Runnable{
-    private final ServerBlockchainSocket server;
+    private ServerBlockchainSocket server;
 
     public SimpleServerListen(ServerBlockchainSocket server){
         this.server = server;
@@ -23,7 +23,7 @@ public class SimpleServerListen implements Runnable{
                 Socket socket = this.server.getServer().accept();
                 System.out.println("Cliente Conectado ...");
                 ClientSocket c = new ClientSocket(socket);
-                System.out.println("In server: " + c);
+
                 this.server.getConnecteds().addNew(c);
                 
                 new Thread( new ThServerRead( c, this.server ) ).start();

@@ -1,6 +1,5 @@
 package ClientSide.View.controller;
 
-import ClientSide.Model.Client;
 import ClientSide.Model.ClientSocket;
 import DAO.DAO;
 import ClientSide.View.cliente.Login;
@@ -20,9 +19,14 @@ public class ControllerLogin {
             if( DAO.login(nome, senha) ){
                ClientSocket client = new ClientSocket(nome);
                ControllerClient controller = new ControllerClient(client);
-               this.login.dispose();
-               return true;
+        
+               if( controller.init() ){
+                    this.login.dispose();
+                    return true;
+               }else
+                   return false;
             }
+            
             return false;
         }
         

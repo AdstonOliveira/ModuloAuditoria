@@ -19,14 +19,21 @@ public class ControllerClient {
     
     public ControllerClient(ClientSocket client){
         this.client = client;
-        if(this.client.connectTo())
-            this.open();
-        else{
-            JOptionPane.showMessageDialog(null,"Não foi possivel conectar a um servidor de blockchain","Falha ao conectar",0);
-        }
     }
     
-    public void open(){
+    public boolean init(){
+        if( this.client.connectTo() ){
+            this.open();
+            return true;
+        }else{
+            JOptionPane.showMessageDialog(null,"Não foi possivel conectar a este servidor de blockchain\n"
+                    + "Tente Novamente","Falha ao conectar",0);
+            return false;
+        }
+        
+    }
+    
+    public final void open(){
         this.desktop = new DesktopCliente();
         this.desktop.setVisible(true);
         this.dash = new Dash();
@@ -63,11 +70,10 @@ public class ControllerClient {
     
     public void addTransaction() {
         Transaction transaction = new Transaction( this.client, this.selectXML.getSelected() );
-        transaction.serializeMe();
+
         transaction.writeFileFromArray();
         
         this.client.sendTransaction(transaction);
-//        this.client.getBlockchain().addTransaction(transaction);
     }
     
     

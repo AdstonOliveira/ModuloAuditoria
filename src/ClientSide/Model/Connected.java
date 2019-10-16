@@ -7,7 +7,6 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 /**
  * @author adston
  */
@@ -21,15 +20,13 @@ public class Connected {
     
     public Connected(ClientSocket client){
         this.client = client;
-        this.initMe();
+//        this.initMe();
     }
     
-//    public String getIP(){
-//        return this.client.getIP();
-//    }
+
     private void initMe(){
         try {
-            this.sendObjet = new ObjectOutputStream(this.getClient().getSocket().getOutputStream());
+            this.sendObjet = new ObjectOutputStream( this.getClient().getSocket().getOutputStream() );
         } catch (IOException ex) {
             Logger.getLogger(Connected.class.getName()).log(Level.SEVERE, null, ex);
         }

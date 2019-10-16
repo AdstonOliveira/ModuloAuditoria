@@ -46,7 +46,10 @@ public class ThServerRead extends Thread{
                     }
 
                     if(tmp instanceof Block){
-                        System.out.println("Bloco recebido");
+                        Block b = (Block) tmp;
+                        if(!b.getHash().equalsIgnoreCase("nao calculado")){
+                            System.out.println("O hash do bloco recebido é: " + b.getHash());
+                        }
                     }
 
             } catch (IOException | ClassNotFoundException ex) {

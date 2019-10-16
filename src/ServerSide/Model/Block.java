@@ -5,8 +5,6 @@ import ClientSide.Model.Thread.ThMinningBlock;
 import Tools.Util;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
-import javax.swing.JOptionPane;
 /**
  * @author adston
  */
@@ -85,8 +83,7 @@ public class Block implements Serializable{
             
             this.transactions.add(transaction);
 
-            JOptionPane.showMessageDialog(null,"Adicionado ao Bloco\n"+
-                    "Total Transaçoes Registradas: " + this.transactions.size() );
+            System.out.println("Adicionado ao Bloco\n Total Transaçoes Registradas: " + this.transactions.size() );
             return true;    
         }
         

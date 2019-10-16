@@ -2,7 +2,6 @@ package ClientSide.Model.Thread;
 import ServerSide.Model.Block;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  * @author adston
@@ -16,8 +15,8 @@ public class ThMinningBlock implements Runnable{
     
     @Override
     synchronized public void run(){
-        
-        JOptionPane.showMessageDialog(null, "Aguarde, bloco sera mineirado","Minning Block",1);
+        System.out.println("Mineirndo bloco");
+
         ThProgressBar pb = new ThProgressBar();
         Thread t = new Thread(pb);
         t.start();
@@ -34,15 +33,12 @@ public class ThMinningBlock implements Runnable{
 
                 pb.stopThis();
 //                t.interrupt();
-            
             finish = true;
         }
         
-        JOptionPane.showMessageDialog(null, "Bloco mineirado!!!: " + this.block.toString() );
-        
         try {
+            this.notifyAll();
             this.finalize();
-            
         } catch (Throwable ex) {
             Logger.getLogger(ThMinningBlock.class.getName()).log(Level.SEVERE, null, ex);
         }

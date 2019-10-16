@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 /**
- *
  * @author adston
  */
 public class ServerBlockchainSocket {
@@ -36,15 +34,12 @@ public class ServerBlockchainSocket {
             this.listen = new SimpleServerListen(this);
             Thread t = new Thread(this.listen);
             t.start();
-            
         } catch (IOException ex) {
             Logger.getLogger(ServerBlockchainSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        Thread t = new Thread(this.listen);
     }
     
     public void closeMe(){
-        Thread.interrupted();
         try {
             this.server.close();
         } catch (IOException ex) {

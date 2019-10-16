@@ -4,6 +4,7 @@ import ClientSide.Model.ClientSocket;
 import ServerSide.Model.Block;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.Thread.State;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -38,6 +39,9 @@ public class ThListenClient implements Runnable{
                         ThMinningBlock mb = new ThMinningBlock(b);
                         Thread t = new Thread(mb);
                         t.start();
+                        
+                        t.join();
+                        System.out.println("Terminou a mineiração com join");
                     }
                     
                     System.out.println("Recebi um bloco do servidor");
@@ -45,7 +49,9 @@ public class ThListenClient implements Runnable{
                 
             } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } catch (InterruptedException ex) {
+            Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
                 
     }
     

@@ -14,6 +14,9 @@ import java.util.logging.Logger;
 public class Connecteds {
  
     private ArrayList<Connected> connecteds = new ArrayList();
+    public Connecteds(){
+       this.checkconnects.start();
+    }
     
     public void add(Connected connected){
         if( connected.isValid() )
@@ -23,6 +26,7 @@ public class Connecteds {
     public void addNew(ClientSocket client){
         Connected connected = new Connected(client);
         this.add(connected);
+        System.out.println("Cliente conectou ao servidor");
     }
     
     public void getIPS(){
@@ -30,6 +34,23 @@ public class Connecteds {
             System.out.println( c.getSocket().getInetAddress().getHostAddress() );
         
     }
+    
+    Thread checkconnects = new Thread( ()->{
+        while(true)
+            if(this.connecteds.size() > 0){
+                for(Connected c : this.connecteds){
+                    if( !c.getSocket().isConnected() ){
+                        this.connecteds.remove(c);
+                        System.out.println("Removendo desconectado ");
+                    }
+                }
+            }
+    
+    });
+    public int size(){
+        return this.connecteds.size();
+    }
+    
     /*
     private boolean duplicated( String name ){
       if(this.connecteds.size() > 0)
@@ -47,7 +68,7 @@ public class Connecteds {
     public void sendToValidation(Block toValid){
         System.out.println("Entrou para envio");
         
-        if(this.connecteds.size() > 0)
+        if( this.connecteds.size() > 0 )
             for(Connected c : this.connecteds){
                 System.out.println("Enviando para validacao ...");
                 ObjectOutputStream os;

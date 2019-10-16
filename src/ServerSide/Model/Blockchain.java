@@ -11,7 +11,7 @@ public class Blockchain {
     public Blockchain(ServerBlockchainSocket sbs){
         this.pool = new Pool(this);
         this.blockchain = new ArrayList();
-        this.tempBlock = new Block(1);
+        this.tempBlock = this.createNewBlock();
         this.sbs = sbs;
     }
     
@@ -20,17 +20,31 @@ public class Blockchain {
     private Block tempBlock;
     private final ServerBlockchainSocket sbs;
             
-    public void addTransaction(Transaction transaction){
+    public void minning(Block minning){
+        this.pool.addToAvalition(minning);
+    }
+    public void addTransaction( Transaction transaction ){
+        
         boolean add = this.tempBlock.add_transation(transaction);
         
         if( !add ){
             this.pool.add(this.tempBlock);
-            this.tempBlock = new Block(1);
+            
+            this.tempBlock = this.createNewBlock();
             this.addTransaction(transaction);
         }
 
     }
-    
+    public Block createNewBlock(){
+        
+        Block block = new Block();
+        block.setTimeStamp( System.currentTimeMillis() );
+        
+        if( this.blockchain.size() > 0 )
+            block.setPreviousHash( this.getLast().getHash() );
+        
+        return block;
+    }
     
     public boolean addOnBlockchain(Block block){
         if(this.getSize() > 0){

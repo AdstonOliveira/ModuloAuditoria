@@ -15,9 +15,9 @@ public class ServerBlockchainSocket {
     private int port = 1050;
     private Connecteds connecteds;
 
-    public ServerBlockchainSocket(Blockchain blockchain) {
-        this.blockchain = blockchain;
-    }
+//    public ServerBlockchainSocket( Blockchain blockchain) {
+//        this.blockchain = blockchain;
+//    }
     
     public ServerBlockchainSocket(){
         this.connecteds = new Connecteds();

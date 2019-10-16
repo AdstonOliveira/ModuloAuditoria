@@ -1,6 +1,7 @@
 package ClientSide.Model;
 
 import ClientSide.Model.Thread.ThListenClient;
+import ServerSide.Model.Block;
 import ServerSide.Model.Blockchain;
 import ServerSide.Model.ServerBlockchainSocket;
 import Tools.Util;
@@ -21,6 +22,7 @@ public class ClientSocket {
     private Socket socket;
     private ServerBlockchainSocket sbs;
     private Blockchain myBlockchain;
+    private ObjectOutputStream os;
     
     private int PORT = 1050;
     private String serverIP = "localhost";
@@ -59,6 +61,8 @@ public class ClientSocket {
             this.socket = new Socket(this.serverIP, this.PORT);
             
             if( this.socket.isConnected() ){
+                this.os = new ObjectOutputStream( this.socket.getOutputStream() );
+                
                 Thread listen = new Thread( new ThListenClient(this) );
                 listen.start();
             return true;
@@ -72,9 +76,9 @@ public class ClientSocket {
     }
     
     public void sendTransaction(Transaction t){
-        ObjectOutputStream os;
+//        ObjectOutputStream os;
         try {
-            os = new ObjectOutputStream( this.socket.getOutputStream() );
+//            os = new ObjectOutputStream( this.socket.getOutputStream() );
             os.writeObject(t);
             os.flush();
         } catch (IOException ex) {
@@ -82,7 +86,10 @@ public class ClientSocket {
         }
     }
     
-    
+    public void senBlock(Block block) throws IOException{
+        this.os.writeObject(block);
+        os.flush();
+    }
     /* teste
     public static void main(String[] args) {
         ClientSocket c = new ClientSocket();

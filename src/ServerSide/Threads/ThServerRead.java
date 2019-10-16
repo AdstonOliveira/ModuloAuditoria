@@ -26,13 +26,13 @@ public class ThServerRead extends Thread{
     public void run() {
         System.out.println("Iniciando leitura ...");
         
-        while( true ){
-            
             try {
                 this.is = new ObjectInputStream( this.socket.getSocket().getInputStream() );
             } catch (IOException ex) {
                 Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
             }
+        while( true ){
+            
 
             Object tmp;
             try {
@@ -48,7 +48,7 @@ public class ThServerRead extends Thread{
                     if(tmp instanceof Block){
                         Block b = (Block) tmp;
                         if(!b.getHash().equalsIgnoreCase("nao calculado")){
-                            System.out.println("O hash do bloco recebido é: " + b.getHash());
+                            this.serverBlockchain.getBlockchain().minning(b);
                         }
                     }
 

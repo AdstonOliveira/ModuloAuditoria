@@ -4,7 +4,6 @@ import ClientSide.Model.ClientSocket;
 import ServerSide.Model.Block;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.Thread.State;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -42,6 +41,7 @@ public class ThListenClient implements Runnable{
                         
                         t.join();
                         System.out.println("Terminou a mineiração com join");
+                        this.cs.senBlock(b);
                     }
                     
                     System.out.println("Recebi um bloco do servidor");

@@ -77,13 +77,11 @@ public class Block implements Serializable{
     
     public boolean add_transation( Transaction transaction ){
         if( !this.isFull() ){
-            
             if( this.transactions.size() > 0 )
                 transaction.setPrevious( this.getLastTransaction().getHash() );
             
             this.transactions.add(transaction);
 
-            System.out.println("Adicionado ao Bloco\n Total Transaçoes Registradas: " + this.transactions.size() );
             return true;    
         }
         
@@ -105,6 +103,22 @@ public class Block implements Serializable{
     
     public boolean isFull(){
         return this.transactions.size() == this.amount_transactions;
+    }
+
+    public String getHash_transactions() {
+        return hash_transactions;
+    }
+
+    public void setHash_transactions(String hash_transactions) {
+        this.hash_transactions = hash_transactions;
+    }
+
+    public int getAmount_transactions() {
+        return amount_transactions;
+    }
+
+    public void setAmount_transactions(int amount_transactions) {
+        this.amount_transactions = amount_transactions;
     }
 
     public String getPreviousHash() {

@@ -11,6 +11,7 @@ public class Pool {
     
     private final Blockchain blockchain;
     private final ArrayList<Block> pool;
+    private AvaliationList al = new AvaliationList(this);
     
     public void addOnBlockchain(Block block){
         if( !this.blockchain.addOnBlockchain(block) ){
@@ -20,13 +21,9 @@ public class Pool {
     
     public void add(Block tempBlock){
         this.pool.add(tempBlock);
-        //Enviar para consenso 
-        // Parte abaixo desenvolvida para testes
+        
         System.out.println("Enviando para consenso ...");
         this.blockchain.getSbs().getConnecteds().sendToValidation(tempBlock);
-//        tempBlock.calculate_hash();
-        
-        this.blockchain.addOnBlockchain( this.getLast() );
     }
     
     public String showBlock(){
@@ -35,6 +32,25 @@ public class Pool {
             content += b.toString() + "\n";
         }
         return content;
+    }
+
+    public void addToAvalition(Block b){
+        this.al.add(b);
+        if(this.al.getToAvaliation().size() >= this.blockchain.getSbs().getConnecteds().size()/2){
+            if(this.al.compareAll()){
+                this.blockchain.addOnBlockchain(b);
+                System.out.println("Adicionei a blockchain");
+            }
+        }
+    }
+    
+    
+    public AvaliationList getAl() {
+        return al;
+    }
+
+    public void setAl(AvaliationList al) {
+        this.al = al;
     }
     
     

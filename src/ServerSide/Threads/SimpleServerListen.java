@@ -17,16 +17,14 @@ public class SimpleServerListen implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Aguardando conexoes");
+        System.out.println("Aguardando conexoes ...");
         while(true){
             try {
                 Socket socket = this.server.getServer().accept();
                 System.out.println("Cliente Conectado ...");
-                ClientSocket c = new ClientSocket(socket);
 
-                this.server.getConnecteds().addNew(c);
-                
-                new Thread( new ThServerRead( c, this.server ) ).start();
+                ClientSocket c = new ClientSocket(socket);
+                new Thread( new ThServerRead( this.server.getConnecteds().addNew(c), this.server ) ).start();
                 
             } catch (IOException ex) {
                 Logger.getLogger(SimpleServerListen.class.getName()).log(Level.SEVERE, null, ex);

@@ -31,6 +31,7 @@ public class Pool {
         
         this.getLast().mineBlock();
         this.al.add( this.getLast() );
+        this.al.compareAll();
 
     }
     

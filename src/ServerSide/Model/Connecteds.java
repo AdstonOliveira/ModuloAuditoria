@@ -3,7 +3,6 @@ package ServerSide.Model;
 import ClientSide.Model.ClientSocket;
 import ClientSide.Model.Connected;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +13,7 @@ import java.util.logging.Logger;
 public class Connecteds {
  
     private ArrayList<Connected> connecteds = new ArrayList();
+    
     public Connecteds(){
        this.checkconnects.start();
     }
@@ -23,15 +23,16 @@ public class Connecteds {
             this.connecteds.add(connected);
     }
     
-    public void addNew(ClientSocket client){
+    public Connected addNew(ClientSocket client){
         Connected connected = new Connected(client);
         this.add(connected);
-        System.out.println("Cliente conectou ao servidor");
+
+        return connected;
     }
     
     public void getIPS(){
         for(Connected c : connecteds)
-            System.out.println( c.getSocket().getInetAddress().getHostAddress() );
+            System.out.println( c.getIP() );
         
     }
     
@@ -78,12 +79,10 @@ public class Connecteds {
         if( this.connecteds.size() > 0 ){
             for(Connected c : this.connecteds){
                 System.out.println("Enviando para validacao ...");
-                ObjectOutputStream os;
         
                 try {
-                    os = new ObjectOutputStream( c.getSocket().getOutputStream() );
-                    os.writeObject(toValid);
-                    os.flush();
+                    c.getOos().writeObject(toValid);
+                    c.getOos().flush();
                 } catch (IOException ex) {
                     Logger.getLogger(Connecteds.class.getName()).log(Level.SEVERE, null, ex);
                 }

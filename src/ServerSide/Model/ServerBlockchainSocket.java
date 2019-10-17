@@ -15,10 +15,7 @@ public class ServerBlockchainSocket {
     private int port = 1050;
     private Connecteds connecteds;
 
-//    public ServerBlockchainSocket( Blockchain blockchain) {
-//        this.blockchain = blockchain;
-//    }
-    
+   
     public ServerBlockchainSocket(){
         this.connecteds = new Connecteds();
         
@@ -34,6 +31,7 @@ public class ServerBlockchainSocket {
             this.listen = new SimpleServerListen(this);
             Thread t = new Thread(this.listen);
             t.start();
+            
         } catch (IOException ex) {
             Logger.getLogger(ServerBlockchainSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -86,13 +84,5 @@ public class ServerBlockchainSocket {
     public Blockchain getBlockchain() {
         return blockchain;
     }
-
-    
-
-
-
-
-
-
     
 }

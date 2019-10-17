@@ -1,41 +1,34 @@
 package ServerSide.Threads;
-import ClientSide.Model.ClientSocket;
+import ClientSide.Model.Connected;
 import ClientSide.Model.Transaction;
 import ServerSide.Model.Block;
 import ServerSide.Model.ServerBlockchainSocket;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
 /**
  * @author adston
  * Efetua a leitura dos dados enviados
  */
 public class ThServerRead extends Thread{
-    private ClientSocket socket;
-    private ObjectInputStream is;
+    
+    private Connected conn;
     private ServerBlockchainSocket serverBlockchain;
     
-    public ThServerRead(ClientSocket socket, ServerBlockchainSocket blockchain){
-        this.socket = socket;
+    public ThServerRead(Connected conn, ServerBlockchainSocket blockchain){
+        this.conn = conn;
         this.serverBlockchain = blockchain;
     }
 
     @Override
     public void run() {
-        System.out.println("Iniciando leitura ...");
+        System.out.println("Lendo objetos recebidos ...\n" + this.conn.getIP() );
         
-            try {
-                this.is = new ObjectInputStream( this.socket.getSocket().getInputStream() );
-            } catch (IOException ex) {
-                Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
-            }
         while( true ){
             Object tmp;
             try {
-                tmp = this.is.readObject();
+                tmp = this.conn.getOis().readObject();
 
                     if(tmp instanceof Transaction){
                         Transaction t = (Transaction) tmp;

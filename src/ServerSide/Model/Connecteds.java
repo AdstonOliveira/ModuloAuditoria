@@ -1,9 +1,8 @@
 package ServerSide.Model;
 
-import ClientSide.Model.ClientSocket;
-import ClientSide.Model.Connected;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,27 +11,25 @@ import java.util.logging.Logger;
  */
 public class Connecteds {
  
-    private ArrayList<Connected> connecteds = new ArrayList();
+    private ArrayList<ConnectedClient> connecteds = new ArrayList();
     
     public Connecteds(){
        this.checkconnects.start();
     }
     
-    public void add(Connected connected){
-        if( connected.isValid() )
-            this.connecteds.add(connected);
+    public void add(ConnectedClient connected){
+       this.connecteds.add(connected);
     }
     
-    public Connected addNew(ClientSocket client){
-        Connected connected = new Connected(client);
-        this.add(connected);
+    public ConnectedClient addNew(ConnectedClient client){
+        this.add(client);
 
-        return connected;
+        return client;
     }
     
     public void getIPS(){
-        for(Connected c : connecteds)
-            System.out.println( c.getIP() );
+        for(ConnectedClient c : connecteds)
+            System.out.println(Arrays.toString(c.getSocket().getInetAddress().getAddress()) );
         
     }
     
@@ -40,11 +37,11 @@ public class Connecteds {
         @Override
         public void run() {
             while (true) {
-                if (Connecteds.this.connecteds.size() > 0) {
-                    for (Connected c : Connecteds.this.connecteds) {
-                        if (!c.getClient().getSocket().isConnected()) {
+                if (connecteds.size() > 0) {
+                    for (ConnectedClient c : connecteds) {
+                        if ( !c.getSocket().isConnected()) {
                             try {
-                                c.getClient().getSocket().close();
+                                c.getSocket().close();
                             } catch (IOException ex) {
                                 Logger.getLogger(Connecteds.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -77,7 +74,7 @@ public class Connecteds {
     public void sendToValidation(Block toValid){
         
         if( this.connecteds.size() > 0 ){
-            for(Connected c : this.connecteds){
+            for(ConnectedClient c : connecteds){
                 System.out.println("Enviando para validacao ...");
         
                 try {

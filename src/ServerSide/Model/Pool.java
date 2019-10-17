@@ -1,10 +1,13 @@
 package ServerSide.Model;
+import ClientSide.Model.Thread.ThMinningBlock;
 import ClientSide.Model.Transaction;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  * @author adston
  */
-public class Pool {
+public class Pool{
     public Pool(Blockchain blockchain){
         this.pool = new ArrayList();
         this.blockchain = blockchain;
@@ -21,23 +24,31 @@ public class Pool {
     }
     
     public void addTransaction(Transaction t){
-        if( this.pool.size() == 0 ){
-            this.createNewBlock();
+        Block b = this.createNewBlock();
+        boolean add = b.add_transation(t);
+        System.out.println("Server: mineirando no servidor");
+        
+        Thread th = new Thread( new ThMinningBlock(b) );
+        th.start(); 
+    
+        try {
+            th.join();
+            System.out.println("Servidor finalizou primeira mineiracao");
+            this.sendToValidaton(b);
+            System.out.println("Bloco Enviado ao cliente");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Pool.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        boolean add = this.getLast().add_transation(t);
+
         
-        this.blockchain.getSbs().getConnecteds().sendToValidation(this.getLast());
-        
-        this.getLast().mineBlock();
         this.al.add( this.getLast() );
         this.al.compareAll();
 
     }
     
-    
-    public void add(Block tempBlock){
-        this.pool.add(tempBlock);
+    private void sendToValidaton(Block tempBlock){
+//        this.pool.add(tempBlock);
         
         this.blockchain.getSbs().getConnecteds().sendToValidation(tempBlock);
     }
@@ -60,7 +71,6 @@ public class Pool {
         }
     }
     public Block createNewBlock(){
-        
         Block block = new Block();
         block.setTimeStamp( System.currentTimeMillis() );
         

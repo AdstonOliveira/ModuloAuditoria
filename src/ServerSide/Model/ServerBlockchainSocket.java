@@ -18,7 +18,6 @@ public class ServerBlockchainSocket {
    
     public ServerBlockchainSocket(){
         this.connecteds = new Connecteds();
-        
         this.startMe();
         this.blockchain = new Blockchain(this);
     }

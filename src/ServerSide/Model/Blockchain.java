@@ -1,12 +1,13 @@
 package ServerSide.Model;
 
 import ClientSide.Model.Transaction;
+import java.io.Serializable;
 import java.util.ArrayList;
 /**
  *
  * @author adston
  */
-public class Blockchain {
+public class Blockchain implements Serializable{
     
     public Blockchain(ServerBlockchainSocket sbs){
         this.pool = new Pool(this);
@@ -14,11 +15,10 @@ public class Blockchain {
         this.tempBlock = this.createNewBlock();
         this.sbs = sbs;
     }
-    
     private final ArrayList<Block> blockchain;
-    private final Pool pool;
+    private transient final Pool pool;
     private Block tempBlock;
-    private final ServerBlockchainSocket sbs;
+    private transient final ServerBlockchainSocket sbs;
             
     public void minning(Block minning){
         this.pool.addToAvalition(minning);
@@ -29,6 +29,7 @@ public class Blockchain {
     
     public void addTransaction( Transaction transaction ){
         this.pool.addTransaction(transaction);
+        System.out.println("Server: Adicionado ao pool");
         /*boolean add = this.tempBlock.add_transation(transaction);
         
         if( !add ){
@@ -39,6 +40,7 @@ public class Blockchain {
         }*/
 
     }
+    
     public Block createNewBlock(){
         
         Block block = new Block();

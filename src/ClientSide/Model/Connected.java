@@ -24,6 +24,7 @@ public class Connected {
         try {
             this.ois = new ObjectInputStream(this.client.getSocket().getInputStream());
             this.oos = new ObjectOutputStream(this.client.getSocket().getOutputStream());
+            
         } catch (IOException ex) {
             Logger.getLogger(Connected.class.getName()).log(Level.SEVERE, null, ex);
         }

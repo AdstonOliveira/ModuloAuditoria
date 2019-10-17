@@ -49,13 +49,13 @@ public class ClientSocket {
             }
     }
     
-    public void startServer(){
-        this.sbs = new ServerBlockchainSocket();
-    }           
+//    public void startServer(){
+//        this.sbs = new ServerBlockchainSocket();
+//    }           
     
     public boolean connectTo(){
         this.chanceConnection();
-        this.startServer();
+//        this.startServer();
 
         try {
             this.socket = new Socket(this.serverIP, this.PORT);
@@ -65,6 +65,7 @@ public class ClientSocket {
                 
                 Thread listen = new Thread( new ThListenClient(this) );
                 listen.start();
+                
             return true;
             }
 
@@ -75,28 +76,39 @@ public class ClientSocket {
         }
     }
     
+//    public void sendBlockchain(){
+//        try {
+//            this.os.writeObject(this.myBlockchain);
+//            this.os.flush();
+//            System.out.println("Cliente: Blockchain enviada ao servidor");
+//        } catch (IOException ex) {
+//            Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
+//            System.out.println("Cliente: Erro ao enviar a blockchain");
+//        }
+//    }
+    
+    
     public void sendTransaction(Transaction t){
-//        ObjectOutputStream os;
         try {
-//            os = new ObjectOutputStream( this.socket.getOutputStream() );
-            os.writeObject(t);
-            os.flush();
+            this.os.writeObject(t);
+            this.os.flush();
+            System.out.println("Cliente: Transacao enviada ao servidor");
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Cliente: Erro ao enviar transacao");
         }
     }
     
-    public void senBlock(Block block) throws IOException{
-        this.os.writeObject(block);
-        os.flush();
+    public void senBlock(Block block){
+        try {
+            this.os.writeObject(block);
+            this.os.flush();
+            System.out.println("Cliente: Bloco enviado ao servidor");
+        } catch (IOException ex) {
+            Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro ao enviar bloco");
+        }
     }
-    
-    /* teste
-    public static void main(String[] args) {
-        ClientSocket c = new ClientSocket();
-        c.connectTo();
-    }
-*/
 
     public ObjectOutputStream getOs() {
         return os;
@@ -113,9 +125,6 @@ public class ClientSocket {
     public void setIs(ObjectInputStream is) {
         this.is = is;
     }
-    
-    
-    
     
     public String getName() {
         return name;

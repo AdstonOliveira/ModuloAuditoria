@@ -14,9 +14,7 @@ public class ThMinningBlock implements Runnable{
     public volatile boolean finish = false;
     
     @Override
-    synchronized public void run(){
-        System.out.println("Mineirando bloco");
-
+    public void run(){
         ThProgressBar pb = new ThProgressBar();
         Thread t = new Thread(pb);
         t.start();
@@ -37,7 +35,6 @@ public class ThMinningBlock implements Runnable{
         }
         
         try {
-            this.notifyAll();
             this.finalize();
         } catch (Throwable ex) {
             Logger.getLogger(ThMinningBlock.class.getName()).log(Level.SEVERE, null, ex);

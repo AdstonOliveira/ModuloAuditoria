@@ -1,5 +1,5 @@
 package ServerSide.Threads;
-import ClientSide.Model.ClientSocket;
+import ServerSide.Model.ConnectedClient;
 import ServerSide.Model.ServerBlockchainSocket;
 import java.io.IOException;
 import java.net.Socket;
@@ -23,8 +23,11 @@ public class SimpleServerListen implements Runnable{
                 Socket socket = this.server.getServer().accept();
                 System.out.println("Cliente Conectado ...");
 
-                ClientSocket c = new ClientSocket(socket);
-                new Thread( new ThServerRead( this.server.getConnecteds().addNew(c), this.server ) ).start();
+                ConnectedClient c = new ConnectedClient(socket);
+                c.getOos().writeObject(this.server.getBlockchain());
+
+                this.server.getConnecteds().addNew(c);
+                new Thread( new ThServerRead( c, this.server ) ).start();
                 
             } catch (IOException ex) {
                 Logger.getLogger(SimpleServerListen.class.getName()).log(Level.SEVERE, null, ex);

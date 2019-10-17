@@ -6,8 +6,6 @@ import Tools.Util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  * @author adston
  */
@@ -19,6 +17,7 @@ public class Block implements Serializable{
         this.amount_transactions = amount_transactions;
     }
 
+    private boolean valid = false;
     private long timeStamp; //data atual 
     private String hash = "nao calculado"; // Hash do atual
     private String previousHash = "First Block";
@@ -59,11 +58,7 @@ public class Block implements Serializable{
         this.hashTransactions();
         Thread t = new Thread( new ThMinningBlock(this) );
         t.start();
-        try {
-            t.join();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
         return true;
     }
     
@@ -95,6 +90,7 @@ public class Block implements Serializable{
         
         return false;
     }
+    
     /** Cria o hash das transações*/
     private String hashTransactions(){
         String thash = "";

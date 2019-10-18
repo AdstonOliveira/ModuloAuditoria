@@ -40,18 +40,26 @@ public class ThListenClient implements Runnable{
                     Block b = (Block) tmp;
                     
                     String hashToCompare = b.getHash();
+                    String hashTransaction = b.getHash_transactions();
+                    
                     b.setHash("Mineirando no cliente");
+                    b.hashTransactions();
                     
                     Thread th = new Thread(new ThMinningBlock(b));
                     th.start();
                     
                     try {
                         th.join();
-                        if( b.getHash().equals(hashToCompare) ){
-                            System.out.println("A mineiracao esta correta");
+                        System.out.println("Cliente: Terminei a mineiracao");
+                        if( b.getHash().equals(hashToCompare) && b.getHash_transactions().equals(hashTransaction)){
+                            b.setValid(true);
+                            System.out.println("Campos iguais");
+                            this.cs.getOs().writeObject(b);
+                        }else if(!b.getHash().equals(hashToCompare)){
+                            System.out.println("Hash não confere");
+                        }else if(!b.getHash_transactions().equals(hashTransaction)){
+                            System.out.println("hash da transacao nao bate");
                         }
-                        
-                        JOptionPane.showMessageDialog(null, "OK, terminou no cliente");
                     } catch (InterruptedException ex) {
                         Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
                     }

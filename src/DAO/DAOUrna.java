@@ -73,6 +73,7 @@ public class DAOUrna extends DAO{
             
             lista.add(u);
         }
+        DAO.closeConnection(conn, stmt, rs);
     
         return lista;
     }

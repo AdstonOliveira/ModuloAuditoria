@@ -4,6 +4,7 @@ import ClientSide.Model.Transaction;
 import ClientSide.Model.Thread.ThMinningBlock;
 import Tools.Util;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 /**
@@ -18,19 +19,19 @@ public class Block implements Serializable{
     }
 
     private boolean valid = false;
-    private long timeStamp; //data atual 
+    private Timestamp timeStamp; //data atual 
     private String hash = "nao calculado"; // Hash do atual
     private String previousHash = "First Block";
     private final ArrayList<I_Transaction> transactions = new ArrayList(); //Dado a ser adicionado ao bloco
     private String hash_transactions;
     
-    private int nonce = 0; // quantidades hash gerados
+        private int nonce = 0; // quantidades hash gerados
     private int amount_transactions = 1; //Quantidade de transações suportadas neste bloco
     private int difficulty = 5;
 
     @Override
     public String toString() {
-        return "Block{\n" + "timeStamp= " + new Date(timeStamp) + "\nhash= " + hash + ",\npreviousHash= " 
+        return "Block{\n" + "timeStamp= " + (timeStamp) + "\nhash= " + hash + ",\npreviousHash= " 
                 + previousHash + "\nHashTransações: " + this.hash_transactions + '}';
     }
     /** Exibe cada transação contida no bloco
@@ -63,9 +64,9 @@ public class Block implements Serializable{
     }
     
     public String calculateHash() {
-        this.timeStamp = System.currentTimeMillis();
+//        this.timeStamp = System.currentTimeMillis();
         
-        String value = this.previousHash + Long.toString(this.timeStamp) 
+        String value = this.previousHash + this.timeStamp 
                 + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
         
         String calculatedhash = Util.applySha512( value );
@@ -83,6 +84,7 @@ public class Block implements Serializable{
             if( this.transactions.size() > 0 )
                 transaction.setPrevious( this.getLastTransaction().getHash() );
             
+            
             this.transactions.add(transaction);
 
             return true;    
@@ -92,16 +94,25 @@ public class Block implements Serializable{
     }
     
     /** Cria o hash das transações*/
-    private String hashTransactions(){
+    public String hashTransactions(){
         String thash = "";
+        
             for(I_Transaction It :  this.transactions){
                 Transaction t = (Transaction) It;
-                    System.out.println("Transaction Hash: " + t.getHash());
+                   System.out.println("Transaction Hash: " + t.getHash());
                    thash += t.getHash();
             }
             
         this.hash_transactions = Util.applySha512(thash);
         return hash;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
     
     public boolean isFull(){
@@ -140,11 +151,11 @@ public class Block implements Serializable{
         this.difficulty = difficulty;
     }
     
-    public long getTimeStamp() {
+    public Timestamp getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(long timeStamp) {
+    public void setTimeStamp(Timestamp timeStamp) {
         this.timeStamp = timeStamp;
     }
 
@@ -177,7 +188,7 @@ public class Block implements Serializable{
     }
     
     public boolean validBlock(){
-        String value = this.previousHash + Long.toString(this.timeStamp) 
+        String value = this.previousHash + (this.timeStamp) 
                 + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
         
         String calculatedhash = Util.applySha512( value );

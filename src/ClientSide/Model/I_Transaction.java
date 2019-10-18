@@ -8,8 +8,8 @@ public interface I_Transaction{
 //    private BoletimUrna boletim;
 //    private String hash;
     
-    public int getId();
-    public void setId(int id);
+    public String getBlockHash();
+    public void setBlockHash(String hashBlock);
     
     public String getSender();
     public void setSender(String sender);

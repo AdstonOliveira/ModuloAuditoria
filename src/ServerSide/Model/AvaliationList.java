@@ -14,7 +14,7 @@ public class AvaliationList {
     }
     
     public void add(Block b){
-        System.out.println("Recebido para avaliar");
+        System.out.println("Server AL: Recebido para avaliar");
         this.toAvaliation.add(b);
     }
     
@@ -30,9 +30,10 @@ public class AvaliationList {
                 }
             }
         }
-        if(equal == true)
+        if(equal == true){
+            System.out.println("Os blocos sao iguais");
             this.toAvaliation.clear();
-        
+        }
         return equal;
     }
 

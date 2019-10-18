@@ -49,13 +49,8 @@ public class ClientSocket {
             }
     }
     
-//    public void startServer(){
-//        this.sbs = new ServerBlockchainSocket();
-//    }           
-    
     public boolean connectTo(){
         this.chanceConnection();
-//        this.startServer();
 
         try {
             this.socket = new Socket(this.serverIP, this.PORT);
@@ -75,18 +70,6 @@ public class ClientSocket {
             return false;
         }
     }
-    
-//    public void sendBlockchain(){
-//        try {
-//            this.os.writeObject(this.myBlockchain);
-//            this.os.flush();
-//            System.out.println("Cliente: Blockchain enviada ao servidor");
-//        } catch (IOException ex) {
-//            Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
-//            System.out.println("Cliente: Erro ao enviar a blockchain");
-//        }
-//    }
-    
     
     public void sendTransaction(Transaction t){
         try {

@@ -1,6 +1,7 @@
 package ServerSide.Model;
 import ClientSide.Model.Thread.ThMinningBlock;
 import ClientSide.Model.Transaction;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,29 +28,27 @@ public class Pool{
         Block b = this.createNewBlock();
         boolean add = b.add_transation(t);
         System.out.println("Server: mineirando no servidor");
+        b.hashTransactions();
         
         Thread th = new Thread( new ThMinningBlock(b) );
         th.start(); 
     
         try {
             th.join();
-            System.out.println("Servidor finalizou primeira mineiracao");
+            System.out.println("Servidor: mineirando ...");
             this.sendToValidaton(b);
-            System.out.println("Bloco Enviado ao cliente");
+            
+            System.out.println("Bloco Enviado para validação dos clientes");
         } catch (InterruptedException ex) {
             Logger.getLogger(Pool.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
 
         
-        this.al.add( this.getLast() );
-        this.al.compareAll();
+        this.addToAvalition(b);
 
     }
     
     private void sendToValidaton(Block tempBlock){
-//        this.pool.add(tempBlock);
-        
         this.blockchain.getSbs().getConnecteds().sendToValidation(tempBlock);
     }
     
@@ -63,16 +62,17 @@ public class Pool{
 
     public void addToAvalition(Block b){
         this.al.add(b);
+        
         if(this.al.getToAvaliation().size() >= this.blockchain.getSbs().getConnecteds().size()/2){
             if( this.al.compareAll() ){
                 this.blockchain.addOnBlockchain(b);
-                System.out.println("Adicionei o bloco a blockchain");
+                System.out.println("Pool: Enviei o bloco a blockchain");
             }
         }
     }
     public Block createNewBlock(){
         Block block = new Block();
-        block.setTimeStamp( System.currentTimeMillis() );
+        block.setTimeStamp( new Timestamp(System.currentTimeMillis()) );
         
         if( this.pool.size() > 0 )
             block.setPreviousHash( this.getLast().getHash() );

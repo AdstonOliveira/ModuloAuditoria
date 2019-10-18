@@ -1,21 +1,26 @@
 package ServerSide.Model;
 
 import ClientSide.Model.Transaction;
+import DAO.DAOBlock;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.util.LinkedHashSet;
+import java.util.Set;
 /**
- *
  * @author adston
  */
 public class Blockchain implements Serializable{
     
     public Blockchain(ServerBlockchainSocket sbs){
         this.pool = new Pool(this);
-        this.blockchain = new ArrayList();
+//        this.blockchain = new ArrayList();
+        this.blockchain = new LinkedHashSet();
         this.tempBlock = this.createNewBlock();
         this.sbs = sbs;
     }
-    private final ArrayList<Block> blockchain;
+    
+//    private final List<Block> blockchain;
+    private Set<Block> blockchain;
     private transient final Pool pool;
     private Block tempBlock;
     private transient final ServerBlockchainSocket sbs;
@@ -42,9 +47,8 @@ public class Blockchain implements Serializable{
     }
     
     public Block createNewBlock(){
-        
         Block block = new Block();
-        block.setTimeStamp( System.currentTimeMillis() );
+        block.setTimeStamp( new Timestamp(System.currentTimeMillis()) );
         
         if( this.blockchain.size() > 0 )
             block.setPreviousHash( this.getLast().getHash() );
@@ -53,23 +57,27 @@ public class Blockchain implements Serializable{
     }
     
     public boolean addOnBlockchain(Block block){
-        if(this.getSize() > 0){
+        if(this.getSize() > 0)
            block.setPreviousHash( this.getLast().getHash() );
-           //implantar distribuição
-//           if( block.mineBlock(block.getDifficulty()) ){
-                this.blockchain.add(block);
-                System.out.println(block.toString());
-                return true;
-//           }
-        }
-        return false;
+        
+           if(DAOBlock.saveBlock(block)){
+                if( this.blockchain.add(block) ){
+                    System.out.println("Server: Block = "+block.toString());
+                    return true;
+                }else{
+                    System.out.println("Server: Block ja existe");
+                    return false;
+                }
+           }
+           System.out.println("Server: Nao foi possivel adicionar");
+           return false;
     }
     
     public Block getLast(){
-        if(this.getSize()>0){
-            return this.blockchain.get(this.getSize()-1);
-        }
-        return this.blockchain.get(0);
+        if(this.getSize()>0)
+            return this.blockchain.stream().skip(this.blockchain.size()-1).findFirst().get();
+        
+    return null;
     }
     
     public int getSize(){
@@ -99,7 +107,7 @@ public class Blockchain implements Serializable{
         this.tempBlock = tempBlock;
     }
 
-    public ArrayList<Block> getBlockchain() {
+    public Set<Block> getBlockchain() {
         return blockchain;
     }
 

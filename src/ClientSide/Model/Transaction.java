@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,21 +21,23 @@ public final class Transaction implements I_Transaction, Serializable{
     private transient SerializeTransaction st;
     
     private transient ClientSocket client;
-    private long timestamp;
-    
-    private int id;
+    private Timestamp timestamp;
+
+    private String hash_block;
     private String transaction_hash;
     private String previous_transaction_hash = "FirstInBlock";
     
-    private transient File transaction_file;
+    private File transaction_file;
     private String hash_transaction_file;
     private byte[] file_content;
+    private String sender;
+    
     /** Inicia a transação com um arquivo gerando seu hash_transaction
      * @param client Informar cliente criador
      * @param file Informar Arquivo a enviar */
     public Transaction(ClientSocket client, File file){
-        
         this.client = client;
+        this.sender = this.client.getName();
 //        this.id = RandID.newID(); // Precisa verificar os numeros no banco
         this.transaction_file = file;
         this.FileToArray();
@@ -43,17 +46,31 @@ public final class Transaction implements I_Transaction, Serializable{
             this.hash_transaction_file = Util.applySHA512(this.transaction_file);
             this.hashTransaction();
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao criar hash da transacao", "Hash Fail",0);
+            JOptionPane.showMessageDialog(null, "Falha ao criar hash do arquivo", "Hash Fail",0);
         }finally{
-            System.out.println(this.toString());
+            this.timestamp = new Timestamp(System.currentTimeMillis());
         }
     }
     
+    public Transaction(File file){
+        this.transaction_file = file;
+        this.FileToArray();
+        
+        try { // Cria o hash_transaction do arquivo
+            this.hash_transaction_file = Util.applySHA512(this.transaction_file);
+            this.hashTransaction();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao criar hash do arquivo", "Hash Fail",0);
+        }finally{
+            this.timestamp = new Timestamp(System.currentTimeMillis());
+        }
+        
+    }
+    
+    
     /* Cria um hash_transaction para a transacao atual */
     public void hashTransaction(){
-        this.timestamp = System.currentTimeMillis();
-        
-        String value = this.client.getName() + this.timestamp + this.previous_transaction_hash 
+        String value = this.sender + this.timestamp + this.previous_transaction_hash 
                 + this.hash_transaction_file;
         
         this.transaction_hash = Util.applySha512(value);
@@ -106,8 +123,8 @@ public final class Transaction implements I_Transaction, Serializable{
     
     @Override
     public String toString() {
-        return "Transaction{\n" + "file_size=(kb) " + this.file_content.length + ", sender= " + this.client.getName()
-                +" Data registro: " + Util.formatDate(timestamp)
+        return "Transaction{\n" + "file_size=(kb) " + this.file_content.length + ", sender= "+this.sender
+                +" Data registro: " + this.timestamp
                 + ",\nHash_file= " + this.hash_transaction_file 
                 + ",\nhash_T= " + this.transaction_hash 
                 +"\nprevious TransactionHash: "+ this.previous_transaction_hash 
@@ -140,19 +157,11 @@ public final class Transaction implements I_Transaction, Serializable{
     }
     
     
-    @Override
-    public int getId() {
-        return this.id;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
+   
 
     @Override
     public String getSender() {
-        return this.client.getName();
+        return this.sender;
     }
 
     @Override
@@ -185,11 +194,11 @@ public final class Transaction implements I_Transaction, Serializable{
         this.client = client;
     }
 
-    public long getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -223,6 +232,16 @@ public final class Transaction implements I_Transaction, Serializable{
 
     public void setHash_transaction_file(String hash_transaction_file) {
         this.hash_transaction_file = hash_transaction_file;
+    }
+
+    @Override
+    public String getBlockHash() {
+        return this.hash_block;
+    }
+
+    @Override
+    public void setBlockHash(String hashBlock) {
+        this.hash_block = hashBlock;
     }
     
     

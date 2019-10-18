@@ -1,39 +1,60 @@
 package DAO;
+import ClientSide.Model.I_Transaction;
 import ClientSide.Model.Transaction;
+import ServerSide.Model.Block;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 /**
  * @author adston
  */
 public class DAOTransaction extends DAO{
     
-    public static boolean saveTransaction(Transaction transaction){
-      /*  conn = DAO.getConnection();
+    public static boolean saveTransaction(Transaction transaction, Connection connn){
+        conn = connn;
         
-        PreparedStatement stmt = null;
-        
+        PreparedStatement stmt2 = null;
+
         try {
-            stmt = conn.prepareStatement("insert into adm.transaction(timestamp, transaction_hash, previous_transaction_hash, hash_transaction_file, path_file) "
-                    + "values (?, ?, ?, ?, ?);");
-            stmt.setLong(1, transaction.getTimestamp() );
-            stmt.setString(2, transaction.getTransaction_hash() );
-            stmt.setString(3, transaction.getPrevious_transaction_hash() );
-            stmt.setString(4, transaction.getHash_transaction_file() );
-            stmt.setString(5, transaction.getTransaction_file().getPath() );
+            stmt2 = conn.prepareStatement("insert into TRANSACAO(t_timestamp, transaction_hash, hash_transaction_file, path_file, block_hash) "
+                    + "values (?, ?, ?, ?, ?)");
+            stmt2.setTimestamp(1, transaction.getTimestamp() );
+            stmt2.setString(2, transaction.getTransaction_hash() );
+            stmt2.setString(3, transaction.getHash_transaction_file() );
             
-            stmt.executeUpdate();
-            DAO.closeConnection(conn, stmt);
+            stmt2.setString(4, transaction.getTransaction_file().getPath() );
+            stmt2.setString(5, transaction.getBlockHash() );
+            
+            stmt2.execute();
+//            conn.commit();
+//            DAO.closeConnection(conn, stmt);
             System.out.println("Transacao salva");
+            
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-//            DAO.closeConnection(conn, stmt);
-        }*/
-        return false;
+           try {
+               conn.rollback();
+               System.out.println("Rollback transaction");
+           } catch (SQLException ex1) {
+               System.out.println("Erro ao realizar roolback");
+               System.out.println(ex1);
+           }
+            System.out.println("Erro ao salvar Transacao ...");
+            System.out.println(ex);
         }
+        return false;
+    }
+    public static boolean saveTransaction(Block block, Connection connn){
+        conn = connn;
+        boolean exec = true;
+        for(I_Transaction t : block.getDados() ){
+            Transaction transaction = (Transaction) t;
+            t.setBlockHash(block.getHash());
+            exec = saveTransaction(transaction, conn) && exec;
+        }
+        return exec;
+    }
     
     
     

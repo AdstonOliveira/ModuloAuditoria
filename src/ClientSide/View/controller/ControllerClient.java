@@ -72,7 +72,7 @@ public class ControllerClient {
         Transaction transaction = new Transaction( this.client, this.selectXML.getSelected() );
 
         transaction.writeFileFromArray();
-        
+        System.out.println("Selecionada cliente: " + transaction.toString());
         this.client.sendTransaction(transaction);
     }
     

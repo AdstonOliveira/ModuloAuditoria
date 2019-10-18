@@ -3,6 +3,7 @@ package ClientSide.Model;
 import ServerSide.Model.Blockchain;
 import ServerSide.Model.ServerBlockchain;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -14,7 +15,7 @@ import javax.swing.JOptionPane;
  * @author adston
  */
 public class Client {
-    
+    /*
     private String name;
     private SSLSocket socket;
     private String myIp;
@@ -22,11 +23,11 @@ public class Client {
     private Blockchain blockchain;
     
     /** Uso no servidor
-     * @param socket*/
+     * @param socket
     public Client(SSLSocket socket){
         this.socket = socket;
     }
-    /*Uso no Cliente*/
+    /*Uso no Cliente
     public Client( String name ){
         this.name = name;
         this.myIp = this.getMyIP();
@@ -39,8 +40,9 @@ public class Client {
     public final void myServerSide(){
         this.mySideServer = new ServerBlockchain();
     }
+    
     public boolean checkPort(String porta){
-        if(porta ==null || porta.length() < 1)
+        if(porta == null || porta.length() < 1)
             return false;
         
         char[] p = porta.toCharArray();
@@ -63,14 +65,11 @@ public class Client {
         if(checkPort(portaT))
             porta = Integer.valueOf(portaT);
         
-        
-        
-        
         SocketSSL ssl = new SocketSSL(endereco, porta);
         this.socket = ssl.createSocket();
         System.out.println("Cliente Context: ");
         ssl.showMe();
-        Connected connected = new Connected(this);
+//        Connected connected = new Connected(this);
     }
     
     public void loadBlockchain(){
@@ -80,7 +79,7 @@ public class Client {
     public void connectTo(String address, int port){
         try {
             this.socket = (SSLSocket) new Socket(address, port);
-            Connected connected = new Connected(this);
+//            Connected connected = new Connected(this);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -96,11 +95,19 @@ public class Client {
         
         return "fail";
     }
-
     
-    
-    
-    
+    public void sendTransaction(Transaction t){
+        ObjectOutputStream os;
+        try {
+            os = new ObjectOutputStream( this.socket.getOutputStream() );
+            os.writeObject(t);
+            os.flush();
+            os.reset();
+            os.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     
     public void myDetails(){
@@ -116,7 +123,7 @@ public class Client {
     }
 
     public String getIP() {
-        return this.getMyIP();
+        return this.socket.getInetAddress().getHostAddress();
     }
 
     public void setIP(String IP) {
@@ -150,5 +157,5 @@ public class Client {
     public void setBlockchain(Blockchain blockchain) {
         this.blockchain = blockchain;
     }
-    
+    */
 }

@@ -23,6 +23,7 @@ public class ServerListen {
     private SSL_Context ssl_context;
     private ServerBlockchain server;
     
+    
     public ServerListen(ServerBlockchain server) throws NoSuchAlgorithmException{
         this.ks = new Key_Store("Server KeyStore");
         this.server = server;
@@ -64,7 +65,7 @@ public class ServerListen {
             System.out.println("Erro linha 58. Criar serverSocket");
             Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if(sss !=null){
+        if(sss != null){
             try {
                 sss.setReuseAddress(true);
             } catch (SocketException ex) {
@@ -82,8 +83,8 @@ public class ServerListen {
         SSLServerSocket socketServer;
         try {
             socketServer = this.CreateServer();
-            Thread t = new Thread(  new ThServerListen(this,socketServer) );
-            t.start();
+//            Thread t = new Thread(  new ThServerListen(this, socketServer) );
+//            t.start();
         } catch (NoSuchAlgorithmException | KeyManagementException ex) {
             System.out.println("Erro metodo init ServerListen");
             Logger.getLogger(ServerListen.class.getName()).log(Level.SEVERE, null, ex);

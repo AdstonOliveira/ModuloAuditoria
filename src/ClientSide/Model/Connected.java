@@ -1,34 +1,52 @@
 package ClientSide.Model;
 
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import javax.swing.JOptionPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * @author adston
  */
 public class Connected {
 
-    private final Client client;
-    private PrintStream channelSendMessage;
+    private final ClientSocket client;
+    private String IP;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
     
-    public Connected(Client client){
+    public Connected(ClientSocket client){
         this.client = client;
-        this.getStream();
-    }
-    public String getIP(){
-        return this.client.getIP();
-    }
-    
-    private void getStream(){
+        this.IP = this.client.getSocket().getInetAddress().getHostAddress();
+        
         try {
-            this.channelSendMessage = new PrintStream( this.client.getSocket().getOutputStream() );
-            System.out.println("PrintStream aberto");
+            this.ois = new ObjectInputStream(this.client.getSocket().getInputStream());
+            this.oos = new ObjectOutputStream(this.client.getSocket().getOutputStream());
+            
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"Erro ao conectar: " + ex,"Fail",0);
+            Logger.getLogger(Connected.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public ObjectOutputStream getOos() {
+        return oos;
+    }
+
+    public void setOos(ObjectOutputStream oos) {
+        this.oos = oos;
+    }
+
+    public ObjectInputStream getOis() {
+        return ois;
+    }
+
+    public void setOis(ObjectInputStream ois) {
+        this.ois = ois;
+    }
     
+
     public boolean isValid(){
         return this.client != null;
     }
@@ -37,22 +55,21 @@ public class Connected {
         return this.client.getName();
     }
     
-    public void sendMessage( String msg ){ 
-        this.channelSendMessage.println( msg ); 
-    }
-
     public Socket getSocket() {
         return this.client.getSocket();
     }
 
-    public PrintStream getChannelSendMessage() {
-        return channelSendMessage;
+    public ClientSocket getClient() {
+        return client;
     }
 
-    public void setChannelSendMessage(PrintStream channelSendMessage) {
-        this.channelSendMessage = channelSendMessage;
+    public String getIP() {
+        return IP;
     }
-    
+
+    public void setIP(String IP) {
+        this.IP = IP;
+    }
     
     
 }

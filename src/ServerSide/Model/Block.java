@@ -3,13 +3,13 @@ import ClientSide.Model.I_Transaction;
 import ClientSide.Model.Transaction;
 import ClientSide.Model.Thread.ThMinningBlock;
 import Tools.Util;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.JOptionPane;
 /**
  * @author adston
  */
-public class Block {
+public class Block implements Serializable{
     public Block(){
     }
     /** inicializa um novo bloco com qtde de transações definida*/
@@ -17,6 +17,7 @@ public class Block {
         this.amount_transactions = amount_transactions;
     }
 
+    private boolean valid = false;
     private long timeStamp; //data atual 
     private String hash = "nao calculado"; // Hash do atual
     private String previousHash = "First Block";
@@ -30,7 +31,7 @@ public class Block {
     @Override
     public String toString() {
         return "Block{\n" + "timeStamp= " + new Date(timeStamp) + "\nhash= " + hash + ",\npreviousHash= " 
-                + previousHash + "\nTransações: " + this.showTransactions() + '}';
+                + previousHash + "\nHashTransações: " + this.hash_transactions + '}';
     }
     /** Exibe cada transação contida no bloco
      * @return  */
@@ -57,7 +58,7 @@ public class Block {
         this.hashTransactions();
         Thread t = new Thread( new ThMinningBlock(this) );
         t.start();
-//        t.run();
+
         return true;
     }
     
@@ -84,13 +85,12 @@ public class Block {
             
             this.transactions.add(transaction);
 
-            JOptionPane.showMessageDialog(null,"Adicionando ao Bloco\n"+
-                    "Total Transaçoes Registradas: " + this.transactions.size() );
             return true;    
         }
-//             this.calculate_hash();
-            return false;
+        
+        return false;
     }
+    
     /** Cria o hash das transações*/
     private String hashTransactions(){
         String thash = "";
@@ -101,12 +101,27 @@ public class Block {
             }
             
         this.hash_transactions = Util.applySha512(thash);
-        System.out.println("hash for all Transactions\n" + this.hash_transactions);
         return hash;
     }
     
     public boolean isFull(){
         return this.transactions.size() == this.amount_transactions;
+    }
+
+    public String getHash_transactions() {
+        return hash_transactions;
+    }
+
+    public void setHash_transactions(String hash_transactions) {
+        this.hash_transactions = hash_transactions;
+    }
+
+    public int getAmount_transactions() {
+        return amount_transactions;
+    }
+
+    public void setAmount_transactions(int amount_transactions) {
+        this.amount_transactions = amount_transactions;
     }
 
     public String getPreviousHash() {
@@ -159,6 +174,16 @@ public class Block {
             return t;
         }
         return null;
+    }
+    
+    public boolean validBlock(){
+        String value = this.previousHash + Long.toString(this.timeStamp) 
+                + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
+        
+        String calculatedhash = Util.applySha512( value );
+        
+         return this.hash.equalsIgnoreCase(calculatedhash);
+        
     }
     
 }

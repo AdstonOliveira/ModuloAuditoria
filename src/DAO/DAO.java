@@ -144,7 +144,7 @@ public class DAO {
         
     }
     
-    public static boolean insertNovo(String nome, String senha){
+    public static boolean insertNovo(String nome, String senha){    
         Connection con = DAO.getConnection();
         PreparedStatement stmt = null;
         

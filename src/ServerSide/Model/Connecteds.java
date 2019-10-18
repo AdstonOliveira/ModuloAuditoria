@@ -1,33 +1,69 @@
 package ServerSide.Model;
 
-import ClientSide.Model.Client;
-import ClientSide.Model.Connected;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author adston
  */
 public class Connecteds {
  
-    private ArrayList<Connected> connecteds = new ArrayList();
+    private ArrayList<ConnectedClient> connecteds = new ArrayList();
     
-    public void add(Connected connected){
-        if( connected.isValid() && !this.duplicated( connected.getName() ) )
-            this.connecteds.add(connected);
-        
-    }
-    public void addNew(Client client){
-        Connected connected = new Connected(client);
-        this.add(connected);
-    }
-    public void.getIPS(){
-        
+    public Connecteds(){
+       this.checkconnects.start();
     }
     
+    public void add(ConnectedClient connected){
+       this.connecteds.add(connected);
+    }
+    
+    public ConnectedClient addNew(ConnectedClient client){
+        this.add(client);
+
+        return client;
+    }
+    
+    public void getIPS(){
+        for(ConnectedClient c : connecteds)
+            System.out.println(Arrays.toString(c.getSocket().getInetAddress().getAddress()) );
+        
+    }
+    
+    Thread checkconnects = new Thread( new Runnable() {
+        @Override
+        public void run() {
+            while (true) {
+                if (connecteds.size() > 0) {
+                    for (ConnectedClient c : connecteds) {
+                        if ( !c.getSocket().isConnected()) {
+                            try {
+                                c.getSocket().close();
+                            } catch (IOException ex) {
+                                Logger.getLogger(Connecteds.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            Connecteds.this.connecteds.remove(c);
+                            System.out.println("Removendo desconectado ");
+                        }
+                    }
+                }
+            }
+        }    
+    });
+    public int size(){
+        return this.connecteds.size();
+    }
+    
+    /*
     private boolean duplicated( String name ){
       if(this.connecteds.size() > 0)
-          return (this.connecteds.stream().anyMatch( (conected) -> ( name.equalsIgnoreCase( conected.getName() ) ))) ;
-    
+          for(Connected c : connecteds){
+              System.out.println(c.getClient().getIP());
+          }
+          
       return false;
     }
     
@@ -35,11 +71,24 @@ public class Connecteds {
      * @param cliente => Socket para comparacao
      * @param msg => Mensagem a ser enviada*/
     
-    public void sendAll( Client cliente, String msg ){
-       if( this.connecteds.size() > 0 )
-          for( Connected c : this.connecteds )
-              if(c.getSocket() != cliente.getSocket())
-              c.sendMessage(msg);
-   }
+    public void sendToValidation(Block toValid){
+        
+        if( this.connecteds.size() > 0 ){
+            for(ConnectedClient c : connecteds){
+                System.out.println("Enviando para validacao ...");
+        
+                try {
+                    c.getOos().writeObject(toValid);
+                    c.getOos().flush();
+                } catch (IOException ex) {
+                    Logger.getLogger(Connecteds.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }else{
+            System.err.println("Nenhum socket conectado");
+        }
+        
+    }
+    
     
 }

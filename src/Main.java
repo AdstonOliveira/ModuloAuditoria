@@ -1,4 +1,5 @@
 import ClientSide.View.controller.ControllerLogin;
+import ServerSide.Model.ServerBlockchainSocket;
 
 
 public class Main {
@@ -7,10 +8,8 @@ public class Main {
         ControllerLogin cl = new ControllerLogin();
         cl.openLogin();
         
-//        ControllerClient cd = new ControllerClient();
-//        cd.open();
-//        Dash dash = new Dash();
-//        cd.addIFrame(dash);
+        ServerBlockchainSocket sbs = new ServerBlockchainSocket();
+        
     }
     
 }

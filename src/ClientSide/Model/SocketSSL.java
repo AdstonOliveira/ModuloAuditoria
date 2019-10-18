@@ -25,9 +25,16 @@ public class SocketSSL {
         this.host = "localhost";
     }
     public SocketSSL(String host, int port){
+        if( port!=0 )
+            this.port = port;
+        else
+            this.port = 1050;
         
-        this.port = port;
-        this.host = host;
+        if(  host!=null && !host.equalsIgnoreCase(""))
+            this.host = host;
+        else
+            this.host = "localhost";
+        
     }
     
     public SSLSocket createSocket(){

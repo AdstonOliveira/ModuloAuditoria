@@ -97,7 +97,9 @@ public class DAOBlock extends DAO{
         return blockchain;
     } 
     
-    
+    public static boolean deleteAll(){
+        return DAO.deleteAll("Block");
+    }
     
     
 }

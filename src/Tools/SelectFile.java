@@ -5,6 +5,7 @@
  */
 package Tools;
 
+import File_Handling.File_Reader_Candidato;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -20,13 +21,16 @@ public class SelectFile {
     private final JFileChooser jfc;
     
     public boolean selectXML(javax.swing.JInternalFrame display){
-        this.jfc.setFileFilter( new FileNameExtensionFilter("Somente XML", "xml") );
+        this.jfc.setFileFilter( new FileNameExtensionFilter("Somente CSV", "csv") );
         this.jfc.setAcceptAllFileFilterUsed(false);
         this.jfc.setMultiSelectionEnabled(false);
 
         if ( this.jfc.showOpenDialog(display) == JFileChooser.APPROVE_OPTION ){
             this.selected = jfc.getSelectedFile();
-                return true;
+
+            File_Reader_Candidato frc = new File_Reader_Candidato(this.selected);
+            
+            return true;
         }
             
         return false;

@@ -35,7 +35,6 @@ public class DAO {
            //nesse Caso: C:\\MyDB\\.netbeans-derby
             NetworkServerControlImpl networkServer = new NetworkServerControlImpl();
             networkServer.start(new PrintWriter(System.out));
-            System.out.println("Banco Iniciado");
         } catch (Exception ex) {
             System.out.println("Não conseguiu iniciar banco de dados.");
 
@@ -51,7 +50,6 @@ public class DAO {
     }
 
     public static void closeConnection(Connection con) {
-
         try {
             if (con != null) {
                 con.close();
@@ -59,13 +57,10 @@ public class DAO {
         } catch (SQLException ex) {
             //menssagem
         }
-
     }
 
     public static void closeConnection(Connection con, PreparedStatement stmt) {
-
         closeConnection(con);
-
         try {
             if (stmt != null) {
                 stmt.close();
@@ -163,4 +158,29 @@ public class DAO {
         }
         return false;
     }
+    
+    public static boolean deleteAll(String table){
+        conn = DAO.getConnection();
+        try {
+            conn.setAutoCommit(false);
+            PreparedStatement stmt = conn.prepareStatement("Delete from "+table);
+            stmt.execute();
+            conn.commit();
+            DAO.closeConnection(conn, stmt);
+            
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                conn.rollback();
+               DAO.closeConnection(conn);
+                return false;
+                
+            } catch (SQLException ex1) {
+                Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        return false;
+    }
+    
 }

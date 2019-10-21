@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 /**
  * @author adston
  */
@@ -17,7 +16,6 @@ public class ThListenClient implements Runnable{
     public ThListenClient(ClientSocket cs){
         this.cs = cs;
     }
-    
     
     @Override
     public void run() {
@@ -45,7 +43,7 @@ public class ThListenClient implements Runnable{
                     b.setHash("Mineirando no cliente");
                     b.hashTransactions();
                     
-                    Thread th = new Thread(new ThMinningBlock(b));
+                    Thread th = new Thread( new ThMinningBlock(b) );
                     th.start();
                     
                     try {
@@ -55,11 +53,12 @@ public class ThListenClient implements Runnable{
                             b.setValid(true);
                             System.out.println("Campos iguais");
                             this.cs.getOs().writeObject(b);
-                        }else if(!b.getHash().equals(hashToCompare)){
+                        }else if( !b.getHash().equals(hashToCompare) ){
                             System.out.println("Hash não confere");
                         }else if(!b.getHash_transactions().equals(hashTransaction)){
                             System.out.println("hash da transacao nao bate");
                         }
+                        
                     } catch (InterruptedException ex) {
                         Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
                     }

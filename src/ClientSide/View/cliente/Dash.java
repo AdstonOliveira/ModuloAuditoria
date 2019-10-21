@@ -3,18 +3,17 @@ package ClientSide.View.cliente;
 import ClientSide.Model.BU.Candidato;
 import ClientSide.Model.BU.Urna;
 import ServerSide.Model.Blockchain;
-import ClientSide.Model.Transaction;
 import ClientSide.View.controller.ControllerClient;
+import DAO.DAOBlock;
 import DAO.DAOCandidato;
+import DAO.DAOPartido;
+import DAO.DAOTransaction;
 import DAO.DAOUrna;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * @author adston
@@ -31,7 +30,6 @@ public class Dash extends javax.swing.JInternalFrame {
     public Dash(){
         initComponents();
         
-//        this.blockchain = new Blockchain();
         try {
             this.populaTableUrna();
             this.populaTableVotos();
@@ -46,6 +44,7 @@ public class Dash extends javax.swing.JInternalFrame {
         }
         this.tableUrnas.setModel(tbUrnas);
     }
+    
     private void populaTableVotos(){
         tbVotos = new VotosTableModel();
         for(Candidato c : DAOCandidato.getVotosTableModel()){
@@ -53,6 +52,7 @@ public class Dash extends javax.swing.JInternalFrame {
         }
         this.tableVotos.setModel(this.tbVotos);
     }
+    
     public void setController(ControllerClient controller){
         this.controller = controller;
     }
@@ -103,6 +103,8 @@ public class Dash extends javax.swing.JInternalFrame {
         btn_cancel = new javax.swing.JButton();
         minningBlock = new javax.swing.JProgressBar();
         lbMinning = new javax.swing.JLabel();
+        refreshTable = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -183,6 +185,21 @@ public class Dash extends javax.swing.JInternalFrame {
 
         lbMinning.setText("Mineirando Bloco");
 
+        refreshTable.setMnemonic('r');
+        refreshTable.setText("RefreshTable");
+        refreshTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshTableActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Delete All");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -190,9 +207,17 @@ public class Dash extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(minningBlock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbMinning))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(minningBlock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbMinning))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(refreshTable)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -201,9 +226,14 @@ public class Dash extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbMinning)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(minningBlock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lbMinning)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(minningBlock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(refreshTable)
+                        .addComponent(jButton1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -379,18 +409,24 @@ public class Dash extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jMenu1MouseClicked
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        Urna u = new Urna();
-        u.setCD_CARGA_1_URNA_EFEETIVADA(10);
-        u.setCD_CARGA_2_URNA_EFEETIVADA(20);
-        u.setCD_FLASHCARD_URNA_EFETIVADA(100);
-        u.setDT_ABERTURA( "2019-01-01 19:00:00");
-        u.setDT_ENCERRAMENTO("2019-01-01 19:30:00");
-        u.setNR_URNA_EFETIVADA(500);
-        u.setUrna(4848);
-//        System.out.println(u.getDT_ABERTURA());
-//        DAOUrna.SaveUrna(u);
-        this.tbUrnas.addUrna(u);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void refreshTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshTableActionPerformed
+        try {
+            this.populaTableUrna();
+            this.populaTableVotos();
+        } catch (SQLException ex) {
+            Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_refreshTableActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DAOUrna.deleteAll();
+        DAOCandidato.deleteAll();
+        DAOPartido.deleteAll();
+        DAOTransaction.deleteAll();
+        DAOBlock.deleteAll();
+    }//GEN-LAST:event_jButton1ActionPerformed
     public void activeButtons(){
         this.btn_cancel.setEnabled(true);
         this.btn_send.setEnabled(true);
@@ -405,6 +441,7 @@ public class Dash extends javax.swing.JInternalFrame {
     private javax.swing.JButton btn_cancel;
     private javax.swing.JButton btn_selectFile;
     private javax.swing.JButton btn_send;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -422,6 +459,7 @@ public class Dash extends javax.swing.JInternalFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lbMinning;
     public static javax.swing.JProgressBar minningBlock;
+    private javax.swing.JButton refreshTable;
     private javax.swing.JTable tableUrnas;
     private javax.swing.JTable tableVotos;
     // End of variables declaration//GEN-END:variables

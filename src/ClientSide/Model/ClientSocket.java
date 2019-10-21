@@ -44,7 +44,7 @@ public class ClientSocket {
                 
                 String port = JOptionPane.showInputDialog(null,"Insira a porta destino: ","1050");
                 
-                if(Util.checkPort(port))
+                if(Util.isNumber(port))
                     this.PORT = Integer.valueOf(port);
             }
     }

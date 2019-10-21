@@ -86,17 +86,17 @@ public Candidato(){
 
     
     public void setDsCargoPergunta(String value){
-        
+        this.DsCargoPergunta = value;
     }
     
     public String getDsCargoPergunta(){
-        return "Cargo";
+        return this.DsCargoPergunta;
     }
     public String getSgPartido(){
-        return "Sigla";
+        return this.SgPartido;
     }
     public void setSgPartido(String value){
-        
+        this.SgPartido = value;
     }
     
     

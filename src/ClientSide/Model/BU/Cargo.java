@@ -5,6 +5,8 @@
  */
 package ClientSide.Model.BU;
 
+import DAO.DAOCargo;
+
 /**
  *
  * @author adston
@@ -37,6 +39,10 @@ public class Cargo {
     public void setDs_cargo_pergunta(String ds_cargo_pergunta) {
         this.ds_cargo_pergunta = ds_cargo_pergunta;
     }
-    
+
+    public boolean saveMe(){
+       return DAOCargo.saveCargo(this);
+    }
+        
     
 }

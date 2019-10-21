@@ -64,10 +64,12 @@ public class VotosTableModel extends AbstractTableModel{
         fireTableCellUpdated(rowIndex, 1);  
         fireTableCellUpdated(rowIndex, 2);  
         fireTableCellUpdated(rowIndex, 3);  
+        fireTableCellUpdated(rowIndex, 4);  
     }
     
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {  
+///*private String[] colunas = {"NR_VOTAVEL","NM_VOTAVEL","DS_CARGO_PERGUNTA","SG_PARTIDO", "QT_VOTOS"};*/
         Candidato candidato = candidatos.get(rowIndex);
      switch (columnIndex) {
          case 0:  

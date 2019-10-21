@@ -111,7 +111,7 @@ public class Util {
         return (df.format(dt));
     }
     
-    public static boolean checkPort(String porta){
+    public static boolean isNumber(String porta){
         if(porta == null || porta.length() < 1)
             return false;
         

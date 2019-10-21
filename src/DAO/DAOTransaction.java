@@ -5,11 +5,14 @@ import ServerSide.Model.Block;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 /**
  * @author adston
  */
 public class DAOTransaction extends DAO{
+
+    public static boolean deleteAll(){
+        return DAO.deleteAll("transacao");
+    }
     
     public static boolean saveTransaction(Transaction transaction, Connection connn){
         conn = connn;

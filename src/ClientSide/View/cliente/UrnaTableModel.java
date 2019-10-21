@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
- *
+ * INSERIR URNA NO BANCO
  * @author adston
  */
 public class UrnaTableModel extends AbstractTableModel{
@@ -39,15 +39,16 @@ public class UrnaTableModel extends AbstractTableModel{
     }
     @Override
     public Class<?> getColumnClass(int columnIndex) {  
+        //private String[] colunas = {"URNA", "DT_ABERTURA", "DT_ENCERRAMENTO", "COD_URNA_EFETIVADA"};
         switch (columnIndex){
             case 0:
                 return int.class;
             case 1:
-                return Date.class;
+                return Timestamp.class;
             case 2:
-                return Date.class;
+                return Timestamp.class;
             case 3:
-                return int.class;
+                return String.class;
             default:
                 return String.class;
         }
@@ -57,10 +58,10 @@ public class UrnaTableModel extends AbstractTableModel{
        Urna urna = urnas.get(rowIndex);
        
         urna.setUrna(aValue.getUrna());
-        urna.setNR_URNA_EFETIVADA(aValue.getNR_URNA_EFETIVADA());
         urna.setDT_ABERTURA(aValue.getDT_ABERTURA());
         urna.setDT_ENCERRAMENTO(aValue.getDT_ENCERRAMENTO());
-   
+        urna.setCD_CARGA_1_URNA_EFEETIVADA(aValue.getCD_CARGA_1_URNA_EFEETIVADA());
+        
         fireTableCellUpdated(rowIndex, 0);  
         fireTableCellUpdated(rowIndex, 1);  
         fireTableCellUpdated(rowIndex, 2);  
@@ -84,7 +85,7 @@ public class UrnaTableModel extends AbstractTableModel{
              urna.setDT_ENCERRAMENTO( Timestamp.valueOf(aValue.toString()) );             
              break;
          case 3:
-             urna.setNR_URNA_EFETIVADA( Integer.valueOf(aValue.toString()) );
+             urna.setCD_CARGA_1_URNA_EFEETIVADA(aValue.toString());
              break;
          default:  
              System.err.println("Índice da coluna inválido");
@@ -103,7 +104,7 @@ public class UrnaTableModel extends AbstractTableModel{
             case 2: 
                 return urna.getDT_ENCERRAMENTO();
             case 3:
-                return urna.getNR_URNA_EFETIVADA();
+                return urna.getCD_CARGA_1_URNA_EFEETIVADA();
             default:
                 System.err.println("Coluna nao identificada");
                 return null;

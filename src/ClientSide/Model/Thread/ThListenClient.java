@@ -7,7 +7,6 @@ import ServerSide.Model.Block;
 import ServerSide.Model.Blockchain;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.SocketException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +49,7 @@ public class ThListenClient implements Runnable{
                         }
                     }
                 }
+                
                 
                 if(tmp instanceof Blockchain){
                     System.out.println("Cliente: Recebi um blockchain do servidor");

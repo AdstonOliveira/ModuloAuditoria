@@ -43,7 +43,7 @@ public class DAOTransaction extends DAO{
     
     public static boolean saveTransaction(Block block){
         boolean exec = true;
-        JOptionPane.showMessageDialog(null, block.toString());
+        JOptionPane.showMessageDialog( null, block.toString() );
         for(Transaction t : block.getTransactions() ){
             Transaction transaction = t;
             

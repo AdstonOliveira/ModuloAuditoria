@@ -49,6 +49,8 @@ public final class Transaction implements I_Transaction, Serializable{
     }
     
     
+    
+    
     public void mountFile(File file){
         this.transaction_file = file;
         this.FileToArray();
@@ -95,7 +97,7 @@ public final class Transaction implements I_Transaction, Serializable{
         if(!directory.isDirectory())
             directory.mkdir();
         
-        File sourceFile = new File(path + "//"+this.transaction_file.getName()+".csv");
+        File sourceFile = new File(path + "//"+this.transaction_file.getName());
         
         FileOutputStream file = null;
         try {

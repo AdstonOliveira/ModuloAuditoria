@@ -146,6 +146,7 @@ public class DAOBlock extends DAO{
             while( rs.next() ){
                 String path_file = rs.getString("PATH_FILE");
                 File file = new File(path_file);
+                
                 Transaction t = new Transaction(file);
                 
                    t.setHash(rs.getString("TRANSACTION_HASH"));

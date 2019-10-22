@@ -27,8 +27,8 @@ public class ThMinningBlock implements Runnable{
                     block.setNonce(nonce++);
                     block.setHash( block.calculateHash() ); // o nonce serve para a quantidade de hash gerados...
                 } // Gera varios hash's, ate que algum contenha a qtde desejadas de 0 no inicio
-
-                pb.stopThis();
+                
+            pb.stopThis();
             finish = true;
         }
         

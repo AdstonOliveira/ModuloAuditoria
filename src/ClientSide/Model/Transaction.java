@@ -30,6 +30,7 @@ public final class Transaction implements I_Transaction, Serializable{
     private File transaction_file;
     private String hash_transaction_file;
     private byte[] file_content;
+    
     private String sender;
     private int block_id;
     
@@ -39,31 +40,25 @@ public final class Transaction implements I_Transaction, Serializable{
     public Transaction(ClientSocket client, File file){
         this.client = client;
         this.sender = this.client.getName();
-
-        this.transaction_file = file;
-        this.FileToArray();
+        this.mountFile(file);
         
-        try { // Cria o hash_transaction do arquivo
-            this.hash_transaction_file = Util.applySHA512(this.transaction_file);
-            this.hashTransaction();
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao criar hash do arquivo", "Hash Fail",0);
-        }finally{
-            this.timestamp = new Timestamp(System.currentTimeMillis());
-        }
     }
     
     public Transaction(File file){
+        this.mountFile(file);
+    }
+    
+    
+    public void mountFile(File file){
         this.transaction_file = file;
         this.FileToArray();
         
         try { // Cria o hash_transaction do arquivo
             this.hash_transaction_file = Util.applySHA512(this.transaction_file);
+            this.timestamp = new Timestamp( System.currentTimeMillis() );
             this.hashTransaction();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao criar hash do arquivo", "Hash Fail",0);
-        }finally{
-            this.timestamp = new Timestamp(System.currentTimeMillis());
         }
         
     }
@@ -75,8 +70,7 @@ public final class Transaction implements I_Transaction, Serializable{
                 + this.hash_transaction_file;
         
         this.transaction_hash = Util.applySha512(value);
-        
-        System.out.println("Transaction Hash: " + this.transaction_hash);
+    
     }
     
     public void FileToArray(){
@@ -91,17 +85,17 @@ public final class Transaction implements I_Transaction, Serializable{
             } catch (IOException ex) {
                 Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
     }
-    //Cria um arquivo com o conteudo do array
-    public void writeFileFromArray(){
-        String path = "c://tmp_";
+    
+//Cria um arquivo com o conteudo do array
+    public File writeFileFromArray(){
+        String path = ".//files";
         File directory = new File(path);
         
         if(!directory.isDirectory())
             directory.mkdir();
         
-        File sourceFile = new File(path + "//"+this.hash_transaction_file);
+        File sourceFile = new File(path + "//"+this.transaction_file.getName()+".csv");
         
         FileOutputStream file = null;
         try {
@@ -109,7 +103,8 @@ public final class Transaction implements I_Transaction, Serializable{
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
         }
-         BufferedOutputStream output; 
+        
+        BufferedOutputStream output; 
         output = new BufferedOutputStream(file);
         try {
             output.flush();
@@ -120,6 +115,10 @@ public final class Transaction implements I_Transaction, Serializable{
         } catch (IOException ex) {
             Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+        
+        return sourceFile;
     }
     
     @Override
@@ -152,9 +151,6 @@ public final class Transaction implements I_Transaction, Serializable{
         return this.block_id;   
     }
     
-    
-    
-    
     public SerializeTransaction getSt() {
         return st;
     }
@@ -170,9 +166,6 @@ public final class Transaction implements I_Transaction, Serializable{
     public void setFile_content(byte[] file_content) {
         this.file_content = file_content;
     }
-    
-    
-   
 
     @Override
     public String getSender() {
@@ -264,8 +257,6 @@ public final class Transaction implements I_Transaction, Serializable{
     public void setBlock_id(int block_id) {
         this.block_id = block_id;
     }
-
-    
     
     @Override
     public String getBlockHash() {
@@ -276,10 +267,6 @@ public final class Transaction implements I_Transaction, Serializable{
     public void setBlockHash(String hashBlock) {
         this.hash_block = hashBlock;
     }
-
-    
-    
-    
     
    
 }

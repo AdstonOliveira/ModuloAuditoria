@@ -8,9 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -116,9 +114,9 @@ public class DAOBlock extends DAO{
         return false;
     }
     
-    public static Set<Block> getBlockchain() throws SQLException{
+    public static List<Block> getBlockchain() throws SQLException{
         conn = DAO.getConnection();
-        Set<Block> blockchain = new LinkedHashSet();
+        List<Block> blockchain = new ArrayList();
         
         try {
             PreparedStatement stmt = conn.prepareStatement("Select * from Block "
@@ -181,9 +179,30 @@ public class DAOBlock extends DAO{
         return blockchain;
     } 
     
+    public static int sizeBlockchain(){
+        conn = DAO.getConnection();
+        int total = 0;
+        try {
+            PreparedStatement stmt = conn.prepareStatement("Select count(id) as total from block");
+            ResultSet rs = stmt.executeQuery();
+            if( rs.next() ){
+                total = rs.getInt("total");
+            }
+            DAO.closeConnection(conn, stmt, rs);
+            return total;
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOBlock.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return total;
+    }
+    
+    
     public static boolean deleteAll(){
         return DAO.deleteAll("Block");
     }
+
+    
+
     
     
 }

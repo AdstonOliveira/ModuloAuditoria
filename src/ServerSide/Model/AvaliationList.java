@@ -14,11 +14,14 @@ public class AvaliationList {
         this.pool = pool;
     }
     
-    public boolean addOnMaster(Block b){
+    public boolean addOnMaster( Block b ){
+        
         if(this.blockMaster.size() > 0){
             for(Block m : blockMaster)
+                
                 if( b.getHash().equals( m.getHash() ) ){
                     System.out.println("Bloco ja existe no master");
+                    
                     return false;  
                 }
             
@@ -38,7 +41,7 @@ public class AvaliationList {
             if( this.compareAll( master, toEvaluation) ){
                 this.pool.addOnBlockchain(master);
             }else{
-                System.out.println("O bloco nao é valido não será adicionado a blockchain");
+                System.out.println("O bloco nao é valido! não será adicionado a blockchain");
             }
         }
     }
@@ -79,10 +82,10 @@ public class AvaliationList {
                 }else
                     count--;
             
+                
              this.toAvaliation.remove(e);
             }
         }
-        
         if( count > this.pool.getBlockchain().getSbs().getConnecteds().size() / 2 ){
             System.out.println("A maioria validou o bloco");
             this.toAvaliation.clear();

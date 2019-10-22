@@ -1,5 +1,6 @@
 package ServerSide.Threads;
 import ClientSide.Model.Transaction;
+import ClientSide.Model.ValidateTransaction;
 import ServerSide.Model.Block;
 import ServerSide.Model.ConnectedClient;
 import ServerSide.Model.ServerBlockchainSocket;
@@ -33,9 +34,16 @@ public class ThServerRead extends Thread{
                         Transaction t = (Transaction) tmp;
                         
                         System.out.println("Transacao Recebida no Server: " + tmp.toString() );
-                        this.serverBlockchain.getBlockchain().addTransaction(t);
+                        ValidateTransaction vt = new ValidateTransaction(t);
+                        
+                        if( vt.validate() )
+                            this.serverBlockchain.getBlockchain().addTransaction(t);
+                        else{
+                            this.conn.getOos().writeObject("Transacao inválida - Não passou na validação");
+                        }
                     }
 
+                    
                     if( tmp instanceof Block ){
                         Block b = (Block) tmp;
                         
@@ -48,6 +56,7 @@ public class ThServerRead extends Thread{
                 Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
         this.interrupt();
     }
     

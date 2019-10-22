@@ -39,8 +39,10 @@ public class Connecteds {
             while (true) {
                 if (connecteds.size() > 0) {
                     for (ConnectedClient c : connecteds) {
-                        if ( !c.getSocket().isConnected()) {
+                        if ( !c.getSocket().isConnected() ) {
                             try {
+                                c.getSocket().shutdownInput();
+                                c.getSocket().shutdownOutput();
                                 c.getSocket().close();
                             } catch (IOException ex) {
                                 Logger.getLogger(Connecteds.class.getName()).log(Level.SEVERE, null, ex);

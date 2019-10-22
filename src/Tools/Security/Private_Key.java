@@ -31,15 +31,7 @@ public class Private_Key{
             this.privateKey = privKeyEntry.getPrivateKey();
             
             return true;
-        } catch (IOException ex) {
-            Logger.getLogger(Private_Key.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(Private_Key.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateException ex) {
-            Logger.getLogger(Private_Key.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnrecoverableEntryException ex) {
-            Logger.getLogger(Private_Key.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (KeyStoreException ex) {
+        } catch (IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableEntryException | KeyStoreException ex) {
             Logger.getLogger(Private_Key.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
@@ -68,11 +60,7 @@ public class Private_Key{
             
             return hexString.toString();
             
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(Private_Key.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex) {
-            Logger.getLogger(Private_Key.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SignatureException ex) {
+        } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException ex) {
             Logger.getLogger(Private_Key.class.getName()).log(Level.SEVERE, null, ex);
         }
         

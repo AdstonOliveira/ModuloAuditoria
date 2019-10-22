@@ -35,7 +35,7 @@ public class ThProgressBar implements Runnable{
     public void stopThis(){
         this.stop = true;
         
-        Dash.minningBlock.setValue(0);
+       // Dash.minningBlock.setValue(0);
     }
     
 }

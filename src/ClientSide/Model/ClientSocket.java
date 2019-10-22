@@ -1,7 +1,6 @@
 package ClientSide.Model;
 
 import ClientSide.Model.Thread.ThListenClient;
-import ServerSide.Model.Block;
 import ServerSide.Model.Blockchain;
 import ServerSide.Model.ServerBlockchainSocket;
 import Tools.Util;
@@ -29,7 +28,6 @@ public class ClientSocket {
     
     private ObjectInputStream is;
     
-    
     public ClientSocket(){}
     public ClientSocket(Socket socket){ this.socket = socket; }
     public ClientSocket(String name){ this.name = name; }
@@ -53,7 +51,7 @@ public class ClientSocket {
         this.chanceConnection();
 
         try {
-            this.socket = new Socket(this.serverIP, this.PORT);
+            this.socket = new Socket( this.serverIP, this.PORT );
             
             if( this.socket.isConnected() ){
                 this.os = new ObjectOutputStream( this.socket.getOutputStream() );
@@ -77,22 +75,10 @@ public class ClientSocket {
             this.os.flush();
             System.out.println("Cliente: Transacao enviada ao servidor");
         } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Cliente: Erro ao enviar transacao");
         }
     }
     
-    public void senBlock(Block block){
-        try {
-            this.os.writeObject(block);
-            this.os.flush();
-            System.out.println("Cliente: Bloco enviado ao servidor");
-        } catch (IOException ex) {
-            Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Erro ao enviar bloco");
-        }
-    }
-
     public ObjectOutputStream getOs() {
         return os;
     }
@@ -156,9 +142,5 @@ public class ClientSocket {
     public void setServerIP(String serverIP) {
         this.serverIP = serverIP;
     }
-
-
-
-
     
 }

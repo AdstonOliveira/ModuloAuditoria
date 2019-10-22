@@ -22,7 +22,7 @@ public class Util {
     public static String applySha512(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
-            //Applies sha256 to our input, 
+            //Applies sha to our input, 
             byte[] hash = digest.digest(input.getBytes("UTF-8"));
             StringBuffer hexString = new StringBuffer(); // This will contain hash as hexidecimal
 
@@ -125,3 +125,4 @@ public class Util {
         return true;
     }
 }
+ 

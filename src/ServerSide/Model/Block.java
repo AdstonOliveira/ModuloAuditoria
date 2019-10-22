@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  * @author adston
  */
-public class Block implements Serializable{
+public class Block implements Serializable, Cloneable{
     public Block(){
     }
     /** inicializa um novo bloco com qtde de transações definida*/
@@ -37,8 +37,8 @@ public class Block implements Serializable{
     public String toString() {
         return "Previous hash"+this.previousHash 
                 + "\nTimestamp: "+this.timeStamp + " ID: "+this.id 
-                + "\nNounce: "+Integer.toString(this.nonce) 
-                + "\nHash: "+this.hash_transactions + "\nAmount: "+this.amount_transactions + " Dificulty: "+this.difficulty;
+                + "\nNounce: "+(this.nonce) + "Hash Tra: " + this.hash_transactions
+                + "\nHash: "+this.hash + "\nAmount: "+this.amount_transactions + " Dificulty: "+this.difficulty;
     }
     /** Exibe cada transação contida no bloco
      * @return  */
@@ -62,7 +62,9 @@ public class Block implements Serializable{
     * Cria o hash das transações para então criar seu proprio hash
     */
     public boolean mineBlock( ) {
-        this.hashTransactions();
+//        this.hashTransactions();
+        this.hash = "nao calculado";
+        this.nonce = 0;
         
         Thread t = new Thread( new ThMinningBlock(this) );
         t.start();
@@ -78,9 +80,9 @@ public class Block implements Serializable{
     public String calculateHash() {
         
         String value = this.previousHash + this.timeStamp + this.id 
-                + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
+                + (this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
         
-        String calculatedhash = Util.applySha512( value );
+        String calculatedhash = Util.applySha512( value.trim() );
     
         return calculatedhash;
     }
@@ -96,7 +98,7 @@ public class Block implements Serializable{
                 transaction.setPrevious( this.getLastTransaction().getHash() );
             
             this.transactions.add(transaction);
-
+            this.hashTransactions();
             return true;    
         }
         
@@ -220,17 +222,21 @@ public class Block implements Serializable{
         this.previousHash = DAOBlock.getLastHash();
     }
     
-    
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
+    }
     
     
     public boolean validBlock(){
-        String value = this.previousHash + (this.timeStamp)  + this.id
-                + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
         
-        String calculatedhash = Util.applySha512( value );
+        String atual = this.getHash();
+        this.mineBlock();
+        String calculado = this.getHash();
         
-         return this.hash.equalsIgnoreCase(calculatedhash);
+        System.out.println("Atual: " + atual +"\nCalculado "+ calculado);
         
+        return atual.equals(calculado);
     }
 
     

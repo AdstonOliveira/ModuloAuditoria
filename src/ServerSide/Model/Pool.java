@@ -30,14 +30,20 @@ public class Pool{
     }
     
     public boolean addTransaction(Transaction t){
-        Block b = this.createNewBlock();
+        Block b;
+        
+        if( this.pool.isEmpty() )
+            b = this.blockchain.createNewBlock();
+        else{
+            b = this.createNewBlock();
+        }
+        
         t.setBlock_id(id);
         id++;
         
         boolean add = b.add_transation(t);
         
-        System.out.println("Server: mineirando no servidor");
-        b.hashTransactions();
+        this.pool.add(b);
         
         Thread th = new Thread( new ThMinningBlock(b) );
         System.out.println("Servidor: mineirando ...");
@@ -85,7 +91,7 @@ public class Pool{
         block.setTimeStamp( new Timestamp(System.currentTimeMillis()) );
         
         if( this.pool.size() > 0 )
-            block.setPreviousHash();
+            block.setPreviousHash(this.pool.get(pool.size()-1).getHash());
         
         return block;
     }
@@ -112,7 +118,7 @@ public class Pool{
         if(this.getSize() > 0){
             return pool.get(this.getSize()-1);
         }else{
-            return null;
+            return new Block();
         }
     }
 

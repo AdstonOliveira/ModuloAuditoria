@@ -1,10 +1,13 @@
 package ClientSide.Model.Thread;
 
 import ClientSide.Model.ClientSocket;
+import ClientSide.Model.ValidateTransaction;
+import DAO.DAOBlock;
 import ServerSide.Model.Block;
 import ServerSide.Model.Blockchain;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -19,7 +22,6 @@ public class ThListenClient implements Runnable{
     
     @Override
     public void run() {
-        
         try {
             this.cs.setIs( new ObjectInputStream( this.cs.getSocket().getInputStream() ));
         } catch (IOException ex) {
@@ -32,23 +34,43 @@ public class ThListenClient implements Runnable{
             try {
                 tmp = this.cs.getIs().readObject();
                 System.out.println("Cliente: Aguardando objetos do servidor ...");
+                if(tmp instanceof String){
+                    String msg = (String) tmp;
+                    javax.swing.JOptionPane.showMessageDialog(null, msg);
+                }
                 
                 if(tmp instanceof Block){
                     System.out.println("Cliente: Bloco recebido");
                     Block b = (Block) tmp;
                     
                     if( !b.isValid() ){
-                        this.noValidate(b);
+                        if(!this.noValidate(b)){
+                            System.out.println("Esta transacao não é valida");
+                        }
                     }
-                    
                 }
                 
                 if(tmp instanceof Blockchain){
                     System.out.println("Cliente: Recebi um blockchain do servidor");
                     Blockchain b = (Blockchain) tmp;
-                    this.cs.setMyBlockchain(b);
+                    
+                    if( b.getSize() >= DAOBlock.sizeBlockchain() ){
+                        System.out.println("Blockchain recebida maior ou igual a atual");
+                        if( b.isChainValid() )
+                            this.cs.setMyBlockchain(b);
+                        else{
+                            System.out.println("Blockchain invalida, mantendo a atual");
+                            this.cs.setMyBlockchain( new Blockchain( DAOBlock.getBlockchain(), this.cs.getSbs() ) );
+                            this.cs.getOs().writeObject(this.cs.getMyBlockchain());
+                        }
+                        
+                    }else{
+                        System.out.println("Blockchain menor que a atual");
+                        this.cs.setMyBlockchain( new Blockchain( DAOBlock.getBlockchain(), this.cs.getSbs() ) );
+                        this.cs.getOs().writeObject(this.cs.getMyBlockchain());
+                    }
                 }
-            } catch (IOException | ClassNotFoundException ex) {
+            } catch (IOException | ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -62,7 +84,9 @@ public class ThListenClient implements Runnable{
                     
                 b.setHash("Mineirando no cliente");
                 b.hashTransactions();
-                    
+                ValidateTransaction vt = new ValidateTransaction(b.getLastTransaction());
+                if(vt.validate()){
+                
                 Thread th = new Thread( new ThMinningBlock(b) );
                 th.start();
                     
@@ -86,6 +110,7 @@ public class ThListenClient implements Runnable{
                         Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
                         return false;
                     }
+                }
         }
         return false;
     }

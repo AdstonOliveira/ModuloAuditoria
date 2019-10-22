@@ -1,8 +1,6 @@
 package DAO;
-import ClientSide.Model.I_Transaction;
 import ClientSide.Model.Transaction;
 import ServerSide.Model.Block;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -21,7 +19,7 @@ public class DAOTransaction extends DAO{
 
         try {
             stmt2 = conn.prepareStatement("insert into TRANSACAO"
-                    + "(t_timestamp, transaction_hash, hash_transaction_file, path_file, block_id) "
+                    + "(t_timestamp, transaction_hash, hash_transaction_file, path_file,block_id ) "
                     + "values (?, ?, ?, ?, ?)");
             
             stmt2.setTimestamp(1, transaction.getTimestamp() );

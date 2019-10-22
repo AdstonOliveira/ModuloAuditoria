@@ -3,26 +3,33 @@ package ServerSide.Model;
 import ClientSide.Model.Transaction;
 import DAO.DAOBlock;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.LinkedHashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  * @author adston
  */
 public class Blockchain implements Serializable{
     
     public Blockchain(ServerBlockchainSocket sbs){
-        this.pool = new Pool(this);
-//        this.blockchain = new ArrayList();
-        this.blockchain = new LinkedHashSet();
-        this.tempBlock = this.createNewBlock();
         this.sbs = sbs;
+        try {
+            this.blockchain = DAOBlock.getBlockchain();
+        } catch (SQLException ex) {
+            System.out.println("Ocorreu um erro ao carregar a blockchain");
+            Logger.getLogger(Blockchain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Blockchain: " + this.showBlock());
+        this.pool = new Pool(this);
     }
     
 //    private final List<Block> blockchain;
     private Set<Block> blockchain;
     private transient final Pool pool;
-    private Block tempBlock;
+//    private Block tempBlock;
     private transient final ServerBlockchainSocket sbs;
             
     public void minning(Block minning){
@@ -58,9 +65,9 @@ public class Blockchain implements Serializable{
     
     public boolean addOnBlockchain(Block block){
         if(this.getSize() > 0)
-           block.setPreviousHash( this.getLast().getHash() );
+           block.setPreviousHash();
         
-           if(DAOBlock.saveBlock(block)){
+           if( DAOBlock.saveBlock(block) ){
                 if( this.blockchain.add(block) ){
                     System.out.println("Server: Block = "+block.toString());
                     return true;
@@ -69,6 +76,7 @@ public class Blockchain implements Serializable{
                     return false;
                 }
            }
+           
            System.out.println("Server: Nao foi possivel adicionar");
            return false;
     }
@@ -87,24 +95,17 @@ public class Blockchain implements Serializable{
     @Override
     public String toString() {
         return "Blockchain{" + "blockchain Blocos: "+this.showBlock()
-                +"\nPool Blocos= " + this.pool.showBlock() 
-                + "\nTemp Blocos: "+ tempBlock.toString() +'}';
+                +"\nPool Blocos= " + this.pool.showBlock() +'}';
     }
     
     public String showBlock(){
+        
         String content = "";
-        for(Block b : this.blockchain){
+        for (Iterator<Block> it = this.blockchain.iterator(); it.hasNext();) {
+            Block b = it.next();
             content += b.toString() + "\n";
         }
         return content;
-    }
-
-    public Block getTempBlock() {
-        return tempBlock;
-    }
-
-    public void setTempBlock(Block tempBlock) {
-        this.tempBlock = tempBlock;
     }
 
     public Set<Block> getBlockchain() {

@@ -16,6 +16,11 @@ public interface I_Transaction{
     
     public String getHash();
     public void setHash(String hash);
+    
     @Override
     public String toString();
+    
+    public void setBlockId(int id);
+     public int getBlockId();
+    
 }

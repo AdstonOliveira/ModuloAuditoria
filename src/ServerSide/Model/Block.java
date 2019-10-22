@@ -2,11 +2,13 @@ package ServerSide.Model;
 import ClientSide.Model.I_Transaction;
 import ClientSide.Model.Transaction;
 import ClientSide.Model.Thread.ThMinningBlock;
+import DAO.DAOBlock;
 import Tools.Util;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  * @author adston
  */
@@ -18,21 +20,25 @@ public class Block implements Serializable{
         this.amount_transactions = amount_transactions;
     }
 
-    private boolean valid = false;
     private Timestamp timeStamp; //data atual 
     private String hash = "nao calculado"; // Hash do atual
     private String previousHash = "First Block";
-    private final ArrayList<I_Transaction> transactions = new ArrayList(); //Dado a ser adicionado ao bloco
+    private final ArrayList<Transaction> transactions = new ArrayList(); //Dado a ser adicionado ao bloco
     private String hash_transactions;
     
-        private int nonce = 0; // quantidades hash gerados
+    public boolean isValid = false;
+    
+    private int id;
+    private int nonce = 0; // quantidades hash gerados
     private int amount_transactions = 1; //Quantidade de transações suportadas neste bloco
     private int difficulty = 5;
 
     @Override
     public String toString() {
-        return "Block{\n" + "timeStamp= " + (timeStamp) + "\nhash= " + hash + ",\npreviousHash= " 
-                + previousHash + "\nHashTransações: " + this.hash_transactions + '}';
+        return "Previous hash"+this.previousHash 
+                + "\nTimestamp: "+this.timeStamp + " ID: "+this.id 
+                + "\nNounce: "+Integer.toString(this.nonce) 
+                + "\nHash: "+this.hash_transactions + "\nAmount: "+this.amount_transactions + " Dificulty: "+this.difficulty;
     }
     /** Exibe cada transação contida no bloco
      * @return  */
@@ -57,16 +63,21 @@ public class Block implements Serializable{
     */
     public boolean mineBlock( ) {
         this.hashTransactions();
+        
         Thread t = new Thread( new ThMinningBlock(this) );
         t.start();
-
-        return true;
+        try {
+            t.join();
+            return true;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
     
     public String calculateHash() {
-//        this.timeStamp = System.currentTimeMillis();
         
-        String value = this.previousHash + this.timeStamp 
+        String value = this.previousHash + this.timeStamp + this.id 
                 + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
         
         String calculatedhash = Util.applySha512( value );
@@ -83,7 +94,6 @@ public class Block implements Serializable{
         if( !this.isFull() ){
             if( this.transactions.size() > 0 )
                 transaction.setPrevious( this.getLastTransaction().getHash() );
-            
             
             this.transactions.add(transaction);
 
@@ -107,13 +117,6 @@ public class Block implements Serializable{
         return hash;
     }
 
-    public boolean isValid() {
-        return valid;
-    }
-
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
     
     public boolean isFull(){
         return this.transactions.size() == this.amount_transactions;
@@ -131,6 +134,11 @@ public class Block implements Serializable{
         return amount_transactions;
     }
 
+    public void setIsValid(boolean isValid) {
+        this.isValid = isValid;
+    }
+
+    
     public void setAmount_transactions(int amount_transactions) {
         this.amount_transactions = amount_transactions;
     }
@@ -167,7 +175,7 @@ public class Block implements Serializable{
         this.hash = hash;
     }
 
-    public ArrayList<I_Transaction> getDados() {
+    public ArrayList<Transaction> getDados() {
         return transactions;
     }
 
@@ -178,6 +186,19 @@ public class Block implements Serializable{
     public void setNonce(int nonce) {
         this.nonce = nonce;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    
+    public void getNewId(){
+        this.id = DAOBlock.getLastId() + 1;
+    }
     
     public Transaction getLastTransaction(){
         if( this.transactions.size() > 0 ){
@@ -186,9 +207,24 @@ public class Block implements Serializable{
         }
         return null;
     }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+    
+    public void setPreviousHash(){
+        this.previousHash = DAOBlock.getLastHash();
+    }
+    
+    
+    
     
     public boolean validBlock(){
-        String value = this.previousHash + (this.timeStamp) 
+        String value = this.previousHash + (this.timeStamp)  + this.id
                 + Integer.toString(this.nonce) + this.hash_transactions + this.amount_transactions + this.difficulty;
         
         String calculatedhash = Util.applySha512( value );
@@ -196,5 +232,6 @@ public class Block implements Serializable{
          return this.hash.equalsIgnoreCase(calculatedhash);
         
     }
+
     
 }

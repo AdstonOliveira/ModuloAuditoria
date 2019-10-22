@@ -26,8 +26,6 @@ public class File_Reader {
     
     public File_Reader( File file ){
         this.file = file;
-        
-//        this.init();
     }
 
     public boolean init(){

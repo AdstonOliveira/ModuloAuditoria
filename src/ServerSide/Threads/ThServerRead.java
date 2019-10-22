@@ -32,17 +32,16 @@ public class ThServerRead extends Thread{
                     if(tmp instanceof Transaction){
                         Transaction t = (Transaction) tmp;
                         
-                        System.out.println("Recebido no Server: " + tmp.toString() );
+                        System.out.println("Transacao Recebida no Server: " + tmp.toString() );
                         this.serverBlockchain.getBlockchain().addTransaction(t);
                     }
 
-                    if(tmp instanceof Block){
+                    if( tmp instanceof Block ){
                         Block b = (Block) tmp;
-                        if( b.isValid() ){
-                            this.serverBlockchain.getBlockchain().getPool().addToAvalition(b);
-                            System.out.println("Server: Bloco adicionado a blockchain");
-                        }else
-                            System.out.println("Nada");
+                        
+                        System.out.println("Bloco esperando validação");
+                        this.serverBlockchain.getBlockchain().getPool().addToAvalition(b);
+                        
                     }
 
             } catch (IOException | ClassNotFoundException ex) {

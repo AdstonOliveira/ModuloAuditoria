@@ -31,6 +31,7 @@ public final class Transaction implements I_Transaction, Serializable{
     private String hash_transaction_file;
     private byte[] file_content;
     private String sender;
+    private int block_id;
     
     /** Inicia a transação com um arquivo gerando seu hash_transaction
      * @param client Informar cliente criador
@@ -38,7 +39,7 @@ public final class Transaction implements I_Transaction, Serializable{
     public Transaction(ClientSocket client, File file){
         this.client = client;
         this.sender = this.client.getName();
-//        this.id = RandID.newID(); // Precisa verificar os numeros no banco
+
         this.transaction_file = file;
         this.FileToArray();
         
@@ -123,8 +124,8 @@ public final class Transaction implements I_Transaction, Serializable{
     
     @Override
     public String toString() {
-        return "Transaction{\n" + "file_size=(kb) " + this.file_content.length + ", sender= "+this.sender
-                +" Data registro: " + this.timestamp
+        return "Transaction{id: + " + this.block_id + "\n" + "file_size=(kb) " + this.file_content.length + ", sender= "+this.sender
+                +" \nData registro: " + this.timestamp
                 + ",\nHash_file= " + this.hash_transaction_file 
                 + ",\nhash_T= " + this.transaction_hash 
                 +"\nprevious TransactionHash: "+ this.previous_transaction_hash 
@@ -140,6 +141,20 @@ public final class Transaction implements I_Transaction, Serializable{
         return false;
     }
 
+
+    @Override
+    public void setBlockId(int id){
+        this.block_id = id;
+    }
+    
+    @Override
+    public int getBlockId(){
+        return this.block_id;   
+    }
+    
+    
+    
+    
     public SerializeTransaction getSt() {
         return st;
     }
@@ -234,6 +249,24 @@ public final class Transaction implements I_Transaction, Serializable{
         this.hash_transaction_file = hash_transaction_file;
     }
 
+    public String getHash_block() {
+        return hash_block;
+    }
+
+    public void setHash_block(String hash_block) {
+        this.hash_block = hash_block;
+    }
+
+    public int getBlock_id() {
+        return block_id;
+    }
+
+    public void setBlock_id(int block_id) {
+        this.block_id = block_id;
+    }
+
+    
+    
     @Override
     public String getBlockHash() {
         return this.hash_block;
@@ -243,6 +276,7 @@ public final class Transaction implements I_Transaction, Serializable{
     public void setBlockHash(String hashBlock) {
         this.hash_block = hashBlock;
     }
+
     
     
     

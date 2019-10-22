@@ -37,30 +37,8 @@ public class ThListenClient implements Runnable{
                     System.out.println("Cliente: Bloco recebido");
                     Block b = (Block) tmp;
                     
-                    String hashToCompare = b.getHash();
-                    String hashTransaction = b.getHash_transactions();
-                    
-                    b.setHash("Mineirando no cliente");
-                    b.hashTransactions();
-                    
-                    Thread th = new Thread( new ThMinningBlock(b) );
-                    th.start();
-                    
-                    try {
-                        th.join();
-                        System.out.println("Cliente: Terminei a mineiracao");
-                        if( b.getHash().equals(hashToCompare) && b.getHash_transactions().equals(hashTransaction)){
-                            b.setValid(true);
-                            System.out.println("Campos iguais");
-                            this.cs.getOs().writeObject(b);
-                        }else if( !b.getHash().equals(hashToCompare) ){
-                            System.out.println("Hash não confere");
-                        }else if(!b.getHash_transactions().equals(hashTransaction)){
-                            System.out.println("hash da transacao nao bate");
-                        }
-                        
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
+                    if( !b.isValid() ){
+                        this.noValidate(b);
                     }
                     
                 }
@@ -76,5 +54,41 @@ public class ThListenClient implements Runnable{
         }
         
     }
+    
+    public boolean noValidate(Block b){
+        if( !b.isValid() ){
+            String hashToCompare = b.getHash();
+            String hashTransaction = b.getHash_transactions();
+                    
+                b.setHash("Mineirando no cliente");
+                b.hashTransactions();
+                    
+                Thread th = new Thread( new ThMinningBlock(b) );
+                th.start();
+                    
+                    try {
+                        th.join();
+                        if( b.getHash().equals(hashToCompare) && b.getHash_transactions().equals(hashTransaction)){
+                            b.setIsValid(true);
+                            this.cs.getOs().writeObject(b);
+                            return true;
+                        }else if( !b.getHash().equals(hashToCompare) ){
+                            System.out.println("Hash não confere");
+                            b.setIsValid(false);
+                            return false;
+                        }else if(!b.getHash_transactions().equals(hashTransaction)){
+                            System.out.println("hash da transacao nao bate");
+                            b.setIsValid(false);
+                            return false;
+                        }
+                        
+                    } catch (InterruptedException | IOException ex) {
+                        Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
+                        return false;
+                    }
+        }
+        return false;
+    }
+    
     
 }

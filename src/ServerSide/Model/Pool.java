@@ -1,6 +1,7 @@
 package ServerSide.Model;
 import ClientSide.Model.Thread.ThMinningBlock;
 import ClientSide.Model.Transaction;
+import DAO.DAOBlock;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -9,6 +10,7 @@ import java.util.logging.Logger;
  * @author adston
  */
 public class Pool{
+    
     public Pool(Blockchain blockchain){
         this.pool = new ArrayList();
         this.blockchain = blockchain;
@@ -18,35 +20,48 @@ public class Pool{
     private ArrayList<Block> pool;
     private AvaliationList al = new AvaliationList(this);
     
+    private int id = DAOBlock.getLastId();
+    
+    
     public void addOnBlockchain(Block block){
         if( !this.blockchain.addOnBlockchain(block) ){
             System.out.println("Ocorreu um erro ao adicionar a Blockchain");
         }
     }
     
-    public void addTransaction(Transaction t){
+    public boolean addTransaction(Transaction t){
         Block b = this.createNewBlock();
+        t.setBlock_id(id);
+        id++;
+        
         boolean add = b.add_transation(t);
+        
         System.out.println("Server: mineirando no servidor");
         b.hashTransactions();
         
         Thread th = new Thread( new ThMinningBlock(b) );
-        th.start(); 
+        System.out.println("Servidor: mineirando ...");
+        th.start();
     
         try {
             th.join();
-            System.out.println("Servidor: mineirando ...");
-            this.sendToValidaton(b);
-            
-            System.out.println("Bloco Enviado para validação dos clientes");
+            if( this.al.addOnMaster(b) ){
+                this.sendToValidaton(b);
+                
+                System.out.println("Bloco Enviado para validação dos clientes");
+                return true;
+            }else{
+                System.out.println("Este block já existe");
+                return false;
+            }
         } catch (InterruptedException ex) {
             Logger.getLogger(Pool.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        
-        this.addToAvalition(b);
+        return false;
 
     }
+    
     
     private void sendToValidaton(Block tempBlock){
         this.blockchain.getSbs().getConnecteds().sendToValidation(tempBlock);
@@ -57,27 +72,20 @@ public class Pool{
         for(Block b : this.pool){
             content += b.toString() + "\n";
         }
+        
         return content;
     }
 
     public void addToAvalition(Block b){
         this.al.add(b);
-        
-        if(this.al.getToAvaliation().size() >= this.blockchain.getSbs().getConnecteds().size()/2){
-            if( this.al.compareAll() ){
-                this.blockchain.addOnBlockchain(b);
-                System.out.println("Pool: Enviei o bloco a blockchain");
-            }
-        }
     }
+    
     public Block createNewBlock(){
         Block block = new Block();
         block.setTimeStamp( new Timestamp(System.currentTimeMillis()) );
         
         if( this.pool.size() > 0 )
-            block.setPreviousHash( this.getLast().getHash() );
-        
-        this.pool.add(block);
+            block.setPreviousHash();
         
         return block;
     }
@@ -107,6 +115,28 @@ public class Pool{
             return null;
         }
     }
+
+    public ArrayList<Block> getPool() {
+        return pool;
+    }
+
+    public void setPool(ArrayList<Block> pool) {
+        this.pool = pool;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Blockchain getBlockchain() {
+        return blockchain;
+    }
+    
+    
     
     
 }

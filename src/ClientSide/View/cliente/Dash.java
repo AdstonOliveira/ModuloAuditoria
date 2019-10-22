@@ -9,6 +9,7 @@ import DAO.DAOCandidato;
 import DAO.DAOPartido;
 import DAO.DAOTransaction;
 import DAO.DAOUrna;
+import ServerSide.Model.Block;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,7 @@ public class Dash extends javax.swing.JInternalFrame {
      */
     private UrnaTableModel tbUrnas;
     private VotosTableModel tbVotos;
+    private BlockTableModel tbBloco;
     
     public Dash(){
         initComponents();
@@ -33,16 +35,28 @@ public class Dash extends javax.swing.JInternalFrame {
         try {
             this.populaTableUrna();
             this.populaTableVotos();
+            this.populaTableBloco();
         } catch (SQLException ex) {
             Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     private void populaTableUrna() throws SQLException{
-         tbUrnas = new UrnaTableModel();
-        for(Urna u : DAOUrna.getUrnas()){
+        tbUrnas = new UrnaTableModel();
+         
+        for(Urna u : DAOUrna.getUrnas())
             this.tbUrnas.addUrna( u );
-        }
+        
         this.tableUrnas.setModel(tbUrnas);
+    }
+    
+    private void populaTableBloco(){
+        tbBloco = new BlockTableModel();
+        
+        for(Block b : DAOBlock.listBlocks())
+            this.tbBloco.addBlock(b);
+        
+        this.tableBlocos.setModel(tbBloco);
     }
     
     private void populaTableVotos(){
@@ -114,6 +128,9 @@ public class Dash extends javax.swing.JInternalFrame {
         jPanel8 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tableVotos = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableBlocos = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -122,6 +139,7 @@ public class Dash extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
+        setMaximizable(true);
         setTitle("DashBoard Cliente");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -323,6 +341,38 @@ public class Dash extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Votos computados", jPanel6);
 
+        tableBlocos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tableBlocos);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Blocos Adicionados", jPanel3);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -413,8 +463,11 @@ public class Dash extends javax.swing.JInternalFrame {
 
     private void refreshTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshTableActionPerformed
         try {
+            
             this.populaTableUrna();
             this.populaTableVotos();
+            this.populaTableBloco();
+            
         } catch (SQLException ex) {
             Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -449,17 +502,20 @@ public class Dash extends javax.swing.JInternalFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lbMinning;
     public static javax.swing.JProgressBar minningBlock;
     private javax.swing.JButton refreshTable;
+    private javax.swing.JTable tableBlocos;
     private javax.swing.JTable tableUrnas;
     private javax.swing.JTable tableVotos;
     // End of variables declaration//GEN-END:variables

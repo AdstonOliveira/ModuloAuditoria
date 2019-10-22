@@ -239,5 +239,9 @@ public class Block implements Serializable, Cloneable{
         return atual.equals(calculado);
     }
 
+    public boolean saveMe(){
+        return DAOBlock.saveBlock(this);
+    }
+    
     
 }

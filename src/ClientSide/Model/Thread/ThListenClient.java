@@ -7,6 +7,7 @@ import ServerSide.Model.Block;
 import ServerSide.Model.Blockchain;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.SocketException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,9 +29,9 @@ public class ThListenClient implements Runnable{
             Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Cliente: Erro ao abrir OIS cliente");
         }
-        
+        boolean stop = false;
         Object tmp;
-        while(true){
+        while( !stop ){
             try {
                 tmp = this.cs.getIs().readObject();
                 System.out.println("Cliente: Aguardando objetos do servidor ...");
@@ -54,11 +55,12 @@ public class ThListenClient implements Runnable{
                     System.out.println("Cliente: Recebi um blockchain do servidor");
                     Blockchain b = (Blockchain) tmp;
                     
-                    if( b.getSize() >= DAOBlock.sizeBlockchain() ){
+                    if( b.getSize() > DAOBlock.sizeBlockchain() ){
                         System.out.println("Blockchain recebida maior ou igual a atual");
-                        if( b.isChainValid() )
+                        if( b.isChainValid() ){
                             this.cs.setMyBlockchain(b);
-                        else{
+                            this.cs.getMyBlockchain().saveMe();
+                        }else{
                             System.out.println("Blockchain invalida, mantendo a atual");
                             this.cs.setMyBlockchain( new Blockchain( DAOBlock.getBlockchain(), this.cs.getSbs() ) );
                             this.cs.getOs().writeObject(this.cs.getMyBlockchain());
@@ -70,7 +72,9 @@ public class ThListenClient implements Runnable{
                         this.cs.getOs().writeObject(this.cs.getMyBlockchain());
                     }
                 }
-            } catch (IOException | ClassNotFoundException | SQLException ex) {
+                
+                stop = true;
+            } catch (IOException | ClassNotFoundException | SQLException | InterruptedException ex) {
                 Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -84,7 +88,7 @@ public class ThListenClient implements Runnable{
                     
                 b.setHash("Mineirando no cliente");
                 b.hashTransactions();
-                ValidateTransaction vt = new ValidateTransaction(b.getLastTransaction());
+                ValidateTransaction vt = new ValidateTransaction( b.getLastTransaction() );
                 if(vt.validate()){
                 
                 Thread th = new Thread( new ThMinningBlock(b) );
@@ -92,10 +96,12 @@ public class ThListenClient implements Runnable{
                     
                     try {
                         th.join();
+                        
                         if( b.getHash().equals(hashToCompare) && b.getHash_transactions().equals(hashTransaction)){
                             b.setIsValid(true);
                             this.cs.getOs().writeObject(b);
                             return true;
+                        
                         }else if( !b.getHash().equals(hashToCompare) ){
                             System.out.println("Hash não confere");
                             b.setIsValid(false);

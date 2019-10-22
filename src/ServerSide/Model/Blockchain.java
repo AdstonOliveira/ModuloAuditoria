@@ -143,7 +143,6 @@ public class Blockchain implements Serializable{
                         t.start();
                         t.join();
                     String compare = init.getHash();
-                    System.out.println("Hash: " + hash +"\nCompare: "+compare);
 
                     if( !hash.equalsIgnoreCase(compare) ){
                         System.out.println("A mineiracao nao bate pro bloco: " + init);
@@ -158,10 +157,9 @@ public class Blockchain implements Serializable{
                         tN.start();
                         tN.join();
                         String compareN = next.getHash();
-                        System.out.println("Hash: " + hashN +"\nCompare: "+compareN);
 
                         if( !hashN.equalsIgnoreCase(compareN) ){
-                            System.out.println("A mineiracao nao bate pro bloco: " + init);
+                            System.out.println("A mineiracao nao bate pro bloco: " + next);
                             return false;
                         }
                     }
@@ -183,6 +181,12 @@ public class Blockchain implements Serializable{
 
     public ServerBlockchainSocket getSbs() {
         return sbs;
+    }
+    
+    public void saveMe(){
+        for(Block b : this.blockchain){
+           b.saveMe();
+        }
     }
     
 

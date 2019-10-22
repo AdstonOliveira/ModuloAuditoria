@@ -61,9 +61,29 @@ public class DAOBlock extends DAO{
         return "First Block";
     }
     
+    public static boolean checkExist(Block b){
+        conn = DAO.getConnection();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("Select id from Block where id = " + b.getId());
+            ResultSet rs = stmt.executeQuery();
+            
+            if(!rs.next()){
+                DAO.closeConnection(conn, stmt, rs);
+                return false;
+            }
+            
+            DAO.closeConnection(conn, stmt, rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOBlock.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return true;
+    }
+
     
     public static boolean saveBlock(Block block){
-        if( !block.isValid() )
+        
+        if( !block.isValid() || checkExist(block) )
             return false;
         
         conn = DAO.getConnection();

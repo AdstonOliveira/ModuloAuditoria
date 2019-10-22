@@ -26,7 +26,7 @@ public class DAOTransaction extends DAO{
             stmt2.setString(2, transaction.getTransaction_hash() );
             stmt2.setString(3, transaction.getHash_transaction_file() );
             
-            stmt2.setString(4, transaction.getTransaction_file().getPath() );
+            stmt2.setString(4, ".//files//"+transaction.getTransaction_file().getName() );
             stmt2.setInt(5, transaction.getBlock_id() );
             
             stmt2.execute();

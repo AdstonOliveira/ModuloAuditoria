@@ -76,6 +76,8 @@ public class ThListenClient implements Runnable{
                 stop = true;
             } catch (IOException | ClassNotFoundException | SQLException | InterruptedException ex) {
                 Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("desconectou caiu THListenClient L79");
+                stop =  true;
             }
         }
         

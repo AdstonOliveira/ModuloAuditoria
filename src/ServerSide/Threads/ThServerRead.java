@@ -24,7 +24,7 @@ public class ThServerRead extends Thread{
     public void run() {
         System.out.println("Server: Lendo objetos recebidos ...\n" + this.conn.getSocket().getInetAddress() );
         
-        while( true ){
+        while( true && this.conn.getSocket().isConnected() ){
             Object tmp;
             try {
                 tmp = this.conn.getOis().readObject();
@@ -47,7 +47,8 @@ public class ThServerRead extends Thread{
             } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }    
+        }
+        this.interrupt();
     }
     
 }

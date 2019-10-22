@@ -14,8 +14,10 @@ public class BlockTableModel extends AbstractTableModel{
     private String[] colunas = { "B_TIMESTAMP", "BLOCK_HASH", "PREVIOUS_HASH", "AMOUNT_TRANSACTIONS",
         "NOUCE","DIFFICULTY","ID" };
     
+    
     public BlockTableModel(List<Block> dados){
         this.blocos = dados;
+            
     }
     
     public BlockTableModel(){

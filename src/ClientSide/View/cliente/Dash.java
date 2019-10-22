@@ -10,11 +10,17 @@ import DAO.DAOPartido;
 import DAO.DAOTransaction;
 import DAO.DAOUrna;
 import ServerSide.Model.Block;
+import java.awt.Color;
+import java.awt.Font;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * @author adston
@@ -33,9 +39,11 @@ public class Dash extends javax.swing.JInternalFrame {
         initComponents();
         
         try {
+            
             this.populaTableUrna();
             this.populaTableVotos();
             this.populaTableBloco();
+            
         } catch (SQLException ex) {
             Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -48,6 +56,10 @@ public class Dash extends javax.swing.JInternalFrame {
             this.tbUrnas.addUrna( u );
         
         this.tableUrnas.setModel(tbUrnas);
+//        this.tableUrnas.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        this.teste(tableUrnas);
+        
+        
     }
     
     private void populaTableBloco(){
@@ -57,6 +69,7 @@ public class Dash extends javax.swing.JInternalFrame {
             this.tbBloco.addBlock(b);
         
         this.tableBlocos.setModel(tbBloco);
+        this.teste(tableBlocos);
     }
     
     private void populaTableVotos(){
@@ -64,7 +77,10 @@ public class Dash extends javax.swing.JInternalFrame {
         for(Candidato c : DAOCandidato.getVotosTableModel()){
             this.tbVotos.addCandidato(c);
         }
+        
         this.tableVotos.setModel(this.tbVotos);
+        this.teste(tableVotos);
+
     }
     
     public void setController(ControllerClient controller){
@@ -181,7 +197,7 @@ public class Dash extends javax.swing.JInternalFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btn_selectFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_selectFile, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_send, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -224,10 +240,8 @@ public class Dash extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(minningBlock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -236,7 +250,7 @@ public class Dash extends javax.swing.JInternalFrame {
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(refreshTable)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(67, 67, 67))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,6 +269,7 @@ public class Dash extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        tableUrnas.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
         tableUrnas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -274,7 +289,7 @@ public class Dash extends javax.swing.JInternalFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -317,7 +332,7 @@ public class Dash extends javax.swing.JInternalFrame {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -360,7 +375,7 @@ public class Dash extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -442,6 +457,7 @@ public class Dash extends javax.swing.JInternalFrame {
         }else{
             JOptionPane.showMessageDialog(this,"Selecione um arquivo para enviar","File Not Selected",0);
         }
+            
         
     }//GEN-LAST:event_btn_selectFileActionPerformed
 
@@ -473,12 +489,33 @@ public class Dash extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_refreshTableActionPerformed
 
+    public void teste(JTable table){
+        table.setBackground(Color.white);
+        table.setForeground(Color.black);
+        table.setFont( new Font("monospaced", Font.BOLD, 12) );
+        table.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setBackground(Color.LIGHT_GRAY);
+        headerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        for (int i = 0; i < table.getModel().getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
+        }
+        
+       
+    }
+    
+    
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         DAOUrna.deleteAll();
         DAOCandidato.deleteAll();
         DAOPartido.deleteAll();
         DAOTransaction.deleteAll();
         DAOBlock.deleteAll();
+        this.refreshTableActionPerformed(evt);
     }//GEN-LAST:event_jButton1ActionPerformed
     public void activeButtons(){
         this.btn_cancel.setEnabled(true);

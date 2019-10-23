@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
  * @author adston
  */
 public class ControllerClient {
+    
     private DesktopCliente desktop;
     private SelectFile selectXML;
     private ClientSocket client;
@@ -36,9 +37,12 @@ public class ControllerClient {
     public final void open(){
         this.desktop = new DesktopCliente();
         this.desktop.setVisible(true);
+            
         this.dash = new Dash();
         this.dash.setTitle("Conectado em: " + this.client.getSocket().getInetAddress().getHostAddress());
         this.addIFrame(dash);
+        
+        
     }
     
     public void addIFrame(Dash iFrame){

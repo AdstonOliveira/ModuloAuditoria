@@ -66,9 +66,12 @@ public class ThListenClient implements Runnable{
                         System.out.println("Blockchain recebida maior ou igual a atual");
                         if( b.isChainValid() ){
                             this.cs.setMyBlockchain(b);
-                            for(Block block : this.cs.getMyBlockchain().getBlockchain()){
+                            
+                            
+                            for(Block block : this.cs.getMyBlockchain().getBlockchain())
                                 this.validated(block);
-                            }
+                            
+                            
                         }else{
                             System.out.println("Blockchain invalida, mantendo a atual");
                             this.cs.setMyBlockchain( new Blockchain( DAOBlock.getBlockchain(), this.cs.getSbs() ) );
@@ -132,12 +135,22 @@ public class ThListenClient implements Runnable{
         return false;
     }
     
-    public void validated(Block b){
-        b.saveMe();
-        System.out.println("Bloco salvo");
-        Transaction t = b.getLastTransaction();
-        File_Reader_Candidato frc = new File_Reader_Candidato( t.writeFileFromArray() ); 
-        System.out.println("Salvando dados no banco");
+    
+     public void validated(Block block){
+        Thread t = new Thread( () -> {
+             block.saveMe();
+             Transaction t1 = block.getLastTransaction();
+             File_Reader_Candidato frc = new File_Reader_Candidato(t1.writeFileFromArray());
+             System.out.println("Salvando dados no banco");
+        });
+        t.start();
+        try {
+            t.join();
+            t.interrupt();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     

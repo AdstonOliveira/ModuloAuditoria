@@ -70,7 +70,7 @@ public class Blockchain implements Serializable{
         
            if( DAOBlock.saveBlock(block) ){
                 if( this.blockchain.add(block) ){
-                    System.out.println("Server: Block = "+block.toString());
+                    this.sbs.getConnecteds().sendToAll(block);
                     return true;
                 }else{
                     System.out.println("Server: Block ja existe");

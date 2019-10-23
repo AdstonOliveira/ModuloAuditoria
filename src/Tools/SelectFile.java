@@ -5,7 +5,6 @@
  */
 package Tools;
 
-import File_Handling.File_Reader_Candidato;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -28,7 +27,7 @@ public class SelectFile {
         if ( this.jfc.showOpenDialog(display) == JFileChooser.APPROVE_OPTION ){
             this.selected = jfc.getSelectedFile();
 
-            File_Reader_Candidato frc = new File_Reader_Candidato(this.selected);
+//            File_Reader_Candidato frc = new File_Reader_Candidato(this.selected);
             
             return true;
         }

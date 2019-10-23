@@ -1,6 +1,7 @@
 package ClientSide.Model;
 
 import ClientSide.Model.Serialize.SerializeTransaction;
+import DAO.DAOTransaction;
 import Tools.Util;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -270,5 +271,7 @@ public final class Transaction implements I_Transaction, Serializable{
         this.hash_block = hashBlock;
     }
     
-   
+    public boolean saveMe(){
+        return DAOTransaction.saveTransaction(this);
+    }
 }

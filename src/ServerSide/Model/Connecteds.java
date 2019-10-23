@@ -58,16 +58,7 @@ public class Connecteds {
     public int size(){
         return this.connecteds.size();
     }
-    
-    /*
-    private boolean duplicated( String name ){
-      if(this.connecteds.size() > 0)
-          for(Connected c : connecteds){
-              System.out.println(c.getClient().getIP());
-          }
-          
-      return false;
-    }
+  
     
     /** Passar o meu Socket para nao me reenviar
      * @param cliente => Socket para comparacao
@@ -91,6 +82,26 @@ public class Connecteds {
         }
         
     }
+    
+    public void sendToAll(Object o){
+        if( this.connecteds.size() > 0 ){
+            for(ConnectedClient c : connecteds){
+                System.out.println("Enviando para validacao ...");
+        
+                try {
+                    c.getOos().writeObject(o);
+                    c.getOos().flush();
+                } catch (IOException ex) {
+                    Logger.getLogger(Connecteds.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }else{
+            System.err.println("Nenhum socket conectado");
+        }
+        
+        //IMPLEMENTAR DISTRIBUIÇÃO A TODOS APOS ATT
+    }
+    
     
     
 }

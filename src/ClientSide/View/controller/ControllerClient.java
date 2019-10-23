@@ -37,6 +37,7 @@ public class ControllerClient {
         this.desktop = new DesktopCliente();
         this.desktop.setVisible(true);
         this.dash = new Dash();
+        this.dash.setTitle("Conectado em: " + this.client.getSocket().getInetAddress().getHostAddress());
         this.addIFrame(dash);
     }
     

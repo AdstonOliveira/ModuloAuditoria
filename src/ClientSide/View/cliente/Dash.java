@@ -57,7 +57,7 @@ public class Dash extends javax.swing.JInternalFrame {
         
         this.tableUrnas.setModel(tbUrnas);
 //        this.tableUrnas.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        this.teste(tableUrnas);
+        this.formatTable(tableUrnas);
         
         
     }
@@ -69,7 +69,7 @@ public class Dash extends javax.swing.JInternalFrame {
             this.tbBloco.addBlock(b);
         
         this.tableBlocos.setModel(tbBloco);
-        this.teste(tableBlocos);
+        this.formatTable(tableBlocos);
     }
     
     private void populaTableVotos(){
@@ -79,7 +79,7 @@ public class Dash extends javax.swing.JInternalFrame {
         }
         
         this.tableVotos.setModel(this.tbVotos);
-        this.teste(tableVotos);
+        this.formatTable(tableVotos);
 
     }
     
@@ -453,7 +453,7 @@ public class Dash extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_refreshTableActionPerformed
 
-    public void teste(JTable table){
+    public void formatTable(JTable table){
         table.setBackground(Color.white);
         table.setForeground(Color.black);
         table.setFont( new Font("monospaced", Font.BOLD, 12) );

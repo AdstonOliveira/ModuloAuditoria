@@ -24,7 +24,7 @@ public class SimpleServerListen implements Runnable{
                 System.out.println("Cliente Conectado ...");
 
                 ConnectedClient c = new ConnectedClient(socket);
-                c.getOos().writeObject(this.server.getBlockchain());
+                c.getOos().writeObject( this.server.getBlockchain() );
 
                 this.server.getConnecteds().addNew(c);
                 new Thread( new ThServerRead( c, this.server ) ).start();

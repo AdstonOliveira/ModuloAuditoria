@@ -113,7 +113,7 @@ public class DAOBlock extends DAO{
             
             DAO.closeConnection(conn, stmt);
             
-            for(Transaction t :block.getDados())
+            for(Transaction t : block.getDados())
                 t.setBlockId(blockId);
             
             DAOTransaction.saveTransaction(block);

@@ -1,8 +1,10 @@
 package ClientSide.Model.Thread;
 
 import ClientSide.Model.ClientSocket;
+import ClientSide.Model.Transaction;
 import ClientSide.Model.ValidateTransaction;
 import DAO.DAOBlock;
+import File_Handling.File_Reader_Candidato;
 import ServerSide.Model.Block;
 import ServerSide.Model.Blockchain;
 import java.io.IOException;
@@ -28,9 +30,10 @@ public class ThListenClient implements Runnable{
             Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Cliente: Erro ao abrir OIS cliente");
         }
+        
         boolean stop = false;
         Object tmp;
-        while( !stop ){
+        while( true ){
             try {
                 tmp = this.cs.getIs().readObject();
                 System.out.println("Cliente: Aguardando objetos do servidor ...");
@@ -47,7 +50,11 @@ public class ThListenClient implements Runnable{
                         if(!this.noValidate(b)){
                             System.out.println("Esta transacao não é valida");
                         }
+                    }else{
+                        System.out.println("Recebi um bloco validado");
+                        this.validated(b);
                     }
+                    
                 }
                 
                 
@@ -59,15 +66,17 @@ public class ThListenClient implements Runnable{
                         System.out.println("Blockchain recebida maior ou igual a atual");
                         if( b.isChainValid() ){
                             this.cs.setMyBlockchain(b);
-                            this.cs.getMyBlockchain().saveMe();
+                            for(Block block : this.cs.getMyBlockchain().getBlockchain()){
+                                this.validated(block);
+                            }
                         }else{
                             System.out.println("Blockchain invalida, mantendo a atual");
                             this.cs.setMyBlockchain( new Blockchain( DAOBlock.getBlockchain(), this.cs.getSbs() ) );
-                            this.cs.getOs().writeObject(this.cs.getMyBlockchain());
+//                            this.cs.getOs().writeObject(this.cs.getMyBlockchain());
                         }
                         
                     }else{
-                        System.out.println("Blockchain menor que a atual");
+                        System.out.println("Blockchain menor ou igual a atual");
                         this.cs.setMyBlockchain( new Blockchain( DAOBlock.getBlockchain(), this.cs.getSbs() ) );
                         this.cs.getOs().writeObject(this.cs.getMyBlockchain());
                     }
@@ -121,6 +130,14 @@ public class ThListenClient implements Runnable{
                 }
         }
         return false;
+    }
+    
+    public void validated(Block b){
+        b.saveMe();
+        System.out.println("Bloco salvo");
+        Transaction t = b.getLastTransaction();
+        File_Reader_Candidato frc = new File_Reader_Candidato( t.writeFileFromArray() ); 
+        System.out.println("Salvando dados no banco");
     }
     
     

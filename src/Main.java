@@ -1,6 +1,4 @@
-import ClientSide.Model.Transaction;
 import ClientSide.View.controller.ControllerLogin;
-import ServerSide.Model.Block;
 import ServerSide.Model.ServerBlockchainSocket;
 
 

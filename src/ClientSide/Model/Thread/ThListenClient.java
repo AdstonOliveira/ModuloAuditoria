@@ -4,6 +4,8 @@ import ClientSide.Model.ClientSocket;
 import ClientSide.Model.Transaction;
 import ClientSide.Model.ValidateTransaction;
 import DAO.DAOBlock;
+import DAO.DAOCandidato;
+import DAO.DAOUrna;
 import File_Handling.File_Reader_Candidato;
 import ServerSide.Model.Block;
 import ServerSide.Model.Blockchain;
@@ -64,6 +66,9 @@ public class ThListenClient implements Runnable{
                     
                     if( b.getSize() > DAOBlock.sizeBlockchain() ){
                         System.out.println("Blockchain recebida maior ou igual a atual");
+                        DAOUrna.deleteAll();
+                        DAOCandidato.deleteAll();
+                        
                         if( b.isChainValid() ){
                             this.cs.setMyBlockchain(b);
                             

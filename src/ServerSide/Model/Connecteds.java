@@ -33,6 +33,15 @@ public class Connecteds {
         
     }
     
+    public void remove(ConnectedClient cc){
+        for(ConnectedClient c : this.connecteds){
+            if(c.equals(cc)){
+                this.connecteds.remove(c);
+                System.out.println("Socket removido");
+            }
+        }
+    }
+    
     Thread checkconnects = new Thread( new Runnable() {
         @Override
         public void run() {
@@ -99,7 +108,6 @@ public class Connecteds {
             System.err.println("Nenhum socket conectado");
         }
         
-        //IMPLEMENTAR DISTRIBUIÇÃO A TODOS APOS ATT
     }
     
     

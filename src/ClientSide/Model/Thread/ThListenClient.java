@@ -35,7 +35,7 @@ public class ThListenClient implements Runnable{
         
         boolean stop = false;
         Object tmp;
-        while( true ){
+        while( !stop ){
             try {
                 tmp = this.cs.getIs().readObject();
                 System.out.println("Cliente: Aguardando objetos do servidor ...");
@@ -76,11 +76,9 @@ public class ThListenClient implements Runnable{
                             for(Block block : this.cs.getMyBlockchain().getBlockchain())
                                 this.validated(block);
                             
-                            
                         }else{
                             System.out.println("Blockchain invalida, mantendo a atual");
                             this.cs.setMyBlockchain( new Blockchain( DAOBlock.getBlockchain(), this.cs.getSbs() ) );
-//                            this.cs.getOs().writeObject(this.cs.getMyBlockchain());
                         }
                         
                     }else{
@@ -90,10 +88,10 @@ public class ThListenClient implements Runnable{
                     }
                 }
                 
-                stop = true;
             } catch (IOException | ClassNotFoundException | SQLException | InterruptedException ex) {
                 Logger.getLogger(ThListenClient.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("desconectou caiu THListenClient L79");
+                System.out.println("Desconectou caiu THListenClient L94");
+                //Implementar reconexao.
                 stop =  true;
             }
         }

@@ -24,8 +24,8 @@ public class ThServerRead extends Thread{
     @Override
     public void run() {
         System.out.println("Server: Lendo objetos recebidos ...\n" + this.conn.getSocket().getInetAddress() );
-        
-        while( true && this.conn.getSocket().isConnected() ){
+        boolean run = true;
+        while( true && run ){
             Object tmp;
             try {
                 tmp = this.conn.getOis().readObject();
@@ -42,7 +42,6 @@ public class ThServerRead extends Thread{
                             this.conn.getOos().writeObject("Transacao inválida - Não passou na validação");
                         }
                     }
-
                     
                     if( tmp instanceof Block ){
                         Block b = (Block) tmp;
@@ -53,6 +52,9 @@ public class ThServerRead extends Thread{
                     }
 
             } catch (IOException | ClassNotFoundException ex) {
+                run = false;
+                this.serverBlockchain.getConnecteds().remove(this.conn);
+                this.interrupt();
                 Logger.getLogger(ThServerRead.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

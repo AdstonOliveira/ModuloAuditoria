@@ -10,13 +10,15 @@ public class Main {
         cl.openLogin();
         
         ServerBlockchainSocket sbs = new ServerBlockchainSocket();
-
- 
-        
-//        Transaction t = new Transaction(file);
-        
-        
-     
     }
     
 }
+/*
+Lista de immplementação
+
+THLISTENCLIENT - L94
+
+
+
+
+*/

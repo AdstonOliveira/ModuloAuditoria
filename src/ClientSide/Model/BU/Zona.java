@@ -5,11 +5,13 @@
  */
 package ClientSide.Model.BU;
 
+import DAO.DAOZona;
+
 /**
  *
  * @author adston
  */
-class Zona {
+public class Zona {
     private int NR_ZONA;
     private int CD_MUNICIPIO;
 
@@ -37,6 +39,10 @@ class Zona {
 
     public void setCD_MUNICIPIO(int CD_MUNICIPIO) {
         this.CD_MUNICIPIO = CD_MUNICIPIO;
+    }
+    
+    public boolean saveMe(){
+        return DAOZona.saveZona(this);
     }
     
     

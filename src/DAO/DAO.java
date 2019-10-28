@@ -20,7 +20,7 @@ public class DAO {
 
     private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver"; // prod
 //    private static final String DRIVER = "org.apache.derby.jdbc.ClientDriver"; //modo dev
-//    private static final String URL = "jdbc:derby://localhost:1527/auditoria"; //modo dev
+//    private sta--tic final String URL = "jdbc:derby://localhost:1527/auditoria"; //modo dev
     private static final String USER = "adm";
     private static final String PASS = "ifsp100%";
     private static final String URL = "jdbc:derby:auditoria;create=false;user="+USER+";password="+PASS; //prod
@@ -182,5 +182,28 @@ public class DAO {
         }
         return false;
     }
+    
+    public static boolean checkExist(String table, String compare, int condiction){
+        conn = getConnection();
+        
+        String select = "select * from "+table+" where " +compare + " = ?";
+        boolean exist = true;
+        try {
+            PreparedStatement stmt = conn.prepareStatement(select);
+            stmt.setInt(1, condiction);
+            
+            ResultSet rs = stmt.executeQuery();
+            if(!rs.next()){
+                exist = false;
+            }
+            
+            DAO.closeConnection(conn, stmt, rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return exist;
+    }
+    
     
 }

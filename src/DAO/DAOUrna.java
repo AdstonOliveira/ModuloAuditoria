@@ -9,19 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 /**
  * @author adston
  */
-/*
-private int urna;
-    private int NR_URNA_EFETIVADA;
-    private int CD_CARGA_1_URNA_EFEETIVADA;
-    private int CD_CARGA_2_URNA_EFEETIVADA;
-    private int CD_FLASHCARD_URNA_EFETIVADA;
-    private Date DT_ABERTURA;
-    private Date DT_ENCERRAMENTO;
-*/
 public class DAOUrna extends DAO{
     
     public static boolean checkUrna(Urna urna){
@@ -67,7 +57,6 @@ public class DAOUrna extends DAO{
                 conn.commit();
                 conn.setAutoCommit(true);
                 DAO.closeConnection(conn, stmt);
-                System.out.println("Urna salva");
             return true;
             
             } catch (SQLException ex) {

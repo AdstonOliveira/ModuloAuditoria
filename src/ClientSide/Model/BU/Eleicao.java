@@ -5,13 +5,19 @@
  */
 package ClientSide.Model.BU;
 
+import DAO.DAOEleicao;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author adston
  */
-class Eleicao {
+public class Eleicao {
     private int CD_ELEICAO;
     private String DS_ELEICAO;
     private Date DT_ELEICAO;
@@ -55,6 +61,15 @@ class Eleicao {
     public void setDT_ELEICAO(Date DT_ELEICAO) {
         this.DT_ELEICAO = DT_ELEICAO;
     }
+    
+    public void setDT_ELEICAO(String DT_ELEICAO){
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            this.DT_ELEICAO = (Date) formatter.parse(DT_ELEICAO);
+        } catch (ParseException ex) {
+            Logger.getLogger(Pleito.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public int getCD_PLEITO() {
         return CD_PLEITO;
@@ -64,6 +79,8 @@ class Eleicao {
         this.CD_PLEITO = CD_PLEITO;
     }
     
-    
+    public boolean saveMe(){
+        return DAOEleicao.saveEleicao(this);
+    }
     
 }

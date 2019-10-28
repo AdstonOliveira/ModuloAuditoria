@@ -5,11 +5,13 @@
  */
 package ClientSide.Model.BU;
 
+import DAO.DAOMunicipio;
+
 /**
  *
  * @author adston
  */
-class Municipio {
+public class Municipio {
     private int CD_MUNICIPIO;
     private String SG_UF;
     private String NM_MUNICIPIO;
@@ -23,7 +25,9 @@ class Municipio {
         this.NM_MUNICIPIO = NM_MUNICIPIO;
     }
 
-    
+    public boolean SaveMe(){
+        return DAOMunicipio.saveMunicipio(this);
+    }
     
     
     public int getCD_MUNICIPIO() {

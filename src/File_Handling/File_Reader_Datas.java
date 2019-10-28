@@ -2,6 +2,7 @@ package File_Handling;
 
 import ClientSide.Model.BU.Candidato;
 import ClientSide.Model.BU.Cargo;
+import ClientSide.Model.BU.Eleicao;
 import ClientSide.Model.BU.Partido;
 import DAO.DAOCandidato;
 import java.io.BufferedReader;
@@ -17,9 +18,9 @@ import java.util.logging.Logger;
 /**
  * @author adston
  */
-public class File_Reader_Candidato extends File_Reader{
+public class File_Reader_Datas extends File_Reader{
     
-    public File_Reader_Candidato(File file) {
+    public File_Reader_Datas(File file) {
         super(file);
         
         if( super.init() )
@@ -44,11 +45,18 @@ public class File_Reader_Candidato extends File_Reader{
                 c.saveMe();
                 
                 Partido p = new Partido();
-                
                 p.setNR_PARTIDO(Integer.valueOf( this.nullTratement( values[this.getPosition("NR_PARTIDO")] ) ) );
                 p.setNM_PARTIDO(this.nullTratement(values[this.getPosition("NM_PARTIDO")]));
                 p.setSG_PARTIDO(this.nullTratement(values[this.getPosition("SG_PARTIDO")]));
                 p.saveMe();
+                
+                Eleicao eleicao = new Eleicao();
+                eleicao.setCD_ELEICAO(Integer.valueOf(this.nullTratement(values[this.getPosition("CD_ELEICAO")])));
+                eleicao.setCD_PLEITO(Integer.valueOf(this.nullTratement(values[this.getPosition("CD_PLEITO")])));
+                eleicao.setDS_ELEICAO(this.nullTratement( values[this.getPosition("DS_ELEICAO")] ) );
+                eleicao.setDT_ELEICAO(this.nullTratement(values[this.getPosition("DT_ELEICAO")]));
+                eleicao.saveMe();
+
                 
                 Candidato candidato = new Candidato();
                 candidato.setCdCargoPergunta( c.getCd_cargo_pergunta() );
@@ -65,21 +73,18 @@ public class File_Reader_Candidato extends File_Reader{
                 candidato.setNmVotavel( values[this.getPosition("NM_VOTAVEL")] );
                 
                 candidato.setQtVotos(Integer.valueOf(values[this.getPosition("QT_VOTOS")]));
-                
                 DAOCandidato.saveCandidato(candidato);
                 
-                System.out.println("Candidato Salvo: " + candidato.getNmVotavel());
-
                 buff = br.readLine();
             }
             
             br.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(File_Reader_Candidato.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(File_Reader_Datas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(File_Reader_Candidato.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(File_Reader_Datas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(File_Reader_Candidato.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(File_Reader_Datas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

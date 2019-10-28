@@ -124,5 +124,17 @@ public class Util {
             }
         return true;
     }
+    
+    public static String DefineDate(String teste){
+        String[] old = teste.split(" ");
+        
+        String[] data = old[0].split("/");
+        
+        String hour[] = old[1].split(":");
+        
+        String dateFormated = data[2] + "-" + data[1] + "-" + data[0] + " " + hour[0]+":"+hour[1]+":00";
+        
+        return (dateFormated);
+    }
 }
  

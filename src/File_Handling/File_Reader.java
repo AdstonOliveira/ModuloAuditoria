@@ -1,6 +1,11 @@
 package File_Handling;
 
+import ClientSide.Model.BU.BU;
+import ClientSide.Model.BU.Eleicao;
+import ClientSide.Model.BU.Municipio;
+import ClientSide.Model.BU.Pleito;
 import ClientSide.Model.BU.Urna;
+import ClientSide.Model.BU.Zona;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,6 +28,7 @@ public class File_Reader {
     protected int lines_number;
     protected String[] header;
     protected int urna_position;
+    protected String[] values;
     
     
     public File_Reader( File file ){
@@ -32,18 +39,13 @@ public class File_Reader {
         this.lines();
         this.getHeader();
         this.urna_position = this.getPosition("NR_URNA_EFETIVADA");
+        this.values = this.getValues();
+        
         return this.createUrn();
     }
     
     public boolean createUrn(){
-        BufferedReader br;
         Urna u = new Urna();
-        try {
-            br = new BufferedReader( new InputStreamReader( new FileInputStream(this.file), "ISO-8859-1") ); //new FileReader(this.file));
-            br.readLine(); // Le o cabecalho
-            String firstLine = br.readLine();
-            String[] values = firstLine.replace("\"","").split(";");
-            
 
             u.setUrna(Integer.valueOf( values[urna_position]) );
             
@@ -53,18 +55,71 @@ public class File_Reader {
             u.setDT_ABERTURA( u.DefineDate(values[this.getPosition("DT_ABERTURA")]) );
             u.setDT_ENCERRAMENTO( u.DefineDate(values[this.getPosition("DT_ENCERRAMENTO")]) );
             
+        if( u.saveMe() ){
+            this.createBU(u);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public String[] getValues(){
+        String[] values = null;
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader( new FileInputStream(this.file), "ISO-8859-1") ) ;
+            br.readLine(); // Le o cabecalho
+            String firstLine = br.readLine();
+            values = firstLine.replace("\"","").split(";");
             br.close();
-
-        } catch (FileNotFoundException ex) {
+            return values;
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             Logger.getLogger(File_Reader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(File_Reader.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return u.saveMe();
+        
+        return values;
+    }
+    
+    public void createMunicipio(){
+        Municipio mun = new Municipio();
+        mun.setCD_MUNICIPIO(Integer.valueOf(values[this.getPosition("CD_MUNICIPIO")]));
+        mun.setNM_MUNICIPIO(values[this.getPosition("NM_MUNICIPIO")]);
+        mun.setSG_UF(values[this.getPosition("SG_UF")]);
+        
+        mun.SaveMe();
+        
+        Zona zona = new Zona();
+        zona.setCD_MUNICIPIO(mun.getCD_MUNICIPIO());
+        zona.setNR_ZONA(Integer.valueOf(values[this.getPosition("NR_ZONA")]));
+        zona.saveMe();
+        
     }
     
     
-    
+    public void createBU(Urna u){
+        BU bu = new BU();
+        Pleito pleito = new Pleito();
+        
+        pleito.setCD_PLEITO(Integer.valueOf(values[this.getPosition("CD_PLEITO") ] ) );
+        pleito.setNR_TURNO(Integer.valueOf(values[this.getPosition("NR_TURNO")]));
+        pleito.setDT_PLEITO(values[this.getPosition("DT_PLEITO")]);
+        
+        pleito.saveMe();
+        bu.setUrna( u.getUrna() );
+
+        try {
+            bu.setDT_GERACAO( ( values[this.getPosition("DT_GERACAO")] ) );
+            bu.setHH_GERACAO( values[this.getPosition("HH_GERACAO")] );
+            bu.setPLEITO( pleito.getCD_PLEITO() );
+        } catch (ParseException ex) {
+            Logger.getLogger(File_Reader.class.getName()).log(Level.SEVERE, null, ex);
+       }
+ 
+        bu.saveMe();
+        this.createMunicipio();
+    }
+
     protected void lines(){
         if( this.file != null ){
             LineNumberReader linhaLeitura;

@@ -5,13 +5,19 @@
  */
 package ClientSide.Model.BU;
 
+import DAO.DAOPleito;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author adston
  */
-class Pleito {
+public class Pleito {
     private int CD_PLEITO;
     private Date DT_PLEITO;
     private int NR_TURNO;
@@ -40,6 +46,14 @@ class Pleito {
     public void setDT_PLEITO(Date DT_PLEITO) {
         this.DT_PLEITO = DT_PLEITO;
     }
+    public void setDT_PLEITO(String dt_pleito){
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            this.DT_PLEITO = (Date) formatter.parse(dt_pleito);
+        } catch (ParseException ex) {
+            Logger.getLogger(Pleito.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public int getNR_TURNO() {
         return NR_TURNO;
@@ -47,6 +61,10 @@ class Pleito {
 
     public void setNR_TURNO(int NR_TURNO) {
         this.NR_TURNO = NR_TURNO;
+    }
+    
+    public boolean saveMe(){
+        return DAOPleito.savePleito(this);
     }
 
 

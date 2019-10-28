@@ -6,7 +6,7 @@ import ClientSide.Model.ValidateTransaction;
 import DAO.DAOBlock;
 import DAO.DAOCandidato;
 import DAO.DAOUrna;
-import File_Handling.File_Reader_Candidato;
+import File_Handling.File_Reader_Datas;
 import ServerSide.Model.Block;
 import ServerSide.Model.Blockchain;
 import java.io.IOException;
@@ -143,7 +143,7 @@ public class ThListenClient implements Runnable{
         Thread t = new Thread( () -> {
              block.saveMe();
              Transaction t1 = block.getLastTransaction();
-             File_Reader_Candidato frc = new File_Reader_Candidato(t1.writeFileFromArray());
+             File_Reader_Datas frc = new File_Reader_Datas(t1.writeFileFromArray());
              System.out.println("Salvando dados no banco");
         });
         t.start();

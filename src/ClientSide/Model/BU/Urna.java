@@ -16,7 +16,8 @@ public class Urna {
     private String CD_FLASHCARD_URNA_EFETIVADA;
     private Timestamp DT_ABERTURA;
     private Timestamp DT_ENCERRAMENTO;
-
+    
+    
     public int getUrna() {
         return urna;
     }

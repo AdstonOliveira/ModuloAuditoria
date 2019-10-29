@@ -19,9 +19,9 @@ public class DAOMunicipio extends DAO{
     
     public static boolean saveMunicipio( Municipio mun ){
         
-        if(!DAO.checkExist("municipio", "cd_municipio", mun.getCD_MUNICIPIO())){
+        if(!DAO.checkExist("municipios", "cd_municipio", mun.getCD_MUNICIPIO())){
             conn = DAO.getConnection();
-            String insert = "insert into municipio(cd_municipio, sg_uf, nm_municipio) values(?,?,?)";
+            String insert = "insert into municipios(cd_municipio, sg_uf, nm_municipio) values(?,?,?)";
             try {
                 conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement(insert);

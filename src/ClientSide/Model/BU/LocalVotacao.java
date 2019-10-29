@@ -5,17 +5,19 @@
  */
 package ClientSide.Model.BU;
 
+import DAO.DAOLocal;
+
 /**
  *
  * @author adston
  */
-class LocalVotacao {
+public class LocalVotacao {
     private int NR_LOCAL_VOTACAO;
     private int QT_APTOS;
     private int QT_COMPARECIMENTO;
     private int QT_ABSTENCOES;
     private int QT_ELEITORES_BIOMETRIA_NH;
-    private int SECAO;
+    private int ZONA;
 
     public LocalVotacao() {
     }
@@ -26,7 +28,7 @@ class LocalVotacao {
         this.QT_COMPARECIMENTO = QT_COMPARECIMENTO;
         this.QT_ABSTENCOES = QT_ABSTENCOES;
         this.QT_ELEITORES_BIOMETRIA_NH = QT_ELEITORES_BIOMETRIA_NH;
-        this.SECAO = SECAO;
+        this.ZONA = SECAO;
     }
 
     
@@ -74,12 +76,16 @@ class LocalVotacao {
         this.QT_ELEITORES_BIOMETRIA_NH = QT_ELEITORES_BIOMETRIA_NH;
     }
 
-    public int getSECAO() {
-        return SECAO;
+    public int getZONA() {
+        return ZONA;
     }
 
-    public void setSECAO(int SECAO) {
-        this.SECAO = SECAO;
+    public void setZONA(int ZONA) {
+        this.ZONA = ZONA;
+    }
+    
+    public boolean saveMe(){
+        return DAOLocal.saveLocal(this);
     }
     
     

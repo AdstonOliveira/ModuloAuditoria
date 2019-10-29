@@ -1,9 +1,10 @@
 package File_Handling;
 
 import ClientSide.Model.BU.BU;
-import ClientSide.Model.BU.Eleicao;
+import ClientSide.Model.BU.LocalVotacao;
 import ClientSide.Model.BU.Municipio;
 import ClientSide.Model.BU.Pleito;
+import ClientSide.Model.BU.Secao;
 import ClientSide.Model.BU.Urna;
 import ClientSide.Model.BU.Zona;
 import java.io.BufferedReader;
@@ -45,10 +46,10 @@ public class File_Reader {
     }
     
     public boolean createUrn(){
+        System.out.println("Criando urna ...");
         Urna u = new Urna();
 
             u.setUrna(Integer.valueOf( values[urna_position]) );
-            
             u.setCD_CARGA_1_URNA_EFEETIVADA( values[this.getPosition("CD_CARGA_1_URNA_EFETIVADA")] );
             u.setCD_CARGA_2_URNA_EFEETIVADA( values[this.getPosition("CD_CARGA_2_URNA_EFETIVADA")] );
             u.setCD_FLASHCARD_URNA_EFETIVADA(values[this.getPosition("CD_FLASCARD_URNA_EFETIVADA")]);
@@ -81,19 +82,43 @@ public class File_Reader {
         return values;
     }
     
+    //urna pertence a uma secao
+    //Local de votacao tem zona
+    //secao tem local
+    
     public void createMunicipio(){
+        System.out.println("Salvando municipio");
         Municipio mun = new Municipio();
-        mun.setCD_MUNICIPIO(Integer.valueOf(values[this.getPosition("CD_MUNICIPIO")]));
-        mun.setNM_MUNICIPIO(values[this.getPosition("NM_MUNICIPIO")]);
-        mun.setSG_UF(values[this.getPosition("SG_UF")]);
-        
+            mun.setCD_MUNICIPIO(Integer.valueOf(values[this.getPosition("CD_MUNICIPIO")]));
+            mun.setNM_MUNICIPIO(values[this.getPosition("NM_MUNICIPIO")]);
+            mun.setSG_UF( this.values[this.getPosition("SG_ UF")] );
         mun.SaveMe();
         
+        System.out.println("Salvando zona");
         Zona zona = new Zona();
-        zona.setCD_MUNICIPIO(mun.getCD_MUNICIPIO());
-        zona.setNR_ZONA(Integer.valueOf(values[this.getPosition("NR_ZONA")]));
+            zona.setCD_MUNICIPIO(mun.getCD_MUNICIPIO());
+            zona.setNR_ZONA(Integer.valueOf(values[this.getPosition("NR_LOCAL_VOTACAO")]));
         zona.saveMe();
         
+        System.out.println("Salvando local");
+        LocalVotacao local = new LocalVotacao();
+            local.setNR_LOCAL_VOTACAO(Integer.valueOf(values[this.getPosition("NR_LOCAL_VOTACAO")]));
+            local.setZONA(zona.getNR_ZONA());
+            local.setQT_ABSTENCOES(Integer.valueOf(this.values[this.getPosition("QT_ABSTENCOES")]));
+            local.setQT_APTOS(Integer.valueOf(this.values[this.getPosition("QT_APTOS")]));
+            local.setQT_COMPARECIMENTO(Integer.valueOf(this.values[this.getPosition("QT_COMPARECIMENTO")]));
+            local.setQT_ELEITORES_BIOMETRIA_NH(Integer.valueOf(this.values[this.getPosition("QT_ELEITORES_BIOMETRIA_NH")]));
+        local.saveMe();
+        
+        System.out.println("Salvando secao");
+        Secao secao = new Secao();
+            secao.setSECAO(Integer.valueOf(values[this.getPosition("NR_SECAO")]));
+            secao.setLOCAL_VOTACAO(local.getNR_LOCAL_VOTACAO());
+            secao.setNR_ZONA(zona.getNR_ZONA());
+            secao.setURNA(Integer.valueOf(this.values[this.urna_position]));
+        
+        secao.saveMe();
+
     }
     
     
@@ -101,21 +126,22 @@ public class File_Reader {
         BU bu = new BU();
         Pleito pleito = new Pleito();
         
+        System.out.println("Salvando pleito");
         pleito.setCD_PLEITO(Integer.valueOf(values[this.getPosition("CD_PLEITO") ] ) );
         pleito.setNR_TURNO(Integer.valueOf(values[this.getPosition("NR_TURNO")]));
         pleito.setDT_PLEITO(values[this.getPosition("DT_PLEITO")]);
-        
         pleito.saveMe();
-        bu.setUrna( u.getUrna() );
 
+        System.out.println("Salvando urna");
         try {
+            bu.setUrna( u.getUrna() );
             bu.setDT_GERACAO( ( values[this.getPosition("DT_GERACAO")] ) );
             bu.setHH_GERACAO( values[this.getPosition("HH_GERACAO")] );
             bu.setPLEITO( pleito.getCD_PLEITO() );
         } catch (ParseException ex) {
             Logger.getLogger(File_Reader.class.getName()).log(Level.SEVERE, null, ex);
        }
- 
+        
         bu.saveMe();
         this.createMunicipio();
     }
@@ -168,7 +194,9 @@ public class File_Reader {
     }
     
     
-    
+    public String[] getHeaderB(){
+        return this.header;
+    }
     
     
     
